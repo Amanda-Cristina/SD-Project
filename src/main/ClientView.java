@@ -2,18 +2,18 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package projeto;
+package main;
 
 /**
  *
  * @author gilson
  */
-public class ClienteView extends javax.swing.JPanel {
+public class ClientView extends javax.swing.JPanel {
 
     /**
      * Creates new form ClienteView
      */
-    public ClienteView() {
+    public ClientView() {
         initComponents();
     }
 
@@ -27,6 +27,15 @@ public class ClienteView extends javax.swing.JPanel {
     private void initComponents() {
 
         jComboBox1 = new javax.swing.JComboBox<>();
+        serverconnection = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        serverconnectionbtn = new javax.swing.JButton();
+        serverconnectionip = new javax.swing.JTextField();
+        serverconnectionport = new javax.swing.JPasswordField();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jSeparator3 = new javax.swing.JSeparator();
         loginpanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
@@ -60,6 +69,97 @@ public class ClienteView extends javax.swing.JPanel {
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         setLayout(new java.awt.CardLayout());
+
+        jLabel9.setFont(new java.awt.Font("Noto Sans", 0, 36)); // NOI18N
+        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel9.setText("Server connection");
+
+        serverconnectionbtn.setBackground(new java.awt.Color(102, 187, 106));
+        serverconnectionbtn.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
+        serverconnectionbtn.setForeground(new java.awt.Color(255, 255, 255));
+        serverconnectionbtn.setText("Connect");
+        serverconnectionbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                serverconnectionbtnActionPerformed(evt);
+            }
+        });
+
+        serverconnectionip.setToolTipText("User");
+        serverconnectionip.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                serverconnectionipActionPerformed(evt);
+            }
+        });
+
+        serverconnectionport.setToolTipText("Password");
+
+        jLabel10.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
+        jLabel10.setText("IP Address");
+
+        jLabel11.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
+        jLabel11.setText("Port");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addGap(0, 211, Short.MAX_VALUE)
+                        .addComponent(serverconnectionbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(serverconnectionport)
+                    .addComponent(serverconnectionip)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel11))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jSeparator3))
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(14, 14, 14)
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(serverconnectionip, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(serverconnectionport, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(38, 38, 38)
+                .addComponent(serverconnectionbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(80, 80, 80))
+        );
+
+        javax.swing.GroupLayout serverconnectionLayout = new javax.swing.GroupLayout(serverconnection);
+        serverconnection.setLayout(serverconnectionLayout);
+        serverconnectionLayout.setHorizontalGroup(
+            serverconnectionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(serverconnectionLayout.createSequentialGroup()
+                .addGap(130, 130, 130)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(130, Short.MAX_VALUE))
+            .addGroup(serverconnectionLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        serverconnectionLayout.setVerticalGroup(
+            serverconnectionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, serverconnectionLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(132, Short.MAX_VALUE))
+        );
+
+        add(serverconnection, "card5");
 
         jLabel1.setFont(new java.awt.Font("Noto Sans", 0, 36)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -284,7 +384,7 @@ public class ClienteView extends javax.swing.JPanel {
         jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel13.setText("Home");
 
-        jPanel5.setLayout(new java.awt.GridLayout());
+        jPanel5.setLayout(new java.awt.GridLayout(1, 0));
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -375,12 +475,22 @@ public class ClienteView extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_logoutbtnActionPerformed
 
+    private void serverconnectionbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_serverconnectionbtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_serverconnectionbtnActionPerformed
+
+    private void serverconnectionipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_serverconnectionipActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_serverconnectionipActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel cadastropanel;
     private javax.swing.JPanel homepanel;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -389,18 +499,25 @@ public class ClienteView extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
     private javax.swing.JButton loginbtn;
     private javax.swing.JTextField logincpf;
     private javax.swing.JPanel loginpanel;
     private javax.swing.JPasswordField loginpassword;
     private javax.swing.JButton logoutbtn;
+    private javax.swing.JPanel serverconnection;
+    private javax.swing.JButton serverconnectionbtn;
+    private javax.swing.JTextField serverconnectionip;
+    private javax.swing.JPasswordField serverconnectionport;
     private javax.swing.JButton signupbtn;
     private javax.swing.JButton signupbtn_link;
     private javax.swing.JTextField signupcpf;
@@ -412,7 +529,7 @@ public class ClienteView extends javax.swing.JPanel {
     public static void main(String args[]) {
       java.awt.EventQueue.invokeLater(new Runnable() {
          public void run() {
-            new ClienteView().setVisible(true);
+            new ClientView().setVisible(true);
          }
       });
    }
