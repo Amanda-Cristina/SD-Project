@@ -24,12 +24,11 @@ public class Tests {
 "}";
         JSONObject jsonobj = new JSONObject();
         JSONObject data = new JSONObject();
-        //data.put("password","password");
-        //data.put("phone","phone");
-        //data.put("cpf","cpf");
-        //data.put("name","name");
-        //data.put("","");
-        jsonobj.put("login", "");
+        data.put("password","password");
+        data.put("phone","phone");
+        data.put("cpf","cpf");
+        data.put("name","name");
+        jsonobj.put("register",data);
         System.out.println(jsonobj);
     }
 }

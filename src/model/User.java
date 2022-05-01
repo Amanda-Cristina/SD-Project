@@ -41,7 +41,7 @@ public class User implements Serializable{
         User user = null;
         for(User u : users){
             if(u.getCpf().equals(cpf)){
-                user = u;
+                return u;
             }
         }
         return user;
@@ -62,7 +62,9 @@ public class User implements Serializable{
         User user = null;
         for(User u : users){
             if(u.getCpf().equals(cpf)){
-                user = u;
+                if(u.getPassword().equals(password)){
+                    return u;
+                }
             }
         }
         return user;

@@ -1,19 +1,17 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package main;
-
-import model.User;
 
 /**
  *
  * @author gilson
  */
-public class ClientView extends javax.swing.JPanel {
+public class ClientView extends javax.swing.JFrame {
 
     /**
-     * Creates new form ClienteView
+     * Creates new form Client
      */
     public ClientView() {
         initComponents();
@@ -28,7 +26,6 @@ public class ClientView extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jComboBox1 = new javax.swing.JComboBox<>();
         serverconnection = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
@@ -68,9 +65,8 @@ public class ClientView extends javax.swing.JPanel {
         jPanel7 = new javax.swing.JPanel();
         logoutbtn = new javax.swing.JButton();
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        setLayout(new java.awt.CardLayout());
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new java.awt.CardLayout());
 
         jLabel9.setFont(new java.awt.Font("Noto Sans", 0, 36)); // NOI18N
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -161,7 +157,7 @@ public class ClientView extends javax.swing.JPanel {
                 .addContainerGap(132, Short.MAX_VALUE))
         );
 
-        add(serverconnection, "card5");
+        getContentPane().add(serverconnection, "card5");
 
         jLabel1.setFont(new java.awt.Font("Noto Sans", 0, 36)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -264,7 +260,7 @@ public class ClientView extends javax.swing.JPanel {
                 .addContainerGap(132, Short.MAX_VALUE))
         );
 
-        add(loginpanel, "card3");
+        getContentPane().add(loginpanel, "card3");
 
         signupcpf.setToolTipText("User");
         signupcpf.addActionListener(new java.awt.event.ActionListener() {
@@ -380,13 +376,13 @@ public class ClientView extends javax.swing.JPanel {
                 .addContainerGap(48, Short.MAX_VALUE))
         );
 
-        add(cadastropanel, "card2");
+        getContentPane().add(cadastropanel, "card2");
 
         jLabel13.setFont(new java.awt.Font("Noto Sans", 0, 36)); // NOI18N
         jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel13.setText("Home");
 
-        jPanel5.setLayout(new java.awt.GridLayout(1, 0));
+        jPanel5.setLayout(new java.awt.GridLayout());
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -431,7 +427,7 @@ public class ClientView extends javax.swing.JPanel {
             .addGroup(homepanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(homepanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 582, Short.MAX_VALUE)
                     .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, homepanelLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -450,8 +446,19 @@ public class ClientView extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        add(homepanel, "card4");
+        getContentPane().add(homepanel, "card4");
+
+        pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void serverconnectionbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_serverconnectionbtnActionPerformed
+        
+        
+    }//GEN-LAST:event_serverconnectionbtnActionPerformed
+
+    private void serverconnectionipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_serverconnectionipActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_serverconnectionipActionPerformed
 
     private void loginbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginbtnActionPerformed
         // TODO add your handling code here:
@@ -471,25 +478,53 @@ public class ClientView extends javax.swing.JPanel {
 
     private void signupbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signupbtnActionPerformed
         // TODO add your handling code here:
+        this.cadastropanel.setVisible(false);
+        this.homepanel.setActionMap(false);
     }//GEN-LAST:event_signupbtnActionPerformed
 
     private void logoutbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutbtnActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_logoutbtnActionPerformed
 
-    private void serverconnectionbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_serverconnectionbtnActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_serverconnectionbtnActionPerformed
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(ClientView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(ClientView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(ClientView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(ClientView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
 
-    private void serverconnectionipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_serverconnectionipActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_serverconnectionipActionPerformed
-
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new ClientView().setVisible(true);
+            }
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel cadastropanel;
     private javax.swing.JPanel homepanel;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -527,13 +562,4 @@ public class ClientView extends javax.swing.JPanel {
     private javax.swing.JPasswordField signuppassword;
     private javax.swing.JPasswordField signupphone;
     // End of variables declaration//GEN-END:variables
-    
-    public static void main(String args[]) {
-      java.awt.EventQueue.invokeLater(new Runnable() {
-         @Override
-         public void run() {
-            new ClientView().setVisible(true);
-         }
-      });
-   }
 }

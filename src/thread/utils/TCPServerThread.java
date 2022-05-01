@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import javax.swing.table.DefaultTableModel;
 import main.ServerView;
+import model.ActiveUser;
 import model.TCPServer;
 import model.User;
 import org.json.JSONException;
@@ -69,6 +70,9 @@ public class TCPServerThread extends Thread{
             data.put("name",user.getName());
             data.put("id",user.getId());
             reply.put("login", data);
+            ActiveUser activeUser = new ActiveUser(this.userSocket.getInetAddress().getHostAddress(), 
+                                                   this.userSocket.getLocalPort(), user);
+            this.server.addActiveUser(activeUser);
         }else{
             data.put("error", "Invalid login");
             reply.put("login", data);
