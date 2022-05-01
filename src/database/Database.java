@@ -45,7 +45,7 @@ public class Database implements Serializable{
         Database bd_;
         ObjectInputStream inputobj = null;
         try{
-            inputobj = new ObjectInputStream(new BufferedInputStream(new FileInputStream(new File("databaset.dat"))));
+            inputobj = new ObjectInputStream(new BufferedInputStream(new FileInputStream(new File("database.dat"))));
             bd_ = (Database) inputobj.readObject();
             inputobj.close();
             return bd_;

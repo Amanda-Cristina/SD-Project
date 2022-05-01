@@ -1,21 +1,23 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package main;
 
+import java.awt.CardLayout;
 import java.io.IOException;
-import java.net.SocketException;
+import javax.swing.JPanel;
+import javax.swing.JTable;
 import model.TCPServer;
 
 /**
  *
  * @author gilson
  */
-public class ServerView extends javax.swing.JPanel {
+public class ServerView extends javax.swing.JFrame {
 
     /**
-     * Creates new form ServerView
+     * Creates new form Server
      */
     public ServerView() {
         initComponents();
@@ -44,8 +46,8 @@ public class ServerView extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
-        setPreferredSize(new java.awt.Dimension(594, 444));
-        setLayout(new java.awt.CardLayout());
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new java.awt.CardLayout());
 
         jPanel1.setPreferredSize(new java.awt.Dimension(594, 444));
 
@@ -122,7 +124,7 @@ public class ServerView extends javax.swing.JPanel {
                 .addContainerGap(204, Short.MAX_VALUE))
         );
 
-        add(jPanel1, "card3");
+        getContentPane().add(jPanel1, "card3");
 
         jLabel10.setFont(new java.awt.Font("Noto Sans", 0, 36)); // NOI18N
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -136,7 +138,7 @@ public class ServerView extends javax.swing.JPanel {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "IP", "Port", "Name", "Logged"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -181,23 +183,65 @@ public class ServerView extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
-        add(jPanel2, "card2");
+        getContentPane().add(jPanel2, "card2");
+
+        pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void serverstartupbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_serverstartupbtnActionPerformed
         // TODO add your handling code here:
         if(!this.serverstartupport.getText().equals("")){
             try{
-                TCPServer tCPServer = new TCPServer();
-                tCPServer.start(Integer.valueOf(serverstartupport.getText()));
-                this.jPanel2.setVisible(true);
+                TCPServer tCPServer = new TCPServer(this);
+                tCPServer.startServer(Integer.valueOf(serverstartupport.getText()));
+                jPanel1.setVisible(false);
+                jPanel2.setVisible(true);
             }catch(IOException e){
                 System.out.println("This port is already in use");
             }
         }
     }//GEN-LAST:event_serverstartupbtnActionPerformed
 
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(ServerView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(ServerView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(ServerView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(ServerView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
 
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new ServerView().setVisible(true);
+            }
+        });
+    }
+    
+    public JTable getTable(){
+        return this.jTable1;
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -213,12 +257,4 @@ public class ServerView extends javax.swing.JPanel {
     private javax.swing.JButton serverstartupbtn;
     private javax.swing.JTextField serverstartupport;
     // End of variables declaration//GEN-END:variables
-
-    public static void main(String args[]) {
-      java.awt.EventQueue.invokeLater(new Runnable() {
-         public void run() {
-            new ServerView().setVisible(true);
-         }
-      });
-   }
 }

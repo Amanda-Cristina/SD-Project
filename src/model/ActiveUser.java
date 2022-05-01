@@ -11,12 +11,12 @@ package model;
  */
 public class ActiveUser {
     private String ip;
-    private int porta;
+    private int port;
     private User user;
     
     public ActiveUser(String ip, int porta, User user){
         this.ip = ip;
-        this.porta = porta;
+        this.port = porta;
         this.user = user;
     }
     
@@ -35,17 +35,17 @@ public class ActiveUser {
     }
 
     /**
-     * @return the porta
+     * @return the port
      */
     public int getPorta() {
-        return porta;
+        return port;
     }
 
     /**
-     * @param porta the porta to set
+     * @param porta the port to set
      */
     public void setPorta(int porta) {
-        this.porta = porta;
+        this.port = porta;
     }
 
     /**

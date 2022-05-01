@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import javax.swing.table.DefaultTableModel;
+import main.ServerView;
 import model.TCPServer;
 import model.User;
 import org.json.JSONException;
@@ -17,6 +19,7 @@ import org.json.JSONObject;
  */
 public class TCPServerThread extends Thread{
     private TCPServer server;
+    private ServerView view;
     public Socket userSocket;
     public boolean loggedUser = false;
     public PrintWriter outputData;
@@ -25,6 +28,7 @@ public class TCPServerThread extends Thread{
     public TCPServerThread(Socket userSocket, TCPServer server){
         this.server = server;
         this.userSocket = userSocket;
+        this.view = server.getServerView();
     }
     
     private JSONObject signup(JSONObject msg_json) throws JSONException, IOException{
@@ -93,10 +97,15 @@ public class TCPServerThread extends Thread{
     
     @Override
     public void run(){
+        System.out.println("a");
         try{
             outputData = new PrintWriter(this.userSocket.getOutputStream(), true);
             inputData = new BufferedReader(new InputStreamReader(this.userSocket.getInputStream()));
             System.out.println("Novo usuário conectado: " + this.userSocket.getInetAddress().getHostAddress());
+            DefaultTableModel table = (DefaultTableModel)view.getTable().getModel();
+            table.addRow(new Object[]{this.userSocket.getInetAddress().getHostAddress(),
+                                      this.userSocket.getPort(),
+                                      "--","false"});
             char[] cbuf = new char[2048];
             while(true){
                 int flag = inputData.read(cbuf);

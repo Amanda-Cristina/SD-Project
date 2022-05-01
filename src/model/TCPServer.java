@@ -9,6 +9,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import main.ServerView;
 import thread.utils.TCPServerThread;
 
 /**
@@ -21,13 +22,15 @@ public class TCPServer extends Thread{
     private Socket clientSocket;
     private ArrayList<TCPServerThread> threads;
     private ArrayList<ActiveUser> activeUsers;
+    private ServerView view;
     
-    public TCPServer(){
+    public TCPServer(ServerView view){
         this.threads = new ArrayList<>();
         this.activeUsers = new ArrayList<>();
+        this.view = view;
     }
     
-    public void start(int port) throws IOException{
+    public void startServer(int port) throws IOException{
         System.out.println("Server start at port: " + port);
         serverSocket = new ServerSocket(port);
         this.start();
@@ -58,5 +61,9 @@ public class TCPServer extends Thread{
                 e.printStackTrace();
             }
         }
+    }
+    
+    public ServerView getServerView(){
+        return this.view;
     }
 }
