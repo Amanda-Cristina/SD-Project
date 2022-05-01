@@ -4,6 +4,8 @@
  */
 package main;
 
+import model.User;
+
 /**
  *
  * @author gilson
@@ -528,6 +530,7 @@ public class ClientView extends javax.swing.JPanel {
     
     public static void main(String args[]) {
       java.awt.EventQueue.invokeLater(new Runnable() {
+         @Override
          public void run() {
             new ClientView().setVisible(true);
          }

@@ -4,6 +4,10 @@
  */
 package main;
 
+import java.io.IOException;
+import java.net.SocketException;
+import model.TCPServer;
+
 /**
  *
  * @author gilson
@@ -30,9 +34,9 @@ public class ServerView extends javax.swing.JPanel {
         jLabel9 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         serverstartupbtn = new javax.swing.JButton();
-        serverstartupport = new javax.swing.JPasswordField();
         jLabel11 = new javax.swing.JLabel();
         jSeparator3 = new javax.swing.JSeparator();
+        serverstartupport = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
@@ -60,8 +64,6 @@ public class ServerView extends javax.swing.JPanel {
             }
         });
 
-        serverstartupport.setToolTipText("Password");
-
         jLabel11.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
         jLabel11.setText("Port");
 
@@ -75,22 +77,22 @@ public class ServerView extends javax.swing.JPanel {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addGap(0, 211, Short.MAX_VALUE)
                         .addComponent(serverstartupbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(serverstartupport)
+                    .addComponent(jSeparator3)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel11)
-                        .addGap(0, 294, Short.MAX_VALUE))
-                    .addComponent(jSeparator3))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(serverstartupport))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                 .addComponent(jLabel11)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(serverstartupport, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38)
+                .addGap(35, 35, 35)
                 .addComponent(serverstartupbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(80, 80, 80))
         );
@@ -117,7 +119,7 @@ public class ServerView extends javax.swing.JPanel {
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(211, Short.MAX_VALUE))
+                .addContainerGap(204, Short.MAX_VALUE))
         );
 
         add(jPanel1, "card3");
@@ -184,6 +186,15 @@ public class ServerView extends javax.swing.JPanel {
 
     private void serverstartupbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_serverstartupbtnActionPerformed
         // TODO add your handling code here:
+        if(!this.serverstartupport.getText().equals("")){
+            try{
+                TCPServer tCPServer = new TCPServer();
+                tCPServer.start(Integer.valueOf(serverstartupport.getText()));
+                this.jPanel2.setVisible(true);
+            }catch(IOException e){
+                System.out.println("This port is already in use");
+            }
+        }
     }//GEN-LAST:event_serverstartupbtnActionPerformed
 
 
@@ -200,6 +211,14 @@ public class ServerView extends javax.swing.JPanel {
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JTable jTable1;
     private javax.swing.JButton serverstartupbtn;
-    private javax.swing.JPasswordField serverstartupport;
+    private javax.swing.JTextField serverstartupport;
     // End of variables declaration//GEN-END:variables
+
+    public static void main(String args[]) {
+      java.awt.EventQueue.invokeLater(new Runnable() {
+         public void run() {
+            new ServerView().setVisible(true);
+         }
+      });
+   }
 }

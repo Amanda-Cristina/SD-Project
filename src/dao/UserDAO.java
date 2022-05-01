@@ -15,13 +15,35 @@ import model.User;
  */
 public class UserDAO {
     public void save(User user) throws IOException{
-        Database bd = Database.getInstance();
-        bd.getUsers().add(user);
-        bd.saveState();
+        Database db = Database.getInstance();
+        db.getUsers().add(user);
+        db.saveState();
     }
     public List<User> select() throws IOException{
-        Database bd = Database.getInstance();
-        return bd.getUsers();
+        Database db = Database.getInstance();
+        return db.getUsers();
+    }
+    
+    public List<User> selectAll() throws IOException{
+        Database db = Database.getInstance();
+        return (List<User>)db.getUsers();
+    }
+    
+    public void delete(User user) throws IOException{
+        Database db = Database.getInstance();
+        db.getUsers().remove(user);
+        db.saveState();
+    }
+    
+    public boolean update(User user) throws IOException{
+        Database db = Database.getInstance();
+        int index = db.getUsers().indexOf(user);
+        if(index == -1){
+            return false;
+        }
+        db.getUsers().set(index, user);
+        db.saveState();
+        return true;
     }
     
 }
