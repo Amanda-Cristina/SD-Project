@@ -478,8 +478,6 @@ public class ClientView extends javax.swing.JFrame {
 
     private void signupbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signupbtnActionPerformed
         // TODO add your handling code here:
-        this.cadastropanel.setVisible(false);
-        this.homepanel.setActionMap(false);
     }//GEN-LAST:event_signupbtnActionPerformed
 
     private void logoutbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutbtnActionPerformed
