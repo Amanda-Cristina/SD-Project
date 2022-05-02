@@ -1,5 +1,7 @@
-
+import br.com.caelum.stella.ValidationMessage;
+import br.com.caelum.stella.validation.CPFValidator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,7 +16,19 @@ import org.json.JSONObject;
  * @author gilson
  */
 public class Tests {
+    
+    ///INÍCIO: TESTE FUNÇÃO VALIDAR CPF
+    public static boolean valida(String cpf) { 
+        CPFValidator cpfValidator = new CPFValidator(); 
+        List<ValidationMessage> erros = cpfValidator.invalidMessagesFor(cpf);
+        return erros.isEmpty();
+    }
+    
     public static void main(String[] args) throws JSONException {
+       
+    System.out.println(valida("444.515.248-02"));
+    ///FIM: TESTE VALIDAR CPF
+        
         String json = "{\n" +
 "  \"login\":\n" +
 "               {\n" +
