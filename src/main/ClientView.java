@@ -500,6 +500,7 @@ public class ClientView extends javax.swing.JFrame {
             Logger.getLogger(ClientView.class.getName()).log(Level.SEVERE, null, ex);
         }
         System.out.println(jsonobj);
+        
     }//GEN-LAST:event_signupbtnActionPerformed
 
     private void logoutbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutbtnActionPerformed
