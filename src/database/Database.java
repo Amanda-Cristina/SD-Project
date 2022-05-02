@@ -50,6 +50,7 @@ public class Database implements Serializable{
             inputobj.close();
             return bd_;
         }catch(ClassNotFoundException | IOException ex){
+            System.out.println("aqui");
             return new Database();
         }
     }

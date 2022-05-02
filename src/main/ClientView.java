@@ -4,8 +4,14 @@
  */
 package main;
 
+import java.awt.Color;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BorderFactory;
+import model.TCPServer;
+import model.TCPUser;
+import model.User;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,6 +21,10 @@ import org.json.JSONObject;
  */
 public class ClientView extends javax.swing.JFrame {
 
+    private TCPUser tCPUser;
+    private boolean loggedUser = false;
+    private User user;
+    
     /**
      * Creates new form Client
      */
@@ -31,7 +41,16 @@ public class ClientView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        cadastropanel = new javax.swing.JPanel();
+        serverconnection = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        serverconnectionbtn = new javax.swing.JButton();
+        serverconnectionip = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jSeparator3 = new javax.swing.JSeparator();
+        serverconnectionport = new javax.swing.JTextField();
+        signuppanel = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         signupname = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
@@ -44,15 +63,6 @@ public class ClientView extends javax.swing.JFrame {
         signupcpf = new javax.swing.JTextField();
         signuppassword = new javax.swing.JPasswordField();
         jLabel4 = new javax.swing.JLabel();
-        serverconnection = new javax.swing.JPanel();
-        jLabel9 = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
-        serverconnectionbtn = new javax.swing.JButton();
-        serverconnectionip = new javax.swing.JTextField();
-        serverconnectionport = new javax.swing.JPasswordField();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jSeparator3 = new javax.swing.JSeparator();
         loginpanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
@@ -72,6 +82,102 @@ public class ClientView extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.CardLayout());
+
+        jLabel9.setFont(new java.awt.Font("Noto Sans", 0, 36)); // NOI18N
+        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel9.setText("Server connection");
+
+        serverconnectionbtn.setBackground(new java.awt.Color(102, 187, 106));
+        serverconnectionbtn.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
+        serverconnectionbtn.setForeground(new java.awt.Color(255, 255, 255));
+        serverconnectionbtn.setText("Connect");
+        serverconnectionbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                serverconnectionbtnActionPerformed(evt);
+            }
+        });
+
+        serverconnectionip.setToolTipText("User");
+        serverconnectionip.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                serverconnectionipActionPerformed(evt);
+            }
+        });
+
+        jLabel10.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
+        jLabel10.setText("IP Address");
+
+        jLabel11.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
+        jLabel11.setText("Port");
+
+        serverconnectionport.setToolTipText("User");
+        serverconnectionport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                serverconnectionportActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addGap(0, 211, Short.MAX_VALUE)
+                        .addComponent(serverconnectionbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(serverconnectionip)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel11))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jSeparator3)
+                    .addComponent(serverconnectionport))
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(14, 14, 14)
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(serverconnectionip, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(serverconnectionport, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(38, 38, 38)
+                .addComponent(serverconnectionbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(80, 80, 80))
+        );
+
+        javax.swing.GroupLayout serverconnectionLayout = new javax.swing.GroupLayout(serverconnection);
+        serverconnection.setLayout(serverconnectionLayout);
+        serverconnectionLayout.setHorizontalGroup(
+            serverconnectionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(serverconnectionLayout.createSequentialGroup()
+                .addGap(130, 130, 130)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(130, Short.MAX_VALUE))
+            .addGroup(serverconnectionLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        serverconnectionLayout.setVerticalGroup(
+            serverconnectionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, serverconnectionLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(132, Short.MAX_VALUE))
+        );
+
+        getContentPane().add(serverconnection, "card5");
 
         signupname.setToolTipText("User");
         signupname.addActionListener(new java.awt.event.ActionListener() {
@@ -170,22 +276,22 @@ public class ClientView extends javax.swing.JFrame {
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("Signup");
 
-        javax.swing.GroupLayout cadastropanelLayout = new javax.swing.GroupLayout(cadastropanel);
-        cadastropanel.setLayout(cadastropanelLayout);
-        cadastropanelLayout.setHorizontalGroup(
-            cadastropanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(cadastropanelLayout.createSequentialGroup()
+        javax.swing.GroupLayout signuppanelLayout = new javax.swing.GroupLayout(signuppanel);
+        signuppanel.setLayout(signuppanelLayout);
+        signuppanelLayout.setHorizontalGroup(
+            signuppanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(signuppanelLayout.createSequentialGroup()
                 .addGap(130, 130, 130)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(130, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, cadastropanelLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, signuppanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        cadastropanelLayout.setVerticalGroup(
-            cadastropanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(cadastropanelLayout.createSequentialGroup()
+        signuppanelLayout.setVerticalGroup(
+            signuppanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(signuppanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -193,98 +299,7 @@ public class ClientView extends javax.swing.JFrame {
                 .addContainerGap(63, Short.MAX_VALUE))
         );
 
-        getContentPane().add(cadastropanel, "card2");
-
-        jLabel9.setFont(new java.awt.Font("Noto Sans", 0, 36)); // NOI18N
-        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setText("Server connection");
-
-        serverconnectionbtn.setBackground(new java.awt.Color(102, 187, 106));
-        serverconnectionbtn.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
-        serverconnectionbtn.setForeground(new java.awt.Color(255, 255, 255));
-        serverconnectionbtn.setText("Connect");
-        serverconnectionbtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                serverconnectionbtnActionPerformed(evt);
-            }
-        });
-
-        serverconnectionip.setToolTipText("User");
-        serverconnectionip.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                serverconnectionipActionPerformed(evt);
-            }
-        });
-
-        serverconnectionport.setToolTipText("Password");
-
-        jLabel10.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
-        jLabel10.setText("IP Address");
-
-        jLabel11.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
-        jLabel11.setText("Port");
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addGap(0, 211, Short.MAX_VALUE)
-                        .addComponent(serverconnectionbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(serverconnectionport)
-                    .addComponent(serverconnectionip)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel10)
-                            .addComponent(jLabel11))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jSeparator3))
-                .addContainerGap())
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(14, 14, 14)
-                .addComponent(jLabel10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(serverconnectionip, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel11)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(serverconnectionport, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38)
-                .addComponent(serverconnectionbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(80, 80, 80))
-        );
-
-        javax.swing.GroupLayout serverconnectionLayout = new javax.swing.GroupLayout(serverconnection);
-        serverconnection.setLayout(serverconnectionLayout);
-        serverconnectionLayout.setHorizontalGroup(
-            serverconnectionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(serverconnectionLayout.createSequentialGroup()
-                .addGap(130, 130, 130)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(130, Short.MAX_VALUE))
-            .addGroup(serverconnectionLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        serverconnectionLayout.setVerticalGroup(
-            serverconnectionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, serverconnectionLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(132, Short.MAX_VALUE))
-        );
-
-        getContentPane().add(serverconnection, "card5");
+        getContentPane().add(signuppanel, "card2");
 
         jLabel1.setFont(new java.awt.Font("Noto Sans", 0, 36)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -463,7 +478,18 @@ public class ClientView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void serverconnectionbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_serverconnectionbtnActionPerformed
-        
+        if(!this.serverconnectionip.getText().equals("")&&
+            !this.serverconnectionport.getText().equals("")){
+            try{
+                this.tCPUser = new TCPUser();
+                this.tCPUser.connect(this.serverconnectionip.getText(),
+                                Integer.valueOf(this.serverconnectionport.getText()));
+                this.serverconnection.setVisible(false);
+                this.loginpanel.setVisible(true);
+            }catch(IOException e){
+                System.out.println("Connection error");
+            }
+        }
         
     }//GEN-LAST:event_serverconnectionbtnActionPerformed
 
@@ -473,6 +499,39 @@ public class ClientView extends javax.swing.JFrame {
 
     private void loginbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginbtnActionPerformed
         // TODO add your handling code here:
+        JSONObject jsonobj = new JSONObject();
+        JSONObject data = new JSONObject();
+        try {
+            if(!this.logincpf.getText().isEmpty()&&
+               !(this.loginpassword.getPassword().length == 0)){
+                data.put("cpf", this.logincpf.getText());
+                data.put("password", new String(this.loginpassword.getPassword()));
+                jsonobj.put("login", data);
+                JSONObject reply = (JSONObject)this.tCPUser.sendMessage(jsonobj).get("login");
+                if(reply.has("error")){
+                    System.out.println("Error");
+                    throw new Exception("LoginError");
+                }
+                this.user = new User(reply.getString("id"), reply.getString("name"), reply.getString("cpf"), 
+                                     reply.getString("phone"), reply.getString("password"));
+                this.loggedUser = true;
+                this.loginpanel.setVisible(false);
+                this.homepanel.setVisible(true);
+            }else{
+                if(this.logincpf.getText().isEmpty()){
+                    this.logincpf.setBorder(BorderFactory.createLineBorder(Color.red));
+                }
+                if(this.loginpassword.getPassword().length == 0){
+                    this.loginpassword.setBorder(BorderFactory.createLineBorder(Color.red));
+                }
+            }
+        } catch (JSONException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            Logger.getLogger(ClientView.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(ClientView.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_loginbtnActionPerformed
 
     private void logincpfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logincpfActionPerformed
@@ -481,6 +540,8 @@ public class ClientView extends javax.swing.JFrame {
 
     private void signupbtn_linkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signupbtn_linkActionPerformed
         // TODO add your handling code here:
+        this.loginpanel.setVisible(false);
+        this.signuppanel.setVisible(true);
     }//GEN-LAST:event_signupbtn_linkActionPerformed
 
     private void signupnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signupnameActionPerformed
@@ -491,16 +552,45 @@ public class ClientView extends javax.swing.JFrame {
         // TODO add your handling code here:
         
         JSONObject jsonobj = new JSONObject();
+        JSONObject data = new JSONObject();
         try {
-            jsonobj.put("name", this.signupphone.getText());
-            jsonobj.put("cpf", this.signupcpf.getText());
-            jsonobj.put("phone", this.signupphone.getText());
-            jsonobj.put("password", this.signuppassword.getText());
+            if(!this.signupphone.getText().isEmpty()&&
+               !this.signupcpf.getText().isEmpty()&&
+               !this.signupname.getText().isEmpty()&&
+               !(this.signuppassword.getPassword().length == 0)){
+                data.put("name", this.signupphone.getText());
+                data.put("cpf", this.signupcpf.getText());
+                data.put("phone", this.signupphone.getText());
+                data.put("password", new String(this.signuppassword.getPassword()));
+                jsonobj.put("register", data);
+                JSONObject reply = this.tCPUser.sendMessage(jsonobj);
+                if(!reply.get("register").equals("")){
+                    System.out.println("Error");
+                    throw new Exception("SignupError");
+                }
+                this.signuppanel.setVisible(false);
+                this.loginpanel.setVisible(true);
+            }else{
+                if(this.signupcpf.getText().isEmpty()){
+                    this.signupcpf.setBorder(BorderFactory.createLineBorder(Color.red));
+                }
+                if(this.signupname.getText().isEmpty()){
+                    this.signupname.setBorder(BorderFactory.createLineBorder(Color.red));
+                }
+                if(this.signupphone.getText().isEmpty()){
+                    this.signupphone.setBorder(BorderFactory.createLineBorder(Color.red));
+                }
+                if(this.signuppassword.getPassword().length == 0){
+                    this.signuppassword.setBorder(BorderFactory.createLineBorder(Color.red));
+                }
+            }
         } catch (JSONException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            Logger.getLogger(ClientView.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
             Logger.getLogger(ClientView.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println(jsonobj);
-        
     }//GEN-LAST:event_signupbtnActionPerformed
 
     private void logoutbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutbtnActionPerformed
@@ -514,6 +604,10 @@ public class ClientView extends javax.swing.JFrame {
     private void signupphoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signupphoneActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_signupphoneActionPerformed
+
+    private void serverconnectionportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_serverconnectionportActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_serverconnectionportActionPerformed
 
     /**
      * @param args the command line arguments
@@ -552,7 +646,6 @@ public class ClientView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel cadastropanel;
     private javax.swing.JPanel homepanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -583,11 +676,12 @@ public class ClientView extends javax.swing.JFrame {
     private javax.swing.JPanel serverconnection;
     private javax.swing.JButton serverconnectionbtn;
     private javax.swing.JTextField serverconnectionip;
-    private javax.swing.JPasswordField serverconnectionport;
+    private javax.swing.JTextField serverconnectionport;
     private javax.swing.JButton signupbtn;
     private javax.swing.JButton signupbtn_link;
     private javax.swing.JTextField signupcpf;
     private javax.swing.JTextField signupname;
+    private javax.swing.JPanel signuppanel;
     private javax.swing.JPasswordField signuppassword;
     private javax.swing.JTextField signupphone;
     // End of variables declaration//GEN-END:variables

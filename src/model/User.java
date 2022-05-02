@@ -35,6 +35,18 @@ public class User implements Serializable{
         this.password = password;
     }
     
+    public User(String id,
+                String name,
+                String cpf,
+                String phone,
+                String password){
+        this.id = id;
+        this.name = name;
+        this.cpf = cpf;
+        this.phone = phone;
+        this.password = password;
+    }
+    
     public static User getUserByCpf(String cpf) throws IOException{
         UserDAO userDAO = new UserDAO();
         List<User> users = userDAO.selectAll();

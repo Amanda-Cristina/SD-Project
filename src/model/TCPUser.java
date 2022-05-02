@@ -21,7 +21,7 @@ public class TCPUser {
         
     }
     
-    public void conect(String ip, int port) throws IOException{
+    public void connect(String ip, int port) throws IOException{
         this.userSocket = new Socket(ip, port);
         output = new PrintWriter(this.userSocket.getOutputStream(), true);
         input = new BufferedReader(new InputStreamReader(this.userSocket.getInputStream()));
@@ -30,6 +30,7 @@ public class TCPUser {
     public JSONObject sendMessage(JSONObject msg_json) throws IOException, JSONException{
         this.output.print(msg_json.toString());
         this.output.flush();
+        System.out.println("Message sent to "+ this.userSocket.getInetAddress().getHostAddress() +" = " + msg_json);
         char[] cbuf = new char[2048];
         input.read(cbuf);
         JSONObject reply = new JSONObject(String.valueOf(cbuf));

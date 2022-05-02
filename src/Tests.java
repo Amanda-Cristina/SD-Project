@@ -26,7 +26,7 @@ public class Tests {
     
     public static void main(String[] args) throws JSONException {
        
-    System.out.println(valida("444.515.248-02"));
+    /*System.out.println(valida("444.515.248-02"));
     ///FIM: TESTE VALIDAR CPF
         
         String json = "{\n" +
@@ -44,5 +44,14 @@ public class Tests {
         data.put("name","name");
         jsonobj.put("register",data);
         System.out.println(jsonobj);
+    }*/
+        JSONObject jsonobj = new JSONObject();
+        JSONObject data = new JSONObject();
+        data.put("error","error");
+        jsonobj.put("login",data);
+        JSONObject reply = (JSONObject)jsonobj.get("login");
+        if(jsonobj.has("error")){
+            System.out.println(reply.get("error"));
+        }
     }
 }

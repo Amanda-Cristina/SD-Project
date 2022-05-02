@@ -101,13 +101,12 @@ public class TCPServerThread extends Thread{
     
     @Override
     public void run(){
-        System.out.println("a");
         try{
             outputData = new PrintWriter(this.userSocket.getOutputStream(), true);
             inputData = new BufferedReader(new InputStreamReader(this.userSocket.getInputStream()));
-            System.out.println("Novo usuário conectado: " + this.userSocket.getInetAddress().getHostAddress());
+            System.out.println("New client connected: " + this.userSocket.getInetAddress().getHostAddress());
             DefaultTableModel table = (DefaultTableModel)view.getTable().getModel();
-            table.addRow(new Object[]{this.userSocket.getInetAddress().getHostAddress(),
+            table.insertRow(0,new Object[]{this.userSocket.getInetAddress().getHostAddress(),
                                       this.userSocket.getPort(),
                                       "--","false"});
             char[] cbuf = new char[2048];
@@ -122,13 +121,15 @@ public class TCPServerThread extends Thread{
                     String msg = String.valueOf(cbuf);
                     cbuf = new char[2048];
                     JSONObject JSONMsg = new JSONObject(msg);
-                    System.out.println("Message received from "+ this.userSocket.getInetAddress().getHostAddress() +" = " + msg);
+                    System.out.println("Message received from " + this.userSocket.getInetAddress().getHostAddress() + ":" +
+                                        this.userSocket.getPort() + " = " + msg);
                     //get the reply
                     JSONObject reply = getReply(JSONMsg);
                     //sending reply to client
                     outputData.print(reply);
                     outputData.flush();
-                    System.out.println("Message sent to "+ this.userSocket.getInetAddress().getHostAddress() +" = " + reply);
+                    System.out.println("Message sent to " + this.userSocket.getInetAddress().getHostAddress() + ":" + 
+                                        this.userSocket.getPort() + " = " + reply);
                 }
             }
         }catch(JSONException e){

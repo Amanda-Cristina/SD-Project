@@ -54,7 +54,7 @@ public class TCPServer extends Thread{
         while(true){
             try{
                 userSocket = serverSocket.accept();
-                TCPServerThread thread = new TCPServerThread(clientSocket, this);
+                TCPServerThread thread = new TCPServerThread(userSocket, this);
                 this.threads.add(thread);
                 thread.start();
             }catch(IOException e){
