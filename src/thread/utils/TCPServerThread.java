@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import main.ServerView;
 import model.ActiveUser;
@@ -27,15 +30,17 @@ public class TCPServerThread extends Thread{
     public BufferedReader inputData;
     private DefaultTableModel table;
     private ActiveUser user;
+    private boolean userPing;
     
     public TCPServerThread(Socket userSocket, TCPServer server){
         this.server = server;
         this.userSocket = userSocket;
         this.view = server.getServerView();
+        this.userPing = true;
     }
     
     public void updateTable(){
-        for(ActiveUser user_ : server.getActiveUsers()){
+        for(ActiveUser user_ : server.getConnectedUsers()){
             table = (DefaultTableModel)view.getTable().getModel();
             table.setRowCount(0);
             if(user_.getLoggedUser()){
@@ -86,10 +91,11 @@ public class TCPServerThread extends Thread{
             reply.put("login", data);
             
             this.loggedUser = true;
-            int user_index = this.server.getActiveUsers().indexOf(this.user);
+            int user_index = this.server.getConnectedUsers().indexOf(this.user);
             this.user.setLoggedUser(true);
             this.user.setUser(user_);
-            this.server.updateActiveUser(user_index, user);
+            this.server.updateActiveUsers(user_index, user);
+            this.server.addOnlineUser(user);
             updateTable();
         }else{
             data.put("error", "Invalid login");
@@ -104,11 +110,19 @@ public class TCPServerThread extends Thread{
         reply.put("close", "");
         this.loggedUser = false;
         //this.server.removeActiveUsers(this.userSocket.getInetAddress().getHostName());
-        int user_index = this.server.getActiveUsers().indexOf(this.user);
+        int user_index = this.server.getConnectedUsers().indexOf(this.user);
         this.user.setLoggedUser(false);
-        this.server.updateActiveUser(user_index, user);
+        this.server.updateActiveUsers(user_index, user);
+        this.server.removeActiveUsers(user);
         updateTable();
         return reply;    
+    }
+    
+    private JSONObject ping(JSONObject msg_json) throws JSONException{
+        JSONObject reply = new JSONObject();
+        reply.put("ping", "");
+        this.userPing = true;
+        return reply;
     }
     
     private JSONObject getReply(JSONObject msg_json) throws JSONException, IOException{
@@ -118,6 +132,7 @@ public class TCPServerThread extends Thread{
             case "login" -> reply = login(msg_json);
             case "register" -> reply = signup(msg_json);
             case "close" -> reply = logout(msg_json);
+            case "ping" -> reply = ping(msg_json);
             default -> {
             }
         }
@@ -135,6 +150,18 @@ public class TCPServerThread extends Thread{
         return reply;
     }
     
+    public void setUserPing(boolean userPing){
+        this.userPing = userPing;
+    }
+    
+    public boolean getUserPing(){
+        return this.userPing;
+    }
+    
+    public ActiveUser getActiveUser(){
+        return this.user;
+    }
+    
     @Override
     public void run(){
         try{
@@ -150,8 +177,16 @@ public class TCPServerThread extends Thread{
             while(true){
                 int flag = inputData.read(cbuf);
                 if (flag == -1 || userSocket.isClosed()) {
+                    System.out.println("Client desconected");
                     this.loggedUser = false;
-                    this.server.removeActiveUsers(this.userSocket.getInetAddress().getHostAddress());
+                    //this.server.removeActiveUsers(this.userSocket.getInetAddress().getHostAddress());
+                    this.server.removeActiveUsers(this.user);
+                    this.server.removeThread(this);
+                    try {
+                        this.userSocket.close();
+                    } catch (IOException ex) {
+                        Logger.getLogger(TCPServerThread.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     break;
                 }else{
                     //deal with received message
@@ -170,13 +205,20 @@ public class TCPServerThread extends Thread{
                 }
             }
         }catch(JSONException e){
-            e.printStackTrace();
             System.out.println("JSON error");
         }catch(IOException e){
             if(e.getMessage().equals("Connection reset")){
                 this.loggedUser = false;
                 System.out.println("Client desconected");
-                this.server.removeActiveUsers(this.userSocket.getInetAddress().getHostAddress());
+                //this.server.removeActiveUsers(this.userSocket.getInetAddress().getHostAddress());
+                this.server.removeActiveUsers(this.user);
+                this.server.removeThread(this);
+                try {
+                    this.userSocket.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(TCPServerThread.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                this.interrupt();
             }
         }
     }

@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -28,13 +29,17 @@ public class TCPServer extends Thread{
     private Socket userSocket;
     private Socket clientSocket;
     private ArrayList<TCPServerThread> threads;
-    private ArrayList<ActiveUser> activeUsers;
+    private ArrayList<ActiveUser> connectedUsers;
+    private ArrayList<ActiveUser> onlineUsers;
     private ServerView view;
+    private boolean alternate;
     
     public TCPServer(ServerView view){
         this.threads = new ArrayList<>();
-        this.activeUsers = new ArrayList<>();
+        this.connectedUsers = new ArrayList<>();
+        this.onlineUsers = new ArrayList<>();
         this.view = view;
+        this.alternate = true;
     }
     
     public void startServer(int port) throws IOException{
@@ -44,46 +49,80 @@ public class TCPServer extends Thread{
     }
     
     public void addActiveUser(ActiveUser activeUser){
-        this.activeUsers.add(activeUser);
+        this.connectedUsers.add(activeUser);
     }
     
-    public void removeActiveUsers(String userIP){
-        for(int i = 0; i < activeUsers.size();i++){
-            ActiveUser au = this.activeUsers.get(i);
+    public void removeActiveUsers(ActiveUser user){
+        /*for(int i = 0; i < connectedUsers.size();i++){
+            ActiveUser au = this.connectedUsers.get(i);
             if(au.getIp().equals(userIP)){
-                this.activeUsers.remove(i);
+                this.connectedUsers.remove(i);
             }
-        }
+        }*/
+        this.connectedUsers.remove(user);
     }
     
-    public ArrayList<ActiveUser> getActiveUsers(){
-        return this.activeUsers;
+    public void removeThread(TCPServerThread thread){
+        this.threads.remove(thread);
     }
     
-    public void updateActiveUser(int user_index, ActiveUser activeUser){
-        this.activeUsers.set(user_index, activeUser);
+    public ArrayList<ActiveUser> getConnectedUsers(){
+        return this.connectedUsers;
+    }
+    
+    public void updateActiveUsers(int user_index, ActiveUser activeUser){
+        this.connectedUsers.set(user_index, activeUser);
+    }
+    
+    public void addOnlineUser(ActiveUser activeUser){
+        this.onlineUsers.add(activeUser);
+    }
+    
+    public void removeOnlineUser(ActiveUser activeUser){
+        this.onlineUsers.remove(activeUser);
     }
     
     private Runnable createRunnable(final TCPServer tCPServer){
         Runnable ping = new Runnable() {
             @Override
             public void run() {
-                if(!tCPServer.threads.isEmpty()){
-                    for(TCPServerThread i : tCPServer.threads){
-                        JSONObject msg = new JSONObject();
-                        try {
-                            msg.put("ping", "");
-                        } catch (JSONException ex) {
-                            Logger.getLogger(TCPServer.class.getName()).log(Level.SEVERE, null, ex);
+                if(alternate){
+                    if(!tCPServer.threads.isEmpty()){
+                        for(TCPServerThread i : tCPServer.threads){
+                            if(!i.loggedUser) continue;
+                            JSONObject msg = new JSONObject();
+                            try {
+                                msg.put("ping", "");
+                            } catch (JSONException ex) {
+                                Logger.getLogger(TCPServer.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            JSONObject reply;
+                            try {
+                                reply = i.sendMessage(msg);
+                                i.setUserPing(false);
+                            } catch (IOException ex) {
+                                Logger.getLogger(TCPServer.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (JSONException ex) {
+                                Logger.getLogger(TCPServer.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
-                        JSONObject reply;
-                        try {
-                            reply = i.sendMessage(msg);
-                        } catch (IOException ex) {
-                            Logger.getLogger(TCPServer.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (JSONException ex) {
-                            Logger.getLogger(TCPServer.class.getName()).log(Level.SEVERE, null, ex);
+                        tCPServer.alternate = !tCPServer.alternate;
+                    }
+                }else{
+                    if(!tCPServer.threads.isEmpty()){
+                        for(TCPServerThread i : tCPServer.threads){
+                            if(!i.getUserPing()){
+                                try {
+                                    i.userSocket.close();
+                                } catch (IOException ex) {
+                                    Logger.getLogger(TCPServer.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                                tCPServer.threads.remove(i);
+                                tCPServer.connectedUsers.remove(i.getActiveUser());
+                                i.interrupt();
+                            }
                         }
+                        tCPServer.alternate = !tCPServer.alternate;
                     }
                 }
             }
@@ -94,7 +133,7 @@ public class TCPServer extends Thread{
     @Override
     public void run(){
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        executor.scheduleAtFixedRate(createRunnable(this), 0, 30, TimeUnit.HOURS);
+        executor.scheduleAtFixedRate(createRunnable(this), 0, 30, TimeUnit.SECONDS);
         while(true){
             try{
                 userSocket = serverSocket.accept();

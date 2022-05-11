@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
+import javax.swing.JOptionPane;
 import model.TCPServer;
 import model.TCPUser;
 import model.User;
@@ -509,7 +510,8 @@ public class ClientView extends javax.swing.JFrame {
                 jsonobj.put("login", data);
                 JSONObject reply = (JSONObject)this.tCPUser.sendMessage(jsonobj).get("login");
                 if(reply.has("error")){
-                    System.out.println("Error");
+                    JOptionPane.showMessageDialog(null, reply.get("error") , "Login error",
+                        JOptionPane.WARNING_MESSAGE);
                     throw new Exception("LoginError");
                 }
                 this.user = new User(reply.getString("id"), reply.getString("name"), reply.getString("cpf"), 
@@ -530,7 +532,6 @@ public class ClientView extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(ClientView.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-            Logger.getLogger(ClientView.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_loginbtnActionPerformed
 
