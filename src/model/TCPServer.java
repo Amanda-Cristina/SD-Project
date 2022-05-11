@@ -9,7 +9,14 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import main.ServerView;
+import org.json.JSONException;
+import org.json.JSONObject;
 import thread.utils.TCPServerThread;
 
 /**
@@ -49,8 +56,45 @@ public class TCPServer extends Thread{
         }
     }
     
+    public ArrayList<ActiveUser> getActiveUsers(){
+        return this.activeUsers;
+    }
+    
+    public void updateActiveUser(int user_index, ActiveUser activeUser){
+        this.activeUsers.set(user_index, activeUser);
+    }
+    
+    private Runnable createRunnable(final TCPServer tCPServer){
+        Runnable ping = new Runnable() {
+            @Override
+            public void run() {
+                if(!tCPServer.threads.isEmpty()){
+                    for(TCPServerThread i : tCPServer.threads){
+                        JSONObject msg = new JSONObject();
+                        try {
+                            msg.put("ping", "");
+                        } catch (JSONException ex) {
+                            Logger.getLogger(TCPServer.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        JSONObject reply;
+                        try {
+                            reply = i.sendMessage(msg);
+                        } catch (IOException ex) {
+                            Logger.getLogger(TCPServer.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (JSONException ex) {
+                            Logger.getLogger(TCPServer.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            }
+        };
+        return ping;
+    }
+    
     @Override
     public void run(){
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        executor.scheduleAtFixedRate(createRunnable(this), 0, 30, TimeUnit.HOURS);
         while(true){
             try{
                 userSocket = serverSocket.accept();
@@ -65,5 +109,9 @@ public class TCPServer extends Thread{
     
     public ServerView getServerView(){
         return this.view;
+    }
+    
+    public ArrayList<TCPServerThread> getServerThreadList(){
+        return this.threads;
     }
 }

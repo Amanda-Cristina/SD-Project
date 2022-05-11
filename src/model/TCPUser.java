@@ -30,10 +30,11 @@ public class TCPUser {
     public JSONObject sendMessage(JSONObject msg_json) throws IOException, JSONException{
         this.output.print(msg_json.toString());
         this.output.flush();
-        System.out.println("Message sent to "+ this.userSocket.getInetAddress().getHostAddress() +" = " + msg_json);
+        System.out.println("Message sent to "+ this.userSocket.getInetAddress().getHostAddress() + ":" + this.userSocket.getPort() + " = " + msg_json);
         char[] cbuf = new char[2048];
         input.read(cbuf);
         JSONObject reply = new JSONObject(String.valueOf(cbuf));
+        System.out.println("Message received from "+ this.userSocket.getInetAddress().getHostAddress() + ":" + this.userSocket.getPort() + " = " + msg_json);
         return reply;
     }
 }

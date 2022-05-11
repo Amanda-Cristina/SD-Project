@@ -589,12 +589,28 @@ public class ClientView extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(ClientView.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-            Logger.getLogger(ClientView.class.getName()).log(Level.SEVERE, null, ex);
+            //show error window
+            System.out.println("User already registered");
         }
     }//GEN-LAST:event_signupbtnActionPerformed
 
     private void logoutbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutbtnActionPerformed
         // TODO add your handling code here:
+        JSONObject jsonobj = new JSONObject();
+        try{
+            jsonobj.put("close", "");
+            JSONObject reply = this.tCPUser.sendMessage(jsonobj);
+            if( reply.get("close") != "" && reply.has("error")){
+                throw  new Exception("Logout error");
+            }
+            this.homepanel.setVisible(false);
+            this.loginpanel.setVisible(true);
+        }catch(JSONException | IOException e){
+            e.printStackTrace();
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        
     }//GEN-LAST:event_logoutbtnActionPerformed
 
     private void signupcpfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signupcpfActionPerformed

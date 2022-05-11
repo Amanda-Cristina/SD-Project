@@ -13,11 +13,19 @@ public class ActiveUser {
     private String ip;
     private int port;
     private User user;
+    private boolean loggedUser;
     
-    public ActiveUser(String ip, int porta, User user){
+    public ActiveUser(String ip, int porta, boolean loggedUser, User user){
         this.ip = ip;
         this.port = porta;
         this.user = user;
+        this.loggedUser = loggedUser;
+    }
+    
+    public ActiveUser(String ip, int porta, boolean loggedUser){
+        this.ip = ip;
+        this.port = porta;
+        this.loggedUser = loggedUser;
     }
     
     /**
@@ -60,5 +68,13 @@ public class ActiveUser {
      */
     public void setUser(User user) {
         this.user = user;
+    }
+    
+    public void setLoggedUser(boolean logged){
+        this.loggedUser = logged;
+    }
+    
+    public boolean getLoggedUser(){
+        return this.loggedUser;
     }
 }

@@ -25,11 +25,25 @@ public class TCPServerThread extends Thread{
     public boolean loggedUser = false;
     public PrintWriter outputData;
     public BufferedReader inputData;
+    private DefaultTableModel table;
+    private ActiveUser user;
     
     public TCPServerThread(Socket userSocket, TCPServer server){
         this.server = server;
         this.userSocket = userSocket;
         this.view = server.getServerView();
+    }
+    
+    public void updateTable(){
+        for(ActiveUser user_ : server.getActiveUsers()){
+            table = (DefaultTableModel)view.getTable().getModel();
+            table.setRowCount(0);
+            if(user_.getLoggedUser()){
+                table.insertRow(0,new Object[]{user_.getIp(),user_.getPorta(),user_.getUser().getName(),"true"});
+            }else{
+                table.insertRow(0,new Object[]{user_.getIp(),user_.getPorta(),"--","false"});
+            }
+        }
     }
     
     private JSONObject signup(JSONObject msg_json) throws JSONException, IOException{
@@ -62,40 +76,62 @@ public class TCPServerThread extends Thread{
         JSONObject data = new JSONObject();
         String cpf = msg_json.getJSONObject("login").getString("cpf");
         String password = msg_json.getJSONObject("login").getString("password");
-        User user = User.login(cpf, password);
-        if(user != null){
-            data.put("password",user.getPassword());
-            data.put("phone",user.getPhone());
-            data.put("cpf",user.getCpf());
-            data.put("name",user.getName());
-            data.put("id",user.getId());
+        User user_ = User.login(cpf, password);
+        if(user_ != null){
+            data.put("password",user_.getPassword());
+            data.put("phone",user_.getPhone());
+            data.put("cpf",user_.getCpf());
+            data.put("name",user_.getName());
+            data.put("id",user_.getId());
             reply.put("login", data);
-            ActiveUser activeUser = new ActiveUser(this.userSocket.getInetAddress().getHostAddress(), 
-                                                   this.userSocket.getLocalPort(), user);
-            this.server.addActiveUser(activeUser);
+            
+            this.loggedUser = true;
+            int user_index = this.server.getActiveUsers().indexOf(this.user);
+            this.user.setLoggedUser(true);
+            this.user.setUser(user_);
+            this.server.updateActiveUser(user_index, user);
+            updateTable();
         }else{
             data.put("error", "Invalid login");
             reply.put("login", data);
         }
+        
         return reply;
     }
     
-    private JSONObject logout(JSONObject msg_json){
+    private JSONObject logout(JSONObject msg_json) throws JSONException{
         JSONObject reply = new JSONObject();
-        JSONObject data = new JSONObject();
+        reply.put("close", "");
         this.loggedUser = false;
-        this.server.removeActiveUsers(this.userSocket.getInetAddress().getHostName());
-        return reply;
+        //this.server.removeActiveUsers(this.userSocket.getInetAddress().getHostName());
+        int user_index = this.server.getActiveUsers().indexOf(this.user);
+        this.user.setLoggedUser(false);
+        this.server.updateActiveUser(user_index, user);
+        updateTable();
+        return reply;    
     }
     
     private JSONObject getReply(JSONObject msg_json) throws JSONException, IOException{
         String operation = msg_json.keys().next().toString();
         JSONObject reply = new JSONObject();
-        if(operation.equals("login")){
-            reply = login(msg_json);
-        }else if(operation.equals("register")){
-            reply = signup(msg_json);
+        switch (operation) {
+            case "login" -> reply = login(msg_json);
+            case "register" -> reply = signup(msg_json);
+            case "close" -> reply = logout(msg_json);
+            default -> {
+            }
         }
+        return reply;
+    }
+    
+    public JSONObject sendMessage(JSONObject msg_json) throws IOException, JSONException{
+        this.outputData.print(msg_json.toString());
+        this.outputData.flush();
+        System.out.println("Message sent to "+ this.userSocket.getInetAddress().getHostAddress() + ":" + this.userSocket.getPort() + " = " + msg_json);
+        char[] cbuf = new char[2048];
+        inputData.read(cbuf);
+        JSONObject reply = new JSONObject(String.valueOf(cbuf));
+        System.out.println("Message received from "+ this.userSocket.getInetAddress().getHostAddress() + ":" + this.userSocket.getPort() + " = " + msg_json);
         return reply;
     }
     
@@ -104,11 +140,12 @@ public class TCPServerThread extends Thread{
         try{
             outputData = new PrintWriter(this.userSocket.getOutputStream(), true);
             inputData = new BufferedReader(new InputStreamReader(this.userSocket.getInputStream()));
-            System.out.println("New client connected: " + this.userSocket.getInetAddress().getHostAddress());
-            DefaultTableModel table = (DefaultTableModel)view.getTable().getModel();
-            table.insertRow(0,new Object[]{this.userSocket.getInetAddress().getHostAddress(),
-                                      this.userSocket.getPort(),
-                                      "--","false"});
+            System.out.println("New client connected: " + this.userSocket.getInetAddress().getHostAddress() + this.userSocket.getPort());
+            ActiveUser activeUser = new ActiveUser(this.userSocket.getInetAddress().getHostAddress(), 
+                                                   this.userSocket.getLocalPort(), false);
+            this.user = activeUser;
+            this.server.addActiveUser(activeUser);
+            this.updateTable();
             char[] cbuf = new char[2048];
             while(true){
                 int flag = inputData.read(cbuf);

@@ -46,12 +46,9 @@ public class Tests {
         System.out.println(jsonobj);
     }*/
         JSONObject jsonobj = new JSONObject();
-        JSONObject data = new JSONObject();
-        data.put("error","error");
-        jsonobj.put("login",data);
-        JSONObject reply = (JSONObject)jsonobj.get("login");
-        if(jsonobj.has("error")){
-            System.out.println(reply.get("error"));
-        }
+        //JSONObject data = new JSONObject();
+        //data.put("error","error");
+        jsonobj.put("ping","");
+        System.out.println(jsonobj);
     }
 }
