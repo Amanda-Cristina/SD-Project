@@ -15,6 +15,7 @@ import model.TCPUser;
 import model.User;
 import org.json.JSONException;
 import org.json.JSONObject;
+import thread.utils.TCPServerThread;
 
 /**
  *
@@ -498,6 +499,54 @@ public class ClientView extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_serverconnectionipActionPerformed
 
+private Runnable createRunnable(final TCPServer tCPServer){
+        Runnable ping = new Runnable() {
+            @Override
+            public void run() {
+                if(alternate){
+                    if(!tCPServer.threads.isEmpty()){
+                        for(TCPServerThread i : tCPServer.threads){
+                            if(!i.loggedUser) continue;
+                            JSONObject msg = new JSONObject();
+                            try {
+                                msg.put("ping", "");
+                            } catch (JSONException ex) {
+                                Logger.getLogger(TCPServer.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            JSONObject reply;
+                            try {
+                                reply = i.sendMessage(msg);
+                                i.setUserPing(false);
+                            } catch (IOException ex) {
+                                Logger.getLogger(TCPServer.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (JSONException ex) {
+                                Logger.getLogger(TCPServer.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                        tCPServer.alternate = !tCPServer.alternate;
+                    }
+                }else{
+                    if(!tCPServer.threads.isEmpty()){
+                        for(TCPServerThread i : tCPServer.threads){
+                            if(!i.getUserPing()){
+                                try {
+                                    i.userSocket.close();
+                                } catch (IOException ex) {
+                                    Logger.getLogger(TCPServer.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                                tCPServer.threads.remove(i);
+                                tCPServer.connectedUsers.remove(i.getActiveUser());
+                                i.interrupt();
+                            }
+                        }
+                        tCPServer.alternate = !tCPServer.alternate;
+                    }
+                }
+            }
+        };
+        return ping;
+    }
+    
     private void loginbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginbtnActionPerformed
         // TODO add your handling code here:
         JSONObject jsonobj = new JSONObject();
