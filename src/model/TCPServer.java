@@ -89,16 +89,16 @@ public class TCPServer extends Thread{
                 if(alternate){
                     if(!tCPServer.threads.isEmpty()){
                         for(TCPServerThread i : tCPServer.threads){
-                            if(!i.loggedUser) continue;
+                            if(!i.getActiveUser().getLoggedUser()) continue;
                             JSONObject msg = new JSONObject();
                             try {
-                                msg.put("ping", "");
+                                msg.put("ping", new JSONObject());
                             } catch (JSONException ex) {
                                 Logger.getLogger(TCPServer.class.getName()).log(Level.SEVERE, null, ex);
                             }
                             JSONObject reply;
                             try {
-                                reply = i.sendMessage(msg);
+                                i.sendMessageWithoutRet(msg);
                                 i.setUserPing(false);
                             } catch (IOException ex) {
                                 Logger.getLogger(TCPServer.class.getName()).log(Level.SEVERE, null, ex);
@@ -106,8 +106,8 @@ public class TCPServer extends Thread{
                                 Logger.getLogger(TCPServer.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
-                        tCPServer.alternate = !tCPServer.alternate;
                     }
+                    tCPServer.setAlternate(!tCPServer.getAlternate());
                 }else{
                     if(!tCPServer.threads.isEmpty()){
                         for(TCPServerThread i : tCPServer.threads){
@@ -120,11 +120,14 @@ public class TCPServer extends Thread{
                                 tCPServer.threads.remove(i);
                                 tCPServer.connectedUsers.remove(i.getActiveUser());
                                 i.interrupt();
+                                System.out.println(i.getActiveUser().getIp() + ":" +
+                                        i.getActiveUser().getPorta()+" removed for not responding to ping ");
                             }
                         }
-                        tCPServer.alternate = !tCPServer.alternate;
                     }
+                    tCPServer.setAlternate(!tCPServer.getAlternate());
                 }
+                return;
             }
         };
         return ping;
@@ -132,8 +135,8 @@ public class TCPServer extends Thread{
     
     @Override
     public void run(){
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        executor.scheduleAtFixedRate(createRunnable(this), 0, 30, TimeUnit.SECONDS);
+        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+        executor.scheduleAtFixedRate(createRunnable(this), 0, 2, TimeUnit.SECONDS);
         while(true){
             try{
                 userSocket = serverSocket.accept();
@@ -144,6 +147,7 @@ public class TCPServer extends Thread{
                 e.printStackTrace();
             }
         }
+        //executor.shutdown();
     }
     
     public ServerView getServerView(){
@@ -152,5 +156,13 @@ public class TCPServer extends Thread{
     
     public ArrayList<TCPServerThread> getServerThreadList(){
         return this.threads;
+    }
+    
+    public boolean getAlternate(){
+        return this.alternate;
+    }
+    
+    public void setAlternate(boolean alt){
+        this.alternate = alt;
     }
 }

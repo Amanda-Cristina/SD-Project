@@ -67,7 +67,7 @@ public class TCPServerThread extends Thread{
             UserDAO userDAO = new UserDAO();
             try{
                 userDAO.save(user);
-                reply.put("register", "");
+                reply.put("register", new JSONObject());
             }catch(IOException e){
                 data.put("error", "Database error");
                 reply.put("register", data);
@@ -90,12 +90,11 @@ public class TCPServerThread extends Thread{
             data.put("id",user_.getId());
             reply.put("login", data);
             
-            this.loggedUser = true;
             int user_index = this.server.getConnectedUsers().indexOf(this.user);
-            this.user.setLoggedUser(true);
             this.user.setUser(user_);
-            this.server.updateActiveUsers(user_index, user);
-            this.server.addOnlineUser(user);
+            this.user.setLoggedUser(true);
+            this.server.updateActiveUsers(user_index, this.user);
+            this.server.addOnlineUser(this.user);
             updateTable();
         }else{
             data.put("error", "Invalid login");
@@ -107,9 +106,8 @@ public class TCPServerThread extends Thread{
     
     private JSONObject logout(JSONObject msg_json) throws JSONException{
         JSONObject reply = new JSONObject();
-        reply.put("close", "");
-        this.loggedUser = false;
-        //this.server.removeActiveUsers(this.userSocket.getInetAddress().getHostName());
+        reply.put("close", new JSONObject());
+        //this.servethis.loggedUserr.removeActiveUsers(this.userSocket.getInetAddress().getHostName());
         int user_index = this.server.getConnectedUsers().indexOf(this.user);
         this.user.setLoggedUser(false);
         this.server.updateActiveUsers(user_index, user);
@@ -120,7 +118,7 @@ public class TCPServerThread extends Thread{
     
     private JSONObject ping(JSONObject msg_json) throws JSONException{
         JSONObject reply = new JSONObject();
-        reply.put("ping", "");
+        reply.put("ping", new JSONObject());
         this.userPing = true;
         return reply;
     }
@@ -137,6 +135,12 @@ public class TCPServerThread extends Thread{
             }
         }
         return reply;
+    }
+    
+    public void sendMessageWithoutRet(JSONObject msg_json) throws IOException, JSONException{
+        this.outputData.print(msg_json.toString());
+        this.outputData.flush();
+        System.out.println("Message sent to "+ this.userSocket.getInetAddress().getHostAddress() + ":" + this.userSocket.getPort() + " = " + msg_json);
     }
     
     public JSONObject sendMessage(JSONObject msg_json) throws IOException, JSONException{
@@ -178,7 +182,7 @@ public class TCPServerThread extends Thread{
                 int flag = inputData.read(cbuf);
                 if (flag == -1 || userSocket.isClosed()) {
                     System.out.println("Client desconected");
-                    this.loggedUser = false;
+                    this.user.setLoggedUser(false);
                     //this.server.removeActiveUsers(this.userSocket.getInetAddress().getHostAddress());
                     this.server.removeActiveUsers(this.user);
                     this.server.removeThread(this);
@@ -198,17 +202,19 @@ public class TCPServerThread extends Thread{
                     //get the reply
                     JSONObject reply = getReply(JSONMsg);
                     //sending reply to client
-                    outputData.print(reply);
-                    outputData.flush();
-                    System.out.println("Message sent to " + this.userSocket.getInetAddress().getHostAddress() + ":" + 
-                                        this.userSocket.getPort() + " = " + reply);
+                    if(!reply.has("ping")){
+                        outputData.print(reply);
+                        outputData.flush();
+                        System.out.println("Message sent to " + this.userSocket.getInetAddress().getHostAddress() + ":" + 
+                                            this.userSocket.getPort() + " = " + reply);
+                    }
                 }
             }
         }catch(JSONException e){
             System.out.println("JSON error");
         }catch(IOException e){
             if(e.getMessage().equals("Connection reset")){
-                this.loggedUser = false;
+                this.user.setLoggedUser(false);
                 System.out.println("Client desconected");
                 //this.server.removeActiveUsers(this.userSocket.getInetAddress().getHostAddress());
                 this.server.removeActiveUsers(this.user);

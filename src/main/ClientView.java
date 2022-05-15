@@ -483,7 +483,7 @@ public class ClientView extends javax.swing.JFrame {
         if(!this.serverconnectionip.getText().equals("")&&
             !this.serverconnectionport.getText().equals("")){
             try{
-                this.tCPUser = new TCPUser();
+                this.tCPUser = new TCPUser(this);
                 this.tCPUser.connect(this.serverconnectionip.getText(),
                                 Integer.valueOf(this.serverconnectionport.getText()));
                 this.serverconnection.setVisible(false);
@@ -498,54 +498,6 @@ public class ClientView extends javax.swing.JFrame {
     private void serverconnectionipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_serverconnectionipActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_serverconnectionipActionPerformed
-
-private Runnable createRunnable(final TCPServer tCPServer){
-        Runnable ping = new Runnable() {
-            @Override
-            public void run() {
-                if(alternate){
-                    if(!tCPServer.threads.isEmpty()){
-                        for(TCPServerThread i : tCPServer.threads){
-                            if(!i.loggedUser) continue;
-                            JSONObject msg = new JSONObject();
-                            try {
-                                msg.put("ping", "");
-                            } catch (JSONException ex) {
-                                Logger.getLogger(TCPServer.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                            JSONObject reply;
-                            try {
-                                reply = i.sendMessage(msg);
-                                i.setUserPing(false);
-                            } catch (IOException ex) {
-                                Logger.getLogger(TCPServer.class.getName()).log(Level.SEVERE, null, ex);
-                            } catch (JSONException ex) {
-                                Logger.getLogger(TCPServer.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        }
-                        tCPServer.alternate = !tCPServer.alternate;
-                    }
-                }else{
-                    if(!tCPServer.threads.isEmpty()){
-                        for(TCPServerThread i : tCPServer.threads){
-                            if(!i.getUserPing()){
-                                try {
-                                    i.userSocket.close();
-                                } catch (IOException ex) {
-                                    Logger.getLogger(TCPServer.class.getName()).log(Level.SEVERE, null, ex);
-                                }
-                                tCPServer.threads.remove(i);
-                                tCPServer.connectedUsers.remove(i.getActiveUser());
-                                i.interrupt();
-                            }
-                        }
-                        tCPServer.alternate = !tCPServer.alternate;
-                    }
-                }
-            }
-        };
-        return ping;
-    }
     
     private void loginbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginbtnActionPerformed
         // TODO add your handling code here:
@@ -557,8 +509,8 @@ private Runnable createRunnable(final TCPServer tCPServer){
                 data.put("cpf", this.logincpf.getText());
                 data.put("password", new String(this.loginpassword.getPassword()));
                 jsonobj.put("login", data);
-                JSONObject reply = (JSONObject)this.tCPUser.sendMessage(jsonobj).get("login");
-                if(reply.has("error")){
+                this.tCPUser.sendMessage(jsonobj);
+                /*if(reply.has("error")){
                     JOptionPane.showMessageDialog(null, reply.get("error") , "Login error",
                         JOptionPane.WARNING_MESSAGE);
                     throw new Exception("LoginError");
@@ -567,7 +519,7 @@ private Runnable createRunnable(final TCPServer tCPServer){
                                      reply.getString("phone"), reply.getString("password"));
                 this.loggedUser = true;
                 this.loginpanel.setVisible(false);
-                this.homepanel.setVisible(true);
+                this.homepanel.setVisible(true);*/
             }else{
                 if(this.logincpf.getText().isEmpty()){
                     this.logincpf.setBorder(BorderFactory.createLineBorder(Color.red));
@@ -613,13 +565,13 @@ private Runnable createRunnable(final TCPServer tCPServer){
                 data.put("phone", this.signupphone.getText());
                 data.put("password", new String(this.signuppassword.getPassword()));
                 jsonobj.put("register", data);
-                JSONObject reply = this.tCPUser.sendMessage(jsonobj);
-                if(!reply.get("register").equals("")){
+                this.tCPUser.sendMessage(jsonobj);
+                /*if(!reply.get("register").equals("")){
                     System.out.println("Error");
                     throw new Exception("SignupError");
                 }
                 this.signuppanel.setVisible(false);
-                this.loginpanel.setVisible(true);
+                this.loginpanel.setVisible(true);*/
             }else{
                 if(this.signupcpf.getText().isEmpty()){
                     this.signupcpf.setBorder(BorderFactory.createLineBorder(Color.red));
@@ -649,12 +601,12 @@ private Runnable createRunnable(final TCPServer tCPServer){
         JSONObject jsonobj = new JSONObject();
         try{
             jsonobj.put("close", "");
-            JSONObject reply = this.tCPUser.sendMessage(jsonobj);
-            if( reply.get("close") != "" && reply.has("error")){
+            this.tCPUser.sendMessage(jsonobj);
+            /*if( reply.get("close") != "" && reply.has("error")){
                 throw  new Exception("Logout error");
             }
-            this.homepanel.setVisible(false);
-            this.loginpanel.setVisible(true);
+            this.getHomepanel().setVisible(false);
+            this.loginpanel.setVisible(true);*/
         }catch(JSONException | IOException e){
             e.printStackTrace();
         }catch(Exception e){
@@ -751,4 +703,41 @@ private Runnable createRunnable(final TCPServer tCPServer){
     private javax.swing.JPasswordField signuppassword;
     private javax.swing.JTextField signupphone;
     // End of variables declaration//GEN-END:variables
+
+    public void setLoggedUser(boolean state){
+        this.loggedUser = state;
+    }
+    
+    public void setHomepanelVisibility(boolean state) {
+        this.serverconnection.setVisible(false);
+        this.homepanel.setVisible(state);
+        this.loginpanel.setVisible(false);
+        this.signuppanel.setVisible(false);
+    }
+
+    public void setLoginpanelVisibility(boolean state) {
+        this.serverconnection.setVisible(false);
+        this.homepanel.setVisible(false);
+        this.loginpanel.setVisible(state);
+        this.signuppanel.setVisible(false);
+    }
+
+    public void setSignuppanelVisibility(boolean state) {
+        this.serverconnection.setVisible(false);
+        this.homepanel.setVisible(false);
+        this.loginpanel.setVisible(false);
+        this.signuppanel.setVisible(state);
+    }
+    
+    public void setServerconnectionVisibility(boolean state){
+        this.serverconnection.setVisible(state);
+        this.homepanel.setVisible(false);
+        this.loginpanel.setVisible(false);
+        this.signuppanel.setVisible(false);
+    }
+    
+    public void setUser(User user){
+        this.user = user;
+    }
+    
 }
