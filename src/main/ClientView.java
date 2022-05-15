@@ -510,16 +510,6 @@ public class ClientView extends javax.swing.JFrame {
                 data.put("password", new String(this.loginpassword.getPassword()));
                 jsonobj.put("login", data);
                 this.tCPUser.sendMessage(jsonobj);
-                /*if(reply.has("error")){
-                    JOptionPane.showMessageDialog(null, reply.get("error") , "Login error",
-                        JOptionPane.WARNING_MESSAGE);
-                    throw new Exception("LoginError");
-                }
-                this.user = new User(reply.getString("id"), reply.getString("name"), reply.getString("cpf"), 
-                                     reply.getString("phone"), reply.getString("password"));
-                this.loggedUser = true;
-                this.loginpanel.setVisible(false);
-                this.homepanel.setVisible(true);*/
             }else{
                 if(this.logincpf.getText().isEmpty()){
                     this.logincpf.setBorder(BorderFactory.createLineBorder(Color.red));
@@ -560,18 +550,12 @@ public class ClientView extends javax.swing.JFrame {
                !this.signupcpf.getText().isEmpty()&&
                !this.signupname.getText().isEmpty()&&
                !(this.signuppassword.getPassword().length == 0)){
-                data.put("name", this.signupphone.getText());
+                data.put("name", this.signupname.getText());
                 data.put("cpf", this.signupcpf.getText());
                 data.put("phone", this.signupphone.getText());
                 data.put("password", new String(this.signuppassword.getPassword()));
                 jsonobj.put("register", data);
                 this.tCPUser.sendMessage(jsonobj);
-                /*if(!reply.get("register").equals("")){
-                    System.out.println("Error");
-                    throw new Exception("SignupError");
-                }
-                this.signuppanel.setVisible(false);
-                this.loginpanel.setVisible(true);*/
             }else{
                 if(this.signupcpf.getText().isEmpty()){
                     this.signupcpf.setBorder(BorderFactory.createLineBorder(Color.red));
@@ -600,13 +584,8 @@ public class ClientView extends javax.swing.JFrame {
         // TODO add your handling code here:
         JSONObject jsonobj = new JSONObject();
         try{
-            jsonobj.put("close", "");
+            jsonobj.put("close", new JSONObject());
             this.tCPUser.sendMessage(jsonobj);
-            /*if( reply.get("close") != "" && reply.has("error")){
-                throw  new Exception("Logout error");
-            }
-            this.getHomepanel().setVisible(false);
-            this.loginpanel.setVisible(true);*/
         }catch(JSONException | IOException e){
             e.printStackTrace();
         }catch(Exception e){

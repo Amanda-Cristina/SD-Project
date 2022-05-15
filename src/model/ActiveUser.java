@@ -45,14 +45,14 @@ public class ActiveUser {
     /**
      * @return the port
      */
-    public int getPorta() {
+    public int getPort() {
         return port;
     }
 
     /**
      * @param porta the port to set
      */
-    public void setPorta(int porta) {
+    public void setPort(int porta) {
         this.port = porta;
     }
 

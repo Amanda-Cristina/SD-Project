@@ -40,13 +40,15 @@ public class TCPServerThread extends Thread{
     }
     
     public void updateTable(){
+        table = (DefaultTableModel)view.getTable().getModel();
+        table.setRowCount(0);
+        int i = 0;
         for(ActiveUser user_ : server.getConnectedUsers()){
             table = (DefaultTableModel)view.getTable().getModel();
-            table.setRowCount(0);
             if(user_.getLoggedUser()){
-                table.insertRow(0,new Object[]{user_.getIp(),user_.getPorta(),user_.getUser().getName(),"true"});
+                table.insertRow(i++,new Object[]{user_.getIp(),user_.getPort(),user_.getUser().getName(),"true"});
             }else{
-                table.insertRow(0,new Object[]{user_.getIp(),user_.getPorta(),"--","false"});
+                table.insertRow(i++,new Object[]{user_.getIp(),user_.getPort(),"--","false"});
             }
         }
     }
@@ -112,6 +114,7 @@ public class TCPServerThread extends Thread{
         this.user.setLoggedUser(false);
         this.server.updateActiveUsers(user_index, user);
         this.server.removeActiveUsers(user);
+        this.server.removeOnlineUser(user);
         updateTable();
         return reply;    
     }
@@ -173,7 +176,7 @@ public class TCPServerThread extends Thread{
             inputData = new BufferedReader(new InputStreamReader(this.userSocket.getInputStream()));
             System.out.println("New client connected: " + this.userSocket.getInetAddress().getHostAddress() + this.userSocket.getPort());
             ActiveUser activeUser = new ActiveUser(this.userSocket.getInetAddress().getHostAddress(), 
-                                                   this.userSocket.getLocalPort(), false);
+                                                   this.userSocket.getPort(), false);
             this.user = activeUser;
             this.server.addActiveUser(activeUser);
             this.updateTable();
@@ -185,12 +188,14 @@ public class TCPServerThread extends Thread{
                     this.user.setLoggedUser(false);
                     //this.server.removeActiveUsers(this.userSocket.getInetAddress().getHostAddress());
                     this.server.removeActiveUsers(this.user);
+                    this.server.removeOnlineUser(this.user);
                     this.server.removeThread(this);
                     try {
                         this.userSocket.close();
                     } catch (IOException ex) {
                         Logger.getLogger(TCPServerThread.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                    updateTable();
                     break;
                 }else{
                     //deal with received message

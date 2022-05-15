@@ -119,9 +119,9 @@ public class TCPServer extends Thread{
                                 }
                                 tCPServer.threads.remove(i);
                                 tCPServer.connectedUsers.remove(i.getActiveUser());
-                                i.interrupt();
                                 System.out.println(i.getActiveUser().getIp() + ":" +
-                                        i.getActiveUser().getPorta()+" removed for not responding to ping ");
+                                        i.getActiveUser().getPort()+" removed for not responding to ping ");
+                                i.interrupt();
                             }
                         }
                     }

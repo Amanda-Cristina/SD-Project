@@ -4,6 +4,7 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/home/gilson/Documents/SD-Project/src/thread/utils/TCPUserThread.java</file>
+            <file>file:/home/gilson/Documents/SD-Project/src/thread/utils/TCPServerThread.java</file>
             <file>file:/home/gilson/Documents/SD-Project/src/model/TCPUser.java</file>
             <file>file:/home/gilson/Documents/SD-Project/src/main/ClientView.java</file>
         </group>

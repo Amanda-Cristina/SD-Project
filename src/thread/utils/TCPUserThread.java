@@ -70,6 +70,13 @@ public class TCPUserThread extends Thread{
         }
     }
     
+    public void treatLogout(JSONObject json_msg, ClientView clientView){
+        if(json_msg.has("close")){
+            clientView.setHomepanelVisibility(false);
+            clientView.setLoginpanelVisibility(true);
+        }
+    }
+    
     private synchronized Runnable createRunnable(final JSONObject json_msg, final ClientView clientView){
         Runnable runnable = () -> {
             String operation = json_msg.keys().next().toString();
@@ -89,7 +96,18 @@ public class TCPUserThread extends Thread{
                         Logger.getLogger(TCPUserThread.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-
+                
+                case "register" -> {
+                    try{
+                        treatSignup(json_msg, clientView);
+                    }catch(JSONException ex){
+                        Logger.getLogger(TCPUserThread.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                
+                case "close" -> {
+                    treatLogout(json_msg, clientView);
+                }
                 default -> throw new AssertionError();
             }
             return;
