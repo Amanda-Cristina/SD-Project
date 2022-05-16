@@ -1,4 +1,4 @@
-package model;
+package thread.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import main.ClientView;
+import model.User;
 import org.json.JSONException;
 import org.json.JSONObject;
 import thread.utils.TCPServerThread;
@@ -65,8 +66,20 @@ public class TCPUserThread extends Thread{
             JOptionPane.showMessageDialog(null, json_msg.get("error"), "Signup error",
                     JOptionPane.WARNING_MESSAGE);
         }else{
-            clientView.setLoggedUser(true);
+            clientView.setLoggedUser(false);
             clientView.setLoginpanelVisibility(true);
+        }
+    }
+    
+    public void treatUpdateUser(JSONObject json_msg, ClientView clientView) throws JSONException{
+        json_msg = (JSONObject)json_msg.get("updateUser");
+        if(json_msg.has("error")){
+            JOptionPane.showMessageDialog(null, json_msg.get("error"), "Update error",
+                    JOptionPane.WARNING_MESSAGE);
+        }else{
+            JOptionPane.showMessageDialog(null, "Update user information saved", "Update sucess",
+                    JOptionPane.OK_OPTION);
+            clientView.setUpdateUserVisibility(true);
         }
     }
     
@@ -100,6 +113,14 @@ public class TCPUserThread extends Thread{
                 case "register" -> {
                     try{
                         treatSignup(json_msg, clientView);
+                    }catch(JSONException ex){
+                        Logger.getLogger(TCPUserThread.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                
+                case "updateUser" -> {
+                    try{
+                        treatUpdateUser(json_msg, clientView);
                     }catch(JSONException ex){
                         Logger.getLogger(TCPUserThread.class.getName()).log(Level.SEVERE, null, ex);
                     }

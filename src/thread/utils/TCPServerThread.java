@@ -57,6 +57,12 @@ public class TCPServerThread extends Thread{
         JSONObject reply = new JSONObject();
         JSONObject data = new JSONObject();
         JSONObject data_ = msg_json.getJSONObject("register");
+        if(!data_.has("cpf")||!data_.has("name")||
+                !data_.has("password")||!data_.has("phone")){
+            data.put("error", "Field empty");
+            reply.put("register", data);
+            return reply;
+        }
         String cpf = data_.getString("cpf");
         String phone = data_.getString("phone");
         String name = data_.getString("name");
@@ -83,6 +89,11 @@ public class TCPServerThread extends Thread{
         JSONObject data = new JSONObject();
         String cpf = msg_json.getJSONObject("login").getString("cpf");
         String password = msg_json.getJSONObject("login").getString("password");
+        if(cpf.isEmpty() || password.isEmpty()){
+            data.put("error", "Field empty");
+            reply.put("register", data);
+            return reply;
+        }
         User user_ = User.login(cpf, password);
         if(user_ != null){
             data.put("password",user_.getPassword());
@@ -123,6 +134,36 @@ public class TCPServerThread extends Thread{
         JSONObject reply = new JSONObject();
         reply.put("ping", new JSONObject());
         this.userPing = true;
+        return reply;
+    }
+    
+    private JSONObject updateUser(JSONObject msg_json) throws JSONException, IOException{
+        JSONObject reply = new JSONObject();
+        JSONObject data = new JSONObject();
+        JSONObject data_ = msg_json.getJSONObject("userUpdate");
+        if(!data_.has("cpf")||!data_.has("name")||
+                !data_.has("password")||!data_.has("phone")){
+            data.put("error", "Field empty");
+            reply.put("register", data);
+            return reply;
+        }
+        String cpf = data_.getString("cpf");
+        String phone = data_.getString("phone");
+        String name = data_.getString("name");
+        String password = data_.getString("password");
+        User user_ = User.getUserByCpf(cpf);
+        UserDAO userDAO = new UserDAO();
+        user_.setCpf(cpf);
+        user_.setName(name);
+        user_.setPassword(password);
+        user_.setPhone(phone);
+        try{
+            userDAO.updateById(user_);
+            reply.put("userUpdate", new JSONObject());
+        }catch(IOException e){
+            data.put("error", "Database error");
+            reply.put("userUpdate", data);
+        }
         return reply;
     }
     

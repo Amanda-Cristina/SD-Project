@@ -136,7 +136,7 @@ public class TCPServer extends Thread{
     @Override
     public void run(){
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-        executor.scheduleAtFixedRate(createRunnable(this), 0, 2, TimeUnit.SECONDS);
+        executor.scheduleAtFixedRate(createRunnable(this), 0, 30, TimeUnit.SECONDS);
         while(true){
             try{
                 userSocket = serverSocket.accept();

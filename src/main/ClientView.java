@@ -81,6 +81,21 @@ public class ClientView extends javax.swing.JFrame {
         jPanel8 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         logoutbtn = new javax.swing.JButton();
+        updateUserbtn = new javax.swing.JButton();
+        updateUserpanel = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        updatename = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        updatebtn = new javax.swing.JButton();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jSeparator4 = new javax.swing.JSeparator();
+        updatephone = new javax.swing.JTextField();
+        updatecpf = new javax.swing.JTextField();
+        updatepassword = new javax.swing.JPasswordField();
+        updatecancelbtn = new javax.swing.JButton();
+        jLabel17 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.CardLayout());
@@ -298,7 +313,7 @@ public class ClientView extends javax.swing.JFrame {
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(63, Short.MAX_VALUE))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
 
         getContentPane().add(signuppanel, "card2");
@@ -448,6 +463,15 @@ public class ClientView extends javax.swing.JFrame {
             }
         });
 
+        updateUserbtn.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
+        updateUserbtn.setForeground(new java.awt.Color(66, 165, 245));
+        updateUserbtn.setText("Edit account");
+        updateUserbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateUserbtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout homepanelLayout = new javax.swing.GroupLayout(homepanel);
         homepanel.setLayout(homepanelLayout);
         homepanelLayout.setHorizontalGroup(
@@ -459,6 +483,8 @@ public class ClientView extends javax.swing.JFrame {
                     .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, homepanelLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(updateUserbtn)
+                        .addGap(18, 18, 18)
                         .addComponent(logoutbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -470,11 +496,148 @@ public class ClientView extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(logoutbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(homepanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(logoutbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(updateUserbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         getContentPane().add(homepanel, "card4");
+
+        updatename.setToolTipText("User");
+        updatename.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updatenameActionPerformed(evt);
+            }
+        });
+
+        jLabel12.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
+        jLabel12.setText("Name");
+
+        jLabel14.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
+        jLabel14.setText("Phone");
+
+        updatebtn.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
+        updatebtn.setForeground(new java.awt.Color(66, 165, 245));
+        updatebtn.setText("Update");
+        updatebtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updatebtnActionPerformed(evt);
+            }
+        });
+
+        jLabel15.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
+        jLabel15.setText("CPF");
+
+        jLabel16.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
+        jLabel16.setText("Password");
+
+        updatephone.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updatephoneActionPerformed(evt);
+            }
+        });
+
+        updatecpf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updatecpfActionPerformed(evt);
+            }
+        });
+
+        updatecancelbtn.setBackground(new java.awt.Color(244, 67, 54));
+        updatecancelbtn.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
+        updatecancelbtn.setForeground(new java.awt.Color(255, 255, 255));
+        updatecancelbtn.setText("Cancel");
+        updatecancelbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updatecancelbtnActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel12)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(updatename)
+                            .addComponent(jSeparator4)
+                            .addComponent(updatephone)
+                            .addComponent(updatecpf)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel14)
+                                    .addComponent(jLabel15)
+                                    .addComponent(jLabel16))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(updatepassword)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                                .addComponent(updatecancelbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
+                                .addComponent(updatebtn, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap())))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(updatename, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel14)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(updatephone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel15)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(updatecpf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel16)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(updatepassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(updatebtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(updatecancelbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        jLabel17.setFont(new java.awt.Font("Noto Sans", 0, 36)); // NOI18N
+        jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel17.setText("Edit account");
+
+        javax.swing.GroupLayout updateUserpanelLayout = new javax.swing.GroupLayout(updateUserpanel);
+        updateUserpanel.setLayout(updateUserpanelLayout);
+        updateUserpanelLayout.setHorizontalGroup(
+            updateUserpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(updateUserpanelLayout.createSequentialGroup()
+                .addGap(130, 130, 130)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(130, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, updateUserpanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        updateUserpanelLayout.setVerticalGroup(
+            updateUserpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(updateUserpanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel17)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        getContentPane().add(updateUserpanel, "card2");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -606,6 +769,67 @@ public class ClientView extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_serverconnectionportActionPerformed
 
+    private void updateUserbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateUserbtnActionPerformed
+        // TODO add your handling code here:
+        this.homepanel.setVisible(false);
+        this.updateUserpanel.setVisible(true);
+    }//GEN-LAST:event_updateUserbtnActionPerformed
+
+    private void updatenameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updatenameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_updatenameActionPerformed
+
+    private void updatebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updatebtnActionPerformed
+        // TODO add your handling code here:
+        JSONObject jsonobj = new JSONObject();
+        JSONObject data = new JSONObject();
+        try {
+            if(!this.updatephone.getText().isEmpty()&&
+               !this.updatecpf.getText().isEmpty()&&
+               !this.updatename.getText().isEmpty()&&
+               !(this.updatepassword.getPassword().length == 0)){
+                data.put("name", this.updatename.getText());
+                data.put("cpf", this.updatecpf.getText());
+                data.put("phone", this.updatephone.getText());
+                data.put("password", new String(this.updatepassword.getPassword()));
+                jsonobj.put("updateUser", data);
+                this.tCPUser.sendMessage(jsonobj);
+            }else{
+                if(this.updatecpf.getText().isEmpty()){
+                    this.updatecpf.setBorder(BorderFactory.createLineBorder(Color.red));
+                }
+                if(this.updatename.getText().isEmpty()){
+                    this.updatename.setBorder(BorderFactory.createLineBorder(Color.red));
+                }
+                if(this.updatephone.getText().isEmpty()){
+                    this.updatephone.setBorder(BorderFactory.createLineBorder(Color.red));
+                }
+                if(this.updatepassword.getPassword().length == 0){
+                    this.updatepassword.setBorder(BorderFactory.createLineBorder(Color.red));
+                }
+            }
+        } catch (JSONException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            Logger.getLogger(ClientView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_updatebtnActionPerformed
+
+    private void updatephoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updatephoneActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_updatephoneActionPerformed
+
+    private void updatecpfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updatecpfActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_updatecpfActionPerformed
+
+    private void updatecancelbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updatecancelbtnActionPerformed
+        // TODO add your handling code here:
+        this.updateUserpanel.setVisible(false);
+        this.homepanel.setVisible(true);
+    }//GEN-LAST:event_updatecancelbtnActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -647,7 +871,12 @@ public class ClientView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -659,12 +888,14 @@ public class ClientView extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
     private javax.swing.JButton loginbtn;
     private javax.swing.JTextField logincpf;
     private javax.swing.JPanel loginpanel;
@@ -681,6 +912,14 @@ public class ClientView extends javax.swing.JFrame {
     private javax.swing.JPanel signuppanel;
     private javax.swing.JPasswordField signuppassword;
     private javax.swing.JTextField signupphone;
+    private javax.swing.JButton updateUserbtn;
+    private javax.swing.JPanel updateUserpanel;
+    private javax.swing.JButton updatebtn;
+    private javax.swing.JButton updatecancelbtn;
+    private javax.swing.JTextField updatecpf;
+    private javax.swing.JTextField updatename;
+    private javax.swing.JPasswordField updatepassword;
+    private javax.swing.JTextField updatephone;
     // End of variables declaration//GEN-END:variables
 
     public void setLoggedUser(boolean state){
@@ -711,6 +950,14 @@ public class ClientView extends javax.swing.JFrame {
     public void setServerconnectionVisibility(boolean state){
         this.serverconnection.setVisible(state);
         this.homepanel.setVisible(false);
+        this.loginpanel.setVisible(false);
+        this.signuppanel.setVisible(false);
+    }
+    
+    public void setUpdateUserVisibility(boolean state){
+        this.updateUserpanel.setVisible(false);
+        this.serverconnection.setVisible(false);
+        this.homepanel.setVisible(true);
         this.loginpanel.setVisible(false);
         this.signuppanel.setVisible(false);
     }
