@@ -7,60 +7,60 @@ package dao;
 import database.Database;
 import java.io.IOException;
 import java.util.List;
-import model.User;
+import model.Donation;
 
 /**
  *
  * @author gilson
  */
-public class UserDAO {
-    public void save(User user) throws IOException{
+public class DonationDAO {
+    public void save(Donation donation) throws IOException{
         Database db = Database.getInstance();
-        db.getUsers().add(user);
+        db.getDonations().add(donation);
         db.saveState();
     }
     
-    public List<User> select() throws IOException{
+    public List<Donation> select() throws IOException{
         Database db = Database.getInstance();
-        return db.getUsers();
+        return db.getDonations();
     }
     
-    public List<User> selectAll() throws IOException{
+    public List<Donation> selectAll() throws IOException{
         Database db = Database.getInstance();
-        return (List<User>)db.getUsers();
+        return (List<Donation>)db.getDonations();
     }
     
-    public void delete(User user) throws IOException{
+    public void delete(Donation donation) throws IOException{
         Database db = Database.getInstance();
-        db.getUsers().remove(user);
+        db.getDonations().remove(donation);
         db.saveState();
     }
     
-    public boolean update(User user) throws IOException{
+    public boolean update(Donation donation) throws IOException{
         Database db = Database.getInstance();
-        int index = db.getUsers().indexOf(user);
+        int index = db.getDonations().indexOf(donation);
         if(index == -1){
             return false;
         }
-        db.getUsers().set(index, user);
+        db.getDonations().set(index, donation);
         db.saveState();
         return true;
     }
     
-    public boolean updateById(User user) throws IOException{
+    public boolean updateById(Donation donation) throws IOException{
         Database db = Database.getInstance();
-        List<User> users = db.getUsers();
+        List<Donation> donations = db.getDonations();
         int index=-1;
-        String id = user.getId();
-        for(int i=0;i<users.size();i++){
-            if(users.get(i).getId().equals(id)){
+        String id = donation.getId();
+        for(int i=0;i<donations.size();i++){
+            if(donations.get(i).getId().equals(id)){
                 index = i;
             }
         }
         if(index == -1){
             return false;
         }
-        db.getUsers().set(index, user);
+        db.getDonations().set(index, donation);
         db.saveState();
         return true;
     }

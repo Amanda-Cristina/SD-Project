@@ -10,8 +10,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
-import model.TCPServer;
-import model.TCPUser;
+import model.server.TCPServer;
+import model.server.TCPUser;
 import model.User;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -96,6 +96,18 @@ public class ClientView extends javax.swing.JFrame {
         updatepassword = new javax.swing.JPasswordField();
         updatecancelbtn = new javax.swing.JButton();
         jLabel17 = new javax.swing.JLabel();
+        createdonationpanel = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
+        createdonationquantity = new javax.swing.JTextField();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        createdonationbtn = new javax.swing.JButton();
+        jLabel20 = new javax.swing.JLabel();
+        jSeparator5 = new javax.swing.JSeparator();
+        createdonationmeasure = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        createdonationdescription = new javax.swing.JTextArea();
+        jLabel22 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.CardLayout());
@@ -639,6 +651,117 @@ public class ClientView extends javax.swing.JFrame {
 
         getContentPane().add(updateUserpanel, "card2");
 
+        createdonationquantity.setToolTipText("User");
+        createdonationquantity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createdonationquantityActionPerformed(evt);
+            }
+        });
+
+        jLabel18.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
+        jLabel18.setText("Quantity");
+
+        jLabel19.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
+        jLabel19.setText("Measure unit");
+
+        createdonationbtn.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
+        createdonationbtn.setForeground(new java.awt.Color(66, 165, 245));
+        createdonationbtn.setText("Create");
+        createdonationbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createdonationbtnActionPerformed(evt);
+            }
+        });
+
+        jLabel20.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
+        jLabel20.setText("Description");
+
+        createdonationmeasure.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createdonationmeasureActionPerformed(evt);
+            }
+        });
+
+        createdonationdescription.setColumns(20);
+        createdonationdescription.setRows(5);
+        jScrollPane1.setViewportView(createdonationdescription);
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(jLabel18)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1)
+                            .addComponent(createdonationquantity)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                                .addGap(0, 211, Short.MAX_VALUE)
+                                .addComponent(createdonationbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jSeparator5)
+                            .addComponent(createdonationmeasure)
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel19)
+                                    .addComponent(jLabel20))
+                                .addGap(0, 234, Short.MAX_VALUE)))
+                        .addContainerGap())))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(createdonationquantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel19)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(createdonationmeasure, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel20)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                .addComponent(createdonationbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jLabel22.setFont(new java.awt.Font("Noto Sans", 0, 36)); // NOI18N
+        jLabel22.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel22.setText("Create donation");
+
+        javax.swing.GroupLayout createdonationpanelLayout = new javax.swing.GroupLayout(createdonationpanel);
+        createdonationpanel.setLayout(createdonationpanelLayout);
+        createdonationpanelLayout.setHorizontalGroup(
+            createdonationpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(createdonationpanelLayout.createSequentialGroup()
+                .addGap(130, 130, 130)
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(130, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, createdonationpanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        createdonationpanelLayout.setVerticalGroup(
+            createdonationpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(createdonationpanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel22)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(48, Short.MAX_VALUE))
+        );
+
+        getContentPane().add(createdonationpanel, "card2");
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -830,6 +953,42 @@ public class ClientView extends javax.swing.JFrame {
         this.homepanel.setVisible(true);
     }//GEN-LAST:event_updatecancelbtnActionPerformed
 
+    private void createdonationquantityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createdonationquantityActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_createdonationquantityActionPerformed
+
+    private void createdonationbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createdonationbtnActionPerformed
+        // TODO add your handling code here:
+        JSONObject jsonobj = new JSONObject();
+        JSONObject data = new JSONObject();
+        try {
+            if(!this.createdonationquantity.getText().isEmpty()&&
+               !this.createdonationmeasure.getText().isEmpty()){
+                data.put("name", this.createdonationquantity.getText());
+                data.put("measureUnit", this.createdonationmeasure.getText());
+                data.put("description", this.createdonationdescription.getText());
+                data.put("idDonor", this.user.getId());
+                jsonobj.put("donation", data);
+                this.tCPUser.sendMessage(jsonobj);
+            }else{
+                if(this.createdonationquantity.getText().isEmpty()){
+                    this.createdonationquantity.setBorder(BorderFactory.createLineBorder(Color.red));
+                }
+                if(this.createdonationmeasure.getText().isEmpty()){
+                    this.createdonationmeasure.setBorder(BorderFactory.createLineBorder(Color.red));
+                }
+            }
+        } catch (JSONException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            Logger.getLogger(ClientView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_createdonationbtnActionPerformed
+
+    private void createdonationmeasureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createdonationmeasureActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_createdonationmeasureActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -867,6 +1026,11 @@ public class ClientView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton createdonationbtn;
+    private javax.swing.JTextArea createdonationdescription;
+    private javax.swing.JTextField createdonationmeasure;
+    private javax.swing.JPanel createdonationpanel;
+    private javax.swing.JTextField createdonationquantity;
     private javax.swing.JPanel homepanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -877,7 +1041,11 @@ public class ClientView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -890,12 +1058,15 @@ public class ClientView extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JSeparator jSeparator5;
     private javax.swing.JButton loginbtn;
     private javax.swing.JTextField logincpf;
     private javax.swing.JPanel loginpanel;

@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package model;
+package model.server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -16,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import main.ServerView;
+import model.ActiveUser;
 import org.json.JSONException;
 import org.json.JSONObject;
 import thread.utils.TCPServerThread;
@@ -43,8 +44,8 @@ public class TCPServer extends Thread{
     }
     
     public void startServer(int port) throws IOException{
-        System.out.println("Server start at port: " + port);
         serverSocket = new ServerSocket(port);
+        System.out.println("Server start at port: " + port);
         this.start();
     }
     

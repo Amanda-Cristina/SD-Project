@@ -8,7 +8,7 @@ import java.awt.CardLayout;
 import java.io.IOException;
 import javax.swing.JPanel;
 import javax.swing.JTable;
-import model.TCPServer;
+import model.server.TCPServer;
 
 /**
  *

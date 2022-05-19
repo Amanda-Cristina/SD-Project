@@ -5,10 +5,18 @@
 package model;
 
 import dao.UserDAO;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.json.JSONException;
 import org.json.JSONObject;
 /**
@@ -27,8 +35,8 @@ public class User implements Serializable{
     public User(String name,
                 String cpf,
                 String phone,
-                String password){
-        this.id = UUID.randomUUID().toString();
+                String password) throws IOException{
+        this.id = String.valueOf(this.getID_());
         this.name = name;
         this.cpf = cpf;
         this.phone = phone;
@@ -45,6 +53,25 @@ public class User implements Serializable{
         this.cpf = cpf;
         this.phone = phone;
         this.password = password;
+    }
+    
+    private int getID_() throws IOException{
+        ObjectInputStream inputobj = null;
+        ObjectOutputStream outputobj = null;
+        AtomicInteger id;
+        try{
+            inputobj = new ObjectInputStream(new BufferedInputStream(new FileInputStream(new File("index_user.dat"))));
+            id = (AtomicInteger) inputobj.readObject();
+            inputobj.close();
+            return id.getAndIncrement();
+        }catch(ClassNotFoundException | IOException ex){
+            id = new AtomicInteger();
+            int id_ = id.getAndIncrement();
+            outputobj = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream("index_user.dat")));
+            outputobj.writeObject(id);
+            outputobj.close();
+            return id_;
+        }
     }
     
     public static User getUserByCpf(String cpf) throws IOException{

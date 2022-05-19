@@ -1,5 +1,6 @@
 package thread.utils;
 
+import dao.DonationDAO;
 import dao.UserDAO;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,7 +13,8 @@ import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import main.ServerView;
 import model.ActiveUser;
-import model.TCPServer;
+import model.Donation;
+import model.server.TCPServer;
 import model.User;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -81,6 +83,34 @@ public class TCPServerThread extends Thread{
                 reply.put("register", data);
             }
         }
+        return reply;
+    }
+    
+    private JSONObject donation(JSONObject msg_json) throws JSONException, IOException{
+        JSONObject reply = new JSONObject();
+        JSONObject data = new JSONObject();
+        JSONObject data_ = msg_json.getJSONObject("donation");
+        if(!data_.has("quantity")||!data_.has("measureUnit")
+                ||!data_.has("description")){
+            data.put("error", "Field empty");
+            reply.put("register", data);
+            return reply;
+        }
+        String quantity = data_.getString("quantity");
+        String description = data_.getString("description");
+        String measureUnit = data_.getString("measureUnit");
+        String idDonor = data_.getString("idDonor");
+        
+        Donation donation = new Donation(Float.parseFloat(quantity), measureUnit, description, idDonor);
+        DonationDAO DonationDAO = new DonationDAO();
+        try{
+            DonationDAO.save(donation);
+            reply.put("donation", new JSONObject());
+        }catch(IOException e){
+            data.put("error", "Database error");
+            reply.put("donation", data);
+        }
+
         return reply;
     }
     
@@ -173,6 +203,7 @@ public class TCPServerThread extends Thread{
         switch (operation) {
             case "login" -> reply = login(msg_json);
             case "register" -> reply = signup(msg_json);
+            case "donation" -> reply = donation(msg_json);
             case "close" -> reply = logout(msg_json);
             case "ping" -> reply = ping(msg_json);
             default -> {

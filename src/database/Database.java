@@ -11,6 +11,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import model.Donation;
 import model.User;
 
 /**
@@ -19,6 +20,7 @@ import model.User;
  */
 public class Database implements Serializable{
     private List<User> users = new ArrayList<>();
+    private List<Donation> donations = new ArrayList<>();
     
     public List<User> getUsers(){
         return users;
@@ -26,6 +28,14 @@ public class Database implements Serializable{
     
     public void setUsers(List<User> users){
         this.users = users;
+    }
+    
+    public List<Donation> getDonations(){
+        return donations;
+    }
+    
+    public void setDonations(List<Donation> donations){
+        this.donations = donations;
     }
     
     private static Database bd = null;
