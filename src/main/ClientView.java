@@ -9,12 +9,14 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import model.server.TCPServer;
 import model.server.TCPUser;
 import model.User;
 import org.json.JSONException;
 import org.json.JSONObject;
+import pojoutils.ReceptionsPojo;
 import thread.utils.TCPServerThread;
 
 /**
@@ -26,11 +28,13 @@ public class ClientView extends javax.swing.JFrame {
     private TCPUser tCPUser;
     private boolean loggedUser = false;
     private User user;
+    private boolean homeOperation;
     
     /**
      * Creates new form Client
      */
     public ClientView() {
+        this.homeOperation = true;
         initComponents();
     }
 
@@ -43,6 +47,8 @@ public class ClientView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
         serverconnection = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
@@ -76,12 +82,15 @@ public class ClientView extends javax.swing.JFrame {
         signupbtn_link = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
         homepanel = new javax.swing.JPanel();
+        jSeparator6 = new javax.swing.JSeparator();
         jLabel13 = new javax.swing.JLabel();
-        jPanel5 = new javax.swing.JPanel();
-        jPanel8 = new javax.swing.JPanel();
-        jPanel7 = new javax.swing.JPanel();
         logoutbtn = new javax.swing.JButton();
         updateUserbtn = new javax.swing.JButton();
+        donateListbtn = new javax.swing.JButton();
+        receiveListbtn = new javax.swing.JButton();
+        receiveOrDonatebtn = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        receiveOrDonateList = new javax.swing.JList();
         updateUserpanel = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         updatename = new javax.swing.JTextField();
@@ -108,6 +117,10 @@ public class ClientView extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         createdonationdescription = new javax.swing.JTextArea();
         jLabel22 = new javax.swing.JLabel();
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane2.setViewportView(jTextArea1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.CardLayout());
@@ -190,7 +203,7 @@ public class ClientView extends javax.swing.JFrame {
             .addGroup(serverconnectionLayout.createSequentialGroup()
                 .addGap(130, 130, 130)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(130, Short.MAX_VALUE))
+                .addContainerGap(132, Short.MAX_VALUE))
             .addGroup(serverconnectionLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -203,7 +216,7 @@ public class ClientView extends javax.swing.JFrame {
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(132, Short.MAX_VALUE))
+                .addContainerGap(104, Short.MAX_VALUE))
         );
 
         getContentPane().add(serverconnection, "card5");
@@ -312,7 +325,7 @@ public class ClientView extends javax.swing.JFrame {
             .addGroup(signuppanelLayout.createSequentialGroup()
                 .addGap(130, 130, 130)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(130, Short.MAX_VALUE))
+                .addContainerGap(132, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, signuppanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -325,7 +338,7 @@ public class ClientView extends javax.swing.JFrame {
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(48, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         getContentPane().add(signuppanel, "card2");
@@ -415,7 +428,7 @@ public class ClientView extends javax.swing.JFrame {
             .addGroup(loginpanelLayout.createSequentialGroup()
                 .addGap(130, 130, 130)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(130, Short.MAX_VALUE))
+                .addContainerGap(132, Short.MAX_VALUE))
             .addGroup(loginpanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -428,7 +441,7 @@ public class ClientView extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(132, Short.MAX_VALUE))
+                .addContainerGap(104, Short.MAX_VALUE))
         );
 
         getContentPane().add(loginpanel, "card3");
@@ -436,34 +449,6 @@ public class ClientView extends javax.swing.JFrame {
         jLabel13.setFont(new java.awt.Font("Noto Sans", 0, 36)); // NOI18N
         jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel13.setText("Home");
-
-        jPanel5.setLayout(new java.awt.GridLayout(1, 0));
-
-        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
-        jPanel8.setLayout(jPanel8Layout);
-        jPanel8Layout.setHorizontalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 291, Short.MAX_VALUE)
-        );
-        jPanel8Layout.setVerticalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 328, Short.MAX_VALUE)
-        );
-
-        jPanel5.add(jPanel8);
-
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 291, Short.MAX_VALUE)
-        );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 328, Short.MAX_VALUE)
-        );
-
-        jPanel5.add(jPanel7);
 
         logoutbtn.setBackground(new java.awt.Color(244, 67, 54));
         logoutbtn.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
@@ -484,6 +469,28 @@ public class ClientView extends javax.swing.JFrame {
             }
         });
 
+        donateListbtn.setText("Donate");
+        donateListbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                donateListbtnActionPerformed(evt);
+            }
+        });
+
+        receiveListbtn.setText("Receive");
+        receiveListbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                receiveListbtnActionPerformed(evt);
+            }
+        });
+
+        receiveOrDonatebtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                receiveOrDonatebtnActionPerformed(evt);
+            }
+        });
+
+        jScrollPane3.setViewportView(receiveOrDonateList);
+
         javax.swing.GroupLayout homepanelLayout = new javax.swing.GroupLayout(homepanel);
         homepanel.setLayout(homepanelLayout);
         homepanelLayout.setHorizontalGroup(
@@ -491,26 +498,41 @@ public class ClientView extends javax.swing.JFrame {
             .addGroup(homepanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(homepanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, homepanelLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jSeparator6)
+                    .addGroup(homepanelLayout.createSequentialGroup()
+                        .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(updateUserbtn)
-                        .addGap(18, 18, 18)
-                        .addComponent(logoutbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(20, 20, 20)
+                        .addComponent(logoutbtn))
+                    .addGroup(homepanelLayout.createSequentialGroup()
+                        .addComponent(donateListbtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(homepanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(receiveOrDonatebtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(receiveListbtn)))
                 .addContainerGap())
         );
         homepanelLayout.setVerticalGroup(
             homepanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(homepanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel13)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(homepanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(logoutbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(updateUserbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel13)
+                    .addComponent(logoutbtn)
+                    .addComponent(updateUserbtn))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(homepanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(homepanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(donateListbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(receiveListbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(receiveOrDonatebtn, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -633,7 +655,7 @@ public class ClientView extends javax.swing.JFrame {
             .addGroup(updateUserpanelLayout.createSequentialGroup()
                 .addGap(130, 130, 130)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(130, Short.MAX_VALUE))
+                .addContainerGap(132, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, updateUserpanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -744,7 +766,7 @@ public class ClientView extends javax.swing.JFrame {
             .addGroup(createdonationpanelLayout.createSequentialGroup()
                 .addGap(130, 130, 130)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(130, Short.MAX_VALUE))
+                .addContainerGap(132, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, createdonationpanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -757,7 +779,7 @@ public class ClientView extends javax.swing.JFrame {
                 .addComponent(jLabel22)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(48, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         getContentPane().add(createdonationpanel, "card2");
@@ -964,7 +986,7 @@ public class ClientView extends javax.swing.JFrame {
         try {
             if(!this.createdonationquantity.getText().isEmpty()&&
                !this.createdonationmeasure.getText().isEmpty()){
-                data.put("name", this.createdonationquantity.getText());
+                data.put("quantity", this.createdonationquantity.getText());
                 data.put("measureUnit", this.createdonationmeasure.getText());
                 data.put("description", this.createdonationdescription.getText());
                 data.put("idDonor", this.user.getId());
@@ -988,6 +1010,34 @@ public class ClientView extends javax.swing.JFrame {
     private void createdonationmeasureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createdonationmeasureActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_createdonationmeasureActionPerformed
+
+    private void donateListbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_donateListbtnActionPerformed
+        // TODO add your handling code here:
+        this.receiveOrDonatebtn.setText("Create Donation");
+        this.homeOperation = true;
+    }//GEN-LAST:event_donateListbtnActionPerformed
+
+    private void receiveListbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_receiveListbtnActionPerformed
+        // TODO add your handling code here:
+        this.receiveOrDonatebtn.setText("Receive");
+        this.homeOperation = false;
+    }//GEN-LAST:event_receiveListbtnActionPerformed
+
+    private void receiveOrDonatebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_receiveOrDonatebtnActionPerformed
+        //Create donation
+        if(homeOperation){
+            this.homepanel.setVisible(false);
+            this.createdonationpanel.setVisible(true);
+        }else{//Receive donation
+            try{
+                JSONObject jsonobj = new JSONObject();
+                jsonobj.append("receptions", new JSONObject());
+                this.tCPUser.sendMessage(jsonobj);
+            }catch(JSONException | IOException ex){
+                System.out.println("Receptions server fetch error");
+            }  
+        }
+    }//GEN-LAST:event_receiveOrDonatebtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1031,6 +1081,7 @@ public class ClientView extends javax.swing.JFrame {
     private javax.swing.JTextField createdonationmeasure;
     private javax.swing.JPanel createdonationpanel;
     private javax.swing.JTextField createdonationquantity;
+    private javax.swing.JButton donateListbtn;
     private javax.swing.JPanel homepanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -1057,21 +1108,25 @@ public class ClientView extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
+    private javax.swing.JSeparator jSeparator6;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JButton loginbtn;
     private javax.swing.JTextField logincpf;
     private javax.swing.JPanel loginpanel;
     private javax.swing.JPasswordField loginpassword;
     private javax.swing.JButton logoutbtn;
+    private javax.swing.JButton receiveListbtn;
+    private javax.swing.JList receiveOrDonateList;
+    private javax.swing.JButton receiveOrDonatebtn;
     private javax.swing.JPanel serverconnection;
     private javax.swing.JButton serverconnectionbtn;
     private javax.swing.JTextField serverconnectionip;
@@ -1133,8 +1188,24 @@ public class ClientView extends javax.swing.JFrame {
         this.signuppanel.setVisible(false);
     }
     
+    public void setCreateDonationVisibility(boolean state){
+        this.updateUserpanel.setVisible(false);
+        this.serverconnection.setVisible(false);
+        this.createdonationpanel.setVisible(false);
+        this.homepanel.setVisible(true);
+        this.loginpanel.setVisible(false);
+        this.signuppanel.setVisible(false);
+    }
+    
     public void setUser(User user){
         this.user = user;
     }
     
+    public void setReceiveOrDonateList(JList jList){
+        this.receiveOrDonateList = jList;
+    }
+    
+    public JList getReceiveOrDonateList(){
+        return this.receiveOrDonateList;
+    }
 }

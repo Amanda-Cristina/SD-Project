@@ -7,11 +7,15 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import main.ClientView;
 import model.User;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import pojoutils.ReceptionPojoList;
+import pojoutils.ReceptionsPojo;
 import thread.utils.TCPServerThread;
 
 /**
@@ -23,6 +27,7 @@ public class TCPUserThread extends Thread{
     public PrintWriter output;
     public BufferedReader input;
     private ClientView clientView;
+    
     
     public TCPUserThread(Socket serverSocket, PrintWriter output, BufferedReader input, ClientView clientView){
         this.serverSocket = serverSocket;
@@ -83,6 +88,39 @@ public class TCPUserThread extends Thread{
         }
     }
     
+    public void treatDonation(JSONObject json_msg, ClientView clientView) throws JSONException{
+        json_msg = (JSONObject)json_msg.get("donation");
+        if(json_msg.has("error")){
+            JOptionPane.showMessageDialog(null, json_msg.get("error"), "Donation error",
+                    JOptionPane.WARNING_MESSAGE);
+        }else{
+            JOptionPane.showMessageDialog(null, "Donation created", "Donation sucess",
+                    JOptionPane.OK_OPTION);
+            clientView.setCreateDonationVisibility(true);
+        }
+    }
+    public void treatReceptions(JSONObject json_msg, ClientView clientView) throws JSONException{
+        json_msg = (JSONObject)json_msg.get("receptions");
+        if(json_msg.has("error")){
+            System.out.println("Error");
+        }else{
+            clientView.setReceiveOrDonateList(new JList<ReceptionsPojo>());
+            ReceptionPojoList receptionPojoList = new ReceptionPojoList(clientView.getReceiveOrDonateList());
+            JSONArray data = (JSONArray)json_msg.get("donations");
+            for(int i=0;i<data.length();i++){
+                JSONObject j = data.getJSONObject(i);
+                receptionPojoList.updateList(new ReceptionsPojo(
+                        Float.valueOf(j.get("quantity").toString()),
+                        j.get("description").toString(), 
+                        j.get("measureUnity").toString(), 
+                        j.get("id").toString()
+                ));
+                System.out.println(j.get("quantity"));
+            }
+            receptionPojoList.setPojoList();
+        }
+    }
+    
     public void treatLogout(JSONObject json_msg, ClientView clientView){
         if(json_msg.has("close")){
             clientView.setHomepanelVisibility(false);
@@ -121,6 +159,22 @@ public class TCPUserThread extends Thread{
                 case "updateUser" -> {
                     try{
                         treatUpdateUser(json_msg, clientView);
+                    }catch(JSONException ex){
+                        Logger.getLogger(TCPUserThread.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                
+                case "donation" -> {
+                    try{
+                        treatDonation(json_msg, clientView);
+                    }catch(JSONException ex){
+                        Logger.getLogger(TCPUserThread.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                
+                case "receptions" ->{
+                    try{
+                        treatReceptions(json_msg, clientView);
                     }catch(JSONException ex){
                         Logger.getLogger(TCPUserThread.class.getName()).log(Level.SEVERE, null, ex);
                     }

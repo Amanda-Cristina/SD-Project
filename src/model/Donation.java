@@ -4,6 +4,7 @@
  */
 package model;
 
+import dao.DonationDAO;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -12,13 +13,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *
  * @author gilson
  */
-public class Donation {
+public class Donation implements Serializable{
     private static long serialVersionUID = 1L;
     
     private float quantity;
@@ -41,6 +44,23 @@ public class Donation {
         this.description = description;
         this.idDonor = idDonor;
         this.id = id;
+    }
+    
+    public static List<Donation> getAllDonations() throws IOException{
+        DonationDAO donationDAO = new DonationDAO();
+        return donationDAO.selectAll();
+    }
+    
+    public static Donation getDonationbyDonerId(String idDonor) throws IOException{
+        DonationDAO donationDAO = new DonationDAO();
+        List<Donation> donations = donationDAO.selectAll();
+        Donation donation = null;
+        for(Donation u : donations){
+            if(u.getIdDonor().equals(idDonor)){
+                return u;
+            }
+        }
+        return donation;
     }
     
     private int getID_() throws IOException{

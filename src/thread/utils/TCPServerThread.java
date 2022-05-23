@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
@@ -109,6 +110,7 @@ public class TCPServerThread extends Thread{
         }catch(IOException e){
             data.put("error", "Database error");
             reply.put("donation", data);
+            System.out.println(e);
         }
 
         return reply;
@@ -154,10 +156,23 @@ public class TCPServerThread extends Thread{
         int user_index = this.server.getConnectedUsers().indexOf(this.user);
         this.user.setLoggedUser(false);
         this.server.updateActiveUsers(user_index, user);
-        this.server.removeActiveUsers(user);
+        //this.server.removeActiveUsers(user);
         this.server.removeOnlineUser(user);
         updateTable();
         return reply;    
+    }
+    
+    private JSONObject clientTransactions(JSONObject msg_json){
+        return null;
+    }
+    
+    private JSONObject receptions(JSONObject msg_json) throws JSONException, IOException{
+        List<Donation> donations = Donation.getAllDonations();
+        JSONObject data = new JSONObject();
+        data.put("donations", donations);
+        JSONObject reply = new JSONObject();
+        reply.put("receptions", data);
+        return reply;
     }
     
     private JSONObject ping(JSONObject msg_json) throws JSONException{
@@ -205,6 +220,8 @@ public class TCPServerThread extends Thread{
             case "register" -> reply = signup(msg_json);
             case "donation" -> reply = donation(msg_json);
             case "close" -> reply = logout(msg_json);
+            case "clientTransactions" -> reply = clientTransactions(msg_json);
+            case "receptions" -> reply = receptions(msg_json);
             case "ping" -> reply = ping(msg_json);
             default -> {
             }
