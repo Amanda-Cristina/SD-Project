@@ -8,6 +8,10 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
+import java.security.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -167,9 +171,11 @@ public class TCPServerThread extends Thread{
     }
     
     private JSONObject receptions(JSONObject msg_json) throws JSONException, IOException{
-        List<Donation> donations = Donation.getAllDonations();
+        ArrayList<Donation> donations = (ArrayList<Donation>) Donation.getAllDonations();
         JSONObject data = new JSONObject();
-        data.put("donations", donations);
+        for(Donation i : donations){
+            data.put("donations", i.getJSON());
+        }
         JSONObject reply = new JSONObject();
         reply.put("receptions", data);
         return reply;
@@ -232,13 +238,17 @@ public class TCPServerThread extends Thread{
     public void sendMessageWithoutRet(JSONObject msg_json) throws IOException, JSONException{
         this.outputData.print(msg_json.toString());
         this.outputData.flush();
-        System.out.println("Message sent to "+ this.userSocket.getInetAddress().getHostAddress() + ":" + this.userSocket.getPort() + " = " + msg_json);
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("h:mm:ss a");
+        System.out.println(sdf.format(date)+" >> Message sent to "+ this.userSocket.getInetAddress().getHostAddress() + ":" + this.userSocket.getPort() + " = " + msg_json);
     }
     
     public JSONObject sendMessage(JSONObject msg_json) throws IOException, JSONException{
         this.outputData.print(msg_json.toString());
         this.outputData.flush();
-        System.out.println("Message sent to "+ this.userSocket.getInetAddress().getHostAddress() + ":" + this.userSocket.getPort() + " = " + msg_json);
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("h:mm:ss a");
+        System.out.println(sdf.format(date)+" >> Message sent to "+ this.userSocket.getInetAddress().getHostAddress() + ":" + this.userSocket.getPort() + " = " + msg_json);
         char[] cbuf = new char[2048];
         inputData.read(cbuf);
         JSONObject reply = new JSONObject(String.valueOf(cbuf));
@@ -291,7 +301,9 @@ public class TCPServerThread extends Thread{
                     String msg = String.valueOf(cbuf);
                     cbuf = new char[2048];
                     JSONObject JSONMsg = new JSONObject(msg);
-                    System.out.println("Message received from " + this.userSocket.getInetAddress().getHostAddress() + ":" +
+                    Date date = new Date();
+                    SimpleDateFormat sdf = new SimpleDateFormat("h:mm:ss a");
+                    System.out.println(sdf.format(date)+" >> Message received from " + this.userSocket.getInetAddress().getHostAddress() + ":" +
                                         this.userSocket.getPort() + " = " + msg);
                     //get the reply
                     JSONObject reply = getReply(JSONMsg);
@@ -299,7 +311,8 @@ public class TCPServerThread extends Thread{
                     if(!reply.has("ping")){
                         outputData.print(reply);
                         outputData.flush();
-                        System.out.println("Message sent to " + this.userSocket.getInetAddress().getHostAddress() + ":" + 
+                        date = new Date();
+                        System.out.println(sdf.format(date)+" >> Message sent to " + this.userSocket.getInetAddress().getHostAddress() + ":" + 
                                             this.userSocket.getPort() + " = " + reply);
                     }
                 }

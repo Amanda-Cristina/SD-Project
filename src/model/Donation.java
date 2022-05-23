@@ -14,8 +14,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  *
@@ -25,14 +28,14 @@ public class Donation implements Serializable{
     private static long serialVersionUID = 1L;
     
     private float quantity;
-    private String measureUnity;
+    private String measureUnit;
     private String description;
     private String idDonor;
     private String id;
     
     public Donation(float quantity, String measureUnity, String description, String idDonor) throws IOException{
         this.quantity = quantity;
-        this.measureUnity = measureUnity;
+        this.measureUnit = measureUnity;
         this.description = description;
         this.idDonor = idDonor;
         this.id = String.valueOf(this.getID_());
@@ -40,7 +43,7 @@ public class Donation implements Serializable{
     
     public Donation(String id, float quantity, String measureUnity, String description, String idDonor){
         this.quantity = quantity;
-        this.measureUnity = measureUnity;
+        this.measureUnit = measureUnity;
         this.description = description;
         this.idDonor = idDonor;
         this.id = id;
@@ -90,12 +93,12 @@ public class Donation implements Serializable{
         this.quantity = quantity;
     }
 
-    public String getMeasureUnity() {
-        return measureUnity;
+    public String getMeasureUnit() {
+        return measureUnit;
     }
 
-    public void setMeasureUnity(String measureUnity) {
-        this.measureUnity = measureUnity;
+    public void setMeasureUnit(String measureUnit) {
+        this.measureUnit = measureUnit;
     }
 
     public String getDescription() {
@@ -120,5 +123,15 @@ public class Donation implements Serializable{
 
     public void setIdDonor(String id) {
         this.idDonor = id;
+    }
+    
+    public JSONObject getJSON() throws JSONException{
+        JSONObject json = new JSONObject();
+        DecimalFormat df = new DecimalFormat("0.0000");
+        json.put("quantity", df.format(this.quantity));
+        json.put("measureUnit", this.measureUnit);
+        json.put("description", this.description);
+        json.put("idDonor", this.idDonor);
+        return json;
     }
 }

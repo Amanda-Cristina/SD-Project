@@ -1021,6 +1021,13 @@ public class ClientView extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.receiveOrDonatebtn.setText("Receive");
         this.homeOperation = false;
+        try{
+            JSONObject jsonobj = new JSONObject();
+            jsonobj.put("receptions", new JSONObject());
+            this.tCPUser.sendMessage(jsonobj);
+        }catch(JSONException | IOException ex){
+            System.out.println("Receptions server fetch error");
+        }
     }//GEN-LAST:event_receiveListbtnActionPerformed
 
     private void receiveOrDonatebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_receiveOrDonatebtnActionPerformed
@@ -1029,13 +1036,7 @@ public class ClientView extends javax.swing.JFrame {
             this.homepanel.setVisible(false);
             this.createdonationpanel.setVisible(true);
         }else{//Receive donation
-            try{
-                JSONObject jsonobj = new JSONObject();
-                jsonobj.append("receptions", new JSONObject());
-                this.tCPUser.sendMessage(jsonobj);
-            }catch(JSONException | IOException ex){
-                System.out.println("Receptions server fetch error");
-            }  
+              
         }
     }//GEN-LAST:event_receiveOrDonatebtnActionPerformed
 

@@ -83,11 +83,12 @@ public class TCPServer extends Thread{
         this.onlineUsers.remove(activeUser);
     }
     
-    private Runnable createRunnable(final TCPServer tCPServer){
-        Runnable ping = new Runnable() {
-            @Override
-            public void run() {
-                if(alternate){
+    private Runnable createRunnable(final TCPServer tCPServer, boolean send, ScheduledExecutorService executor){
+        Runnable ping = null;
+        if(send){
+            ping = new Runnable() {
+                @Override
+                public void run() {
                     if(!tCPServer.threads.isEmpty()){
                         for(TCPServerThread i : tCPServer.threads){
                             if(!i.getActiveUser().getLoggedUser()) continue;
@@ -108,8 +109,13 @@ public class TCPServer extends Thread{
                             }
                         }
                     }
-                    tCPServer.setAlternate(!tCPServer.getAlternate());
-                }else{
+                    executor.schedule(tCPServer.createRunnable(tCPServer, false, null), 29, TimeUnit.SECONDS);
+                }
+            };
+        }else{
+            ping = new Runnable() {
+                @Override
+                public void run() {
                     if(!tCPServer.threads.isEmpty()){
                         for(TCPServerThread i : tCPServer.threads){
                             if(!i.getUserPing()){
@@ -126,18 +132,18 @@ public class TCPServer extends Thread{
                             }
                         }
                     }
-                    tCPServer.setAlternate(!tCPServer.getAlternate());
                 }
-                return;
-            }
-        };
+            };
+        }
+        
         return ping;
     }
     
     @Override
     public void run(){
-        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-        executor.scheduleAtFixedRate(createRunnable(this), 0, 30, TimeUnit.SECONDS);
+        ScheduledExecutorService executor_1 = Executors.newSingleThreadScheduledExecutor();
+        ScheduledExecutorService executor_2 = Executors.newSingleThreadScheduledExecutor(); 
+        executor_1.scheduleAtFixedRate(createRunnable(this, true, executor_2), 0, 30, TimeUnit.SECONDS);;
         while(true){
             try{
                 userSocket = serverSocket.accept();

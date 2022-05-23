@@ -35,8 +35,9 @@ public class Tests {
         users.add(new Donation(0.2f, "12", "12", "12"));
         users.add(new Donation(0.2f, "13", "14", "12"));
         users.add(new Donation(0.2f, "14", "15", "12"));
-       
-        jsonobj.put("receptions", users);
+        
+        jsonobj.append("receptions", users.get(0).getJSON());
+        jsonobj.append("receptions", users.get(1).getJSON());
         System.out.println(jsonobj);
         /*JSONArray a = (JSONArray)data.get("donations");
         for(int i=0;i<a.length();i++){
