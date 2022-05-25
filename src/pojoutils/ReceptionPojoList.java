@@ -17,9 +17,10 @@ import model.Donation;
  */
 public class ReceptionPojoList {
     DefaultListModel<ReceptionsPojo> model;
-    JList<ReceptionsPojo> list;
-    public ReceptionPojoList(JList<ReceptionsPojo> list){
-        this.model = (DefaultListModel<ReceptionsPojo>) list.getModel();
+    JList list;
+    public ReceptionPojoList(JList list){
+        this.list = list;
+        this.model = (DefaultListModel<ReceptionsPojo>) this.list.getModel();
     }
     public void setPojoList(){
         this.list.addListSelectionListener(new ListSelectionListener() {

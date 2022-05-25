@@ -74,6 +74,18 @@ public class User implements Serializable{
         }
     }
     
+    public static User getUserById(String id) throws IOException{
+        UserDAO userDAO = new UserDAO();
+        List<User> users = userDAO.selectAll();
+        User user = null;
+        for(User u : users){
+            if(u.getId().equals(id)){
+                return u;
+            }
+        }
+        return user;
+    }
+    
     public static User getUserByCpf(String cpf) throws IOException{
         UserDAO userDAO = new UserDAO();
         List<User> users = userDAO.selectAll();

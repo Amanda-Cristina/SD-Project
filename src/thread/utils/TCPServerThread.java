@@ -23,6 +23,7 @@ import model.server.TCPServer;
 import model.User;
 import org.json.JSONException;
 import org.json.JSONObject;
+import utils.ConsoleDate;
 
 /**
  *
@@ -74,7 +75,7 @@ public class TCPServerThread extends Thread{
         String phone = data_.getString("phone");
         String name = data_.getString("name");
         String password = data_.getString("password");
-        if(User.getUserByCpf(cpf) != null){
+        if(User.getUserById(cpf) != null){
             data.put("error", "User already registered");
             reply.put("register", data);
         }else{
@@ -174,10 +175,11 @@ public class TCPServerThread extends Thread{
         ArrayList<Donation> donations = (ArrayList<Donation>) Donation.getAllDonations();
         JSONObject data = new JSONObject();
         for(Donation i : donations){
-            data.put("donations", i.getJSON());
+            data.append("donations", i.getJSON());
         }
         JSONObject reply = new JSONObject();
         reply.put("receptions", data);
+        System.out.println(reply);
         return reply;
     }
     
@@ -193,23 +195,33 @@ public class TCPServerThread extends Thread{
         JSONObject data = new JSONObject();
         JSONObject data_ = msg_json.getJSONObject("userUpdate");
         if(!data_.has("cpf")||!data_.has("name")||
-                !data_.has("password")||!data_.has("phone")){
+                !data_.has("password")||!data_.has("phone") ||
+                !data_.has("id")){
             data.put("error", "Field empty");
             reply.put("register", data);
             return reply;
         }
+        String id = data_.getString("id");
         String cpf = data_.getString("cpf");
         String phone = data_.getString("phone");
         String name = data_.getString("name");
         String password = data_.getString("password");
-        User user_ = User.getUserByCpf(cpf);
+        User user_ = User.getUserById(id);
+        User user_cpf = User.getUserByCpf(cpf);
+        if(user_cpf!=null){
+            data.put("error", "CPF already registered");
+            reply.put("userUpdate", data);
+            return reply;
+        }
         UserDAO userDAO = new UserDAO();
         user_.setCpf(cpf);
         user_.setName(name);
         user_.setPassword(password);
         user_.setPhone(phone);
         try{
-            userDAO.updateById(user_);
+            if(!userDAO.updateById(user_)){
+                throw new IOException();
+            }
             reply.put("userUpdate", new JSONObject());
         }catch(IOException e){
             data.put("error", "Database error");
@@ -228,6 +240,7 @@ public class TCPServerThread extends Thread{
             case "close" -> reply = logout(msg_json);
             case "clientTransactions" -> reply = clientTransactions(msg_json);
             case "receptions" -> reply = receptions(msg_json);
+            case "userUpdate" -> reply = updateUser(msg_json);
             case "ping" -> reply = ping(msg_json);
             default -> {
             }
@@ -238,21 +251,17 @@ public class TCPServerThread extends Thread{
     public void sendMessageWithoutRet(JSONObject msg_json) throws IOException, JSONException{
         this.outputData.print(msg_json.toString());
         this.outputData.flush();
-        Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("h:mm:ss a");
-        System.out.println(sdf.format(date)+" >> Message sent to "+ this.userSocket.getInetAddress().getHostAddress() + ":" + this.userSocket.getPort() + " = " + msg_json);
+        System.out.println(ConsoleDate.getConsoleDate()+"Message sent to "+ this.userSocket.getInetAddress().getHostAddress() + ":" + this.userSocket.getPort() + " = " + msg_json);
     }
     
     public JSONObject sendMessage(JSONObject msg_json) throws IOException, JSONException{
         this.outputData.print(msg_json.toString());
         this.outputData.flush();
-        Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("h:mm:ss a");
-        System.out.println(sdf.format(date)+" >> Message sent to "+ this.userSocket.getInetAddress().getHostAddress() + ":" + this.userSocket.getPort() + " = " + msg_json);
+        System.out.println(ConsoleDate.getConsoleDate()+"Message sent to "+ this.userSocket.getInetAddress().getHostAddress() + ":" + this.userSocket.getPort() + " = " + msg_json);
         char[] cbuf = new char[2048];
         inputData.read(cbuf);
         JSONObject reply = new JSONObject(String.valueOf(cbuf));
-        System.out.println("Message received from "+ this.userSocket.getInetAddress().getHostAddress() + ":" + this.userSocket.getPort() + " = " + msg_json);
+        System.out.println(ConsoleDate.getConsoleDate()+"Message received from "+ this.userSocket.getInetAddress().getHostAddress() + ":" + this.userSocket.getPort() + " = " + msg_json);
         return reply;
     }
     
@@ -273,7 +282,7 @@ public class TCPServerThread extends Thread{
         try{
             outputData = new PrintWriter(this.userSocket.getOutputStream(), true);
             inputData = new BufferedReader(new InputStreamReader(this.userSocket.getInputStream()));
-            System.out.println("New client connected: " + this.userSocket.getInetAddress().getHostAddress() + this.userSocket.getPort());
+            System.out.println(ConsoleDate.getConsoleDate()+"New client connected: " + this.userSocket.getInetAddress().getHostAddress() + this.userSocket.getPort());
             ActiveUser activeUser = new ActiveUser(this.userSocket.getInetAddress().getHostAddress(), 
                                                    this.userSocket.getPort(), false);
             this.user = activeUser;
@@ -283,7 +292,7 @@ public class TCPServerThread extends Thread{
             while(true){
                 int flag = inputData.read(cbuf);
                 if (flag == -1 || userSocket.isClosed()) {
-                    System.out.println("Client desconected");
+                    System.out.println(ConsoleDate.getConsoleDate()+"Client desconected");
                     this.user.setLoggedUser(false);
                     //this.server.removeActiveUsers(this.userSocket.getInetAddress().getHostAddress());
                     this.server.removeActiveUsers(this.user);
@@ -301,9 +310,7 @@ public class TCPServerThread extends Thread{
                     String msg = String.valueOf(cbuf);
                     cbuf = new char[2048];
                     JSONObject JSONMsg = new JSONObject(msg);
-                    Date date = new Date();
-                    SimpleDateFormat sdf = new SimpleDateFormat("h:mm:ss a");
-                    System.out.println(sdf.format(date)+" >> Message received from " + this.userSocket.getInetAddress().getHostAddress() + ":" +
+                    System.out.println(ConsoleDate.getConsoleDate()+"Message received from " + this.userSocket.getInetAddress().getHostAddress() + ":" +
                                         this.userSocket.getPort() + " = " + msg);
                     //get the reply
                     JSONObject reply = getReply(JSONMsg);
@@ -311,18 +318,18 @@ public class TCPServerThread extends Thread{
                     if(!reply.has("ping")){
                         outputData.print(reply);
                         outputData.flush();
-                        date = new Date();
-                        System.out.println(sdf.format(date)+" >> Message sent to " + this.userSocket.getInetAddress().getHostAddress() + ":" + 
+                        System.out.println(ConsoleDate.getConsoleDate()+"Message sent to " + this.userSocket.getInetAddress().getHostAddress() + ":" + 
                                             this.userSocket.getPort() + " = " + reply);
                     }
                 }
             }
         }catch(JSONException e){
-            System.out.println("JSON error");
+            System.out.println(e);
+            System.out.println(ConsoleDate.getConsoleDate()+"JSON error");
         }catch(IOException e){
             if(e.getMessage().equals("Connection reset")){
                 this.user.setLoggedUser(false);
-                System.out.println("Client desconected");
+                System.out.println(ConsoleDate.getConsoleDate()+"Client desconected");
                 //this.server.removeActiveUsers(this.userSocket.getInetAddress().getHostAddress());
                 this.server.removeActiveUsers(this.user);
                 this.server.removeThread(this);

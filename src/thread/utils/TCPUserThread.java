@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import main.ClientView;
@@ -17,6 +18,7 @@ import org.json.JSONObject;
 import pojoutils.ReceptionPojoList;
 import pojoutils.ReceptionsPojo;
 import thread.utils.TCPServerThread;
+import utils.ConsoleDate;
 
 /**
  *
@@ -38,7 +40,7 @@ public class TCPUserThread extends Thread{
     public void sendMessage(JSONObject msg_json) throws IOException, JSONException{
         this.output.print(msg_json.toString());
         this.output.flush();
-        System.out.println("Message sent to "+ this.serverSocket.getInetAddress().getHostAddress() + ":" + this.serverSocket.getPort() + " = " + msg_json);
+        System.out.println(ConsoleDate.getConsoleDate()+"Message sent to "+ this.serverSocket.getInetAddress().getHostAddress() + ":" + this.serverSocket.getPort() + " = " + msg_json);
         //char[] cbuf = new char[2048];
         //input.read(cbuf);
         //JSONObject reply = new JSONObject(String.valueOf(cbuf));
@@ -77,7 +79,7 @@ public class TCPUserThread extends Thread{
     }
     
     public void treatUpdateUser(JSONObject json_msg, ClientView clientView) throws JSONException{
-        json_msg = (JSONObject)json_msg.get("updateUser");
+        json_msg = (JSONObject)json_msg.get("userUpdate");
         if(json_msg.has("error")){
             JOptionPane.showMessageDialog(null, json_msg.get("error"), "Update error",
                     JOptionPane.WARNING_MESSAGE);
@@ -102,9 +104,11 @@ public class TCPUserThread extends Thread{
     public void treatReceptions(JSONObject json_msg, ClientView clientView) throws JSONException{
         json_msg = (JSONObject)json_msg.get("receptions");
         if(json_msg.has("error")){
-            System.out.println("Error");
+            System.out.println(ConsoleDate.getConsoleDate()+"Error");
+        }else if(json_msg.isNull("donations")){
+            System.out.println(ConsoleDate.getConsoleDate()+"Vazio");
         }else{
-            clientView.setReceiveOrDonateList(new JList<ReceptionsPojo>());
+            clientView.setReceiveOrDonateList(new JList(new DefaultListModel<ReceptionsPojo>()));
             ReceptionPojoList receptionPojoList = new ReceptionPojoList(clientView.getReceiveOrDonateList());
             JSONArray data = (JSONArray)json_msg.get("donations");
             for(int i=0;i<data.length();i++){
@@ -112,7 +116,7 @@ public class TCPUserThread extends Thread{
                 receptionPojoList.updateList(new ReceptionsPojo(
                         Float.valueOf(j.get("quantity").toString()),
                         j.get("description").toString(), 
-                        j.get("measureUnity").toString(), 
+                        j.get("measureUnit").toString(), 
                         j.get("id").toString()
                 ));
                 System.out.println(j.get("quantity"));
@@ -156,7 +160,7 @@ public class TCPUserThread extends Thread{
                     }
                 }
                 
-                case "updateUser" -> {
+                case "userUpdate" -> {
                     try{
                         treatUpdateUser(json_msg, clientView);
                     }catch(JSONException ex){
@@ -197,19 +201,20 @@ public class TCPUserThread extends Thread{
             while(true){
                 int flag = input.read(cbuf);
                 if (flag == -1 || serverSocket.isClosed()) {
-                    System.out.println("Connection closed");
+                    System.out.println(ConsoleDate.getConsoleDate()+"Connection closed");
                     try {
                         this.serverSocket.close();
                     } catch (IOException ex) {
                         Logger.getLogger(TCPServerThread.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                    this.clientView.setServerconnectionVisibility(true);
                     break;
                 }else{
                     //deal with received message
                     String msg = String.valueOf(cbuf);
                     cbuf = new char[2048];
                     JSONObject JSONMsg = new JSONObject(msg);
-                    System.out.println("Message received from " + this.serverSocket.getInetAddress().getHostAddress() + ":" +
+                    System.out.println(ConsoleDate.getConsoleDate()+"Message received from " + this.serverSocket.getInetAddress().getHostAddress() + ":" +
                                         this.serverSocket.getPort() + " = " + msg);
              
                     //sending reply to client
@@ -218,10 +223,10 @@ public class TCPUserThread extends Thread{
                 }
             }
         }catch(JSONException e){
-            System.out.println("JSON error");
+            System.out.println(ConsoleDate.getConsoleDate()+"JSON error");
         }catch(IOException e){
             if(e.getMessage().equals("Connection reset")){
-                System.out.println("Client desconected");
+                System.out.println(ConsoleDate.getConsoleDate()+"Client desconected");
                 //this.server.removeActiveUsers(this.serverSocket.getInetAddress().getHostAddress());
                 try {
                     this.serverSocket.close();

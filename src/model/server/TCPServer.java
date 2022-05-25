@@ -8,8 +8,10 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.text.SimpleDateFormat;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -20,6 +22,7 @@ import model.ActiveUser;
 import org.json.JSONException;
 import org.json.JSONObject;
 import thread.utils.TCPServerThread;
+import utils.ConsoleDate;
 
 /**
  *
@@ -45,7 +48,7 @@ public class TCPServer extends Thread{
     
     public void startServer(int port) throws IOException{
         serverSocket = new ServerSocket(port);
-        System.out.println("Server start at port: " + port);
+        System.out.println(ConsoleDate.getConsoleDate()+"Server start at port: " + port);
         this.start();
     }
     
@@ -126,7 +129,7 @@ public class TCPServer extends Thread{
                                 }
                                 tCPServer.threads.remove(i);
                                 tCPServer.connectedUsers.remove(i.getActiveUser());
-                                System.out.println(i.getActiveUser().getIp() + ":" +
+                                System.out.println(ConsoleDate.getConsoleDate()+i.getActiveUser().getIp() + ":" +
                                         i.getActiveUser().getPort()+" removed for not responding to ping ");
                                 i.interrupt();
                             }

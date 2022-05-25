@@ -6,9 +6,12 @@ package main;
 
 import java.awt.CardLayout;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import model.server.TCPServer;
+import utils.ConsoleDate;
 
 /**
  *
@@ -197,7 +200,7 @@ public class ServerView extends javax.swing.JFrame {
                 jPanel1.setVisible(false);
                 jPanel2.setVisible(true);
             }catch(IOException e){
-                System.out.println("This port is already in use");
+                System.out.println(ConsoleDate.getConsoleDate() + "This port is already in use");
             }
         }
     }//GEN-LAST:event_serverstartupbtnActionPerformed

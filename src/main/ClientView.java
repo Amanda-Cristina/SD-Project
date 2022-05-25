@@ -6,6 +6,8 @@ package main;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
@@ -18,6 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import pojoutils.ReceptionsPojo;
 import thread.utils.TCPServerThread;
+import utils.ConsoleDate;
 
 /**
  *
@@ -797,7 +800,7 @@ public class ClientView extends javax.swing.JFrame {
                 this.serverconnection.setVisible(false);
                 this.loginpanel.setVisible(true);
             }catch(IOException e){
-                System.out.println("Connection error");
+                System.out.println(ConsoleDate.getConsoleDate()+"Connection error");
             }
         }
         
@@ -884,7 +887,7 @@ public class ClientView extends javax.swing.JFrame {
             Logger.getLogger(ClientView.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             //show error window
-            System.out.println("User already registered");
+            System.out.println(ConsoleDate.getConsoleDate()+"User already registered");
         }
     }//GEN-LAST:event_signupbtnActionPerformed
 
@@ -933,11 +936,12 @@ public class ClientView extends javax.swing.JFrame {
                !this.updatecpf.getText().isEmpty()&&
                !this.updatename.getText().isEmpty()&&
                !(this.updatepassword.getPassword().length == 0)){
+                data.put("id", this.user.getId());
                 data.put("name", this.updatename.getText());
                 data.put("cpf", this.updatecpf.getText());
                 data.put("phone", this.updatephone.getText());
                 data.put("password", new String(this.updatepassword.getPassword()));
-                jsonobj.put("updateUser", data);
+                jsonobj.put("userUpdate", data);
                 this.tCPUser.sendMessage(jsonobj);
             }else{
                 if(this.updatecpf.getText().isEmpty()){
@@ -1026,7 +1030,7 @@ public class ClientView extends javax.swing.JFrame {
             jsonobj.put("receptions", new JSONObject());
             this.tCPUser.sendMessage(jsonobj);
         }catch(JSONException | IOException ex){
-            System.out.println("Receptions server fetch error");
+            System.out.println(ConsoleDate.getConsoleDate()+"Receptions server fetch error");
         }
     }//GEN-LAST:event_receiveListbtnActionPerformed
 
@@ -1175,10 +1179,13 @@ public class ClientView extends javax.swing.JFrame {
     }
     
     public void setServerconnectionVisibility(boolean state){
-        this.serverconnection.setVisible(state);
+        this.updateUserpanel.setVisible(false);
+        this.serverconnection.setVisible(false);
+        this.createdonationpanel.setVisible(false);
         this.homepanel.setVisible(false);
         this.loginpanel.setVisible(false);
         this.signuppanel.setVisible(false);
+        this.serverconnection.setVisible(true);
     }
     
     public void setUpdateUserVisibility(boolean state){
