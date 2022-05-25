@@ -208,7 +208,7 @@ public class TCPServerThread extends Thread{
         String password = data_.getString("password");
         User user_ = User.getUserById(id);
         User user_cpf = User.getUserByCpf(cpf);
-        if(user_cpf!=null){
+        if(user_cpf!=null && user_cpf.getId().equals(user_.getCpf())){
             data.put("error", "CPF already registered");
             reply.put("userUpdate", data);
             return reply;
@@ -227,6 +227,7 @@ public class TCPServerThread extends Thread{
             data.put("error", "Database error");
             reply.put("userUpdate", data);
         }
+        this.updateTable();
         return reply;
     }
     
@@ -282,7 +283,7 @@ public class TCPServerThread extends Thread{
         try{
             outputData = new PrintWriter(this.userSocket.getOutputStream(), true);
             inputData = new BufferedReader(new InputStreamReader(this.userSocket.getInputStream()));
-            System.out.println(ConsoleDate.getConsoleDate()+"New client connected: " + this.userSocket.getInetAddress().getHostAddress() + this.userSocket.getPort());
+            System.out.println(ConsoleDate.getConsoleDate()+"New client connected: " + this.userSocket.getInetAddress().getHostAddress()+":" + this.userSocket.getPort());
             ActiveUser activeUser = new ActiveUser(this.userSocket.getInetAddress().getHostAddress(), 
                                                    this.userSocket.getPort(), false);
             this.user = activeUser;

@@ -800,6 +800,8 @@ public class ClientView extends javax.swing.JFrame {
                 this.serverconnection.setVisible(false);
                 this.loginpanel.setVisible(true);
             }catch(IOException e){
+                JOptionPane.showMessageDialog(null, "An error occurred while trying to connect to the server.","Connection error",
+                    JOptionPane.OK_OPTION);
                 System.out.println(ConsoleDate.getConsoleDate()+"Connection error");
             }
         }
@@ -921,6 +923,9 @@ public class ClientView extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.homepanel.setVisible(false);
         this.updateUserpanel.setVisible(true);
+        this.updatename.setText(this.user.getName());
+        this.updatecpf.setText(this.user.getCpf());
+        this.updatephone.setText(this.user.getPhone());
     }//GEN-LAST:event_updateUserbtnActionPerformed
 
     private void updatenameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updatenameActionPerformed

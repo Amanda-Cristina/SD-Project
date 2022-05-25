@@ -85,7 +85,7 @@ public class TCPUserThread extends Thread{
                     JOptionPane.WARNING_MESSAGE);
         }else{
             JOptionPane.showMessageDialog(null, "Update user information saved", "Update sucess",
-                    JOptionPane.OK_OPTION);
+                    JOptionPane.INFORMATION_MESSAGE);
             clientView.setUpdateUserVisibility(true);
         }
     }
@@ -97,7 +97,7 @@ public class TCPUserThread extends Thread{
                     JOptionPane.WARNING_MESSAGE);
         }else{
             JOptionPane.showMessageDialog(null, "Donation created", "Donation sucess",
-                    JOptionPane.OK_OPTION);
+                    JOptionPane.INFORMATION_MESSAGE);
             clientView.setCreateDonationVisibility(true);
         }
     }
