@@ -38,14 +38,9 @@ public class TCPUserThread extends Thread{
         this.clientView = clientView;
     }
     public void sendMessage(JSONObject msg_json) throws IOException, JSONException{
+        System.out.println(ConsoleDate.getConsoleDate()+"Message sent to "+ this.serverSocket.getInetAddress().getHostAddress() + ":" + this.serverSocket.getPort() + " = " + msg_json);
         this.output.print(msg_json.toString());
         this.output.flush();
-        System.out.println(ConsoleDate.getConsoleDate()+"Message sent to "+ this.serverSocket.getInetAddress().getHostAddress() + ":" + this.serverSocket.getPort() + " = " + msg_json);
-        //char[] cbuf = new char[2048];
-        //input.read(cbuf);
-        //JSONObject reply = new JSONObject(String.valueOf(cbuf));
-        //System.out.println("Message received from "+ this.serverSocket.getInetAddress().getHostAddress() + ":" + this.serverSocket.getPort() + " = " + msg_json);
-        //return reply;
     }
     
     public void treatPing() throws JSONException, IOException{
@@ -125,10 +120,14 @@ public class TCPUserThread extends Thread{
         }
     }
     
-    public void treatLogout(JSONObject json_msg, ClientView clientView){
-        if(json_msg.has("close")){
+    public void treatLogout(JSONObject json_msg, ClientView clientView) throws JSONException{
+        json_msg = (JSONObject)json_msg.get("close");
+        if(!json_msg.has("error")){
             clientView.setHomepanelVisibility(false);
             clientView.setLoginpanelVisibility(true);
+        }else{
+            JOptionPane.showMessageDialog(null, json_msg.get("error"), "Logout error",
+                    JOptionPane.WARNING_MESSAGE);
         }
     }
     
@@ -185,7 +184,11 @@ public class TCPUserThread extends Thread{
                 }
                 
                 case "close" -> {
+                try {
                     treatLogout(json_msg, clientView);
+                } catch (JSONException ex) {
+                    Logger.getLogger(TCPUserThread.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 }
                 default -> throw new AssertionError();
             }

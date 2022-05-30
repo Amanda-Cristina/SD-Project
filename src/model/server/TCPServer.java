@@ -5,6 +5,7 @@
 package model.server;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -56,13 +57,16 @@ public class TCPServer extends Thread{
         this.connectedUsers.add(activeUser);
     }
     
-    public void removeActiveUsers(ActiveUser user){
-        /*for(int i = 0; i < connectedUsers.size();i++){
-            ActiveUser au = this.connectedUsers.get(i);
-            if(au.getIp().equals(userIP)){
-                this.connectedUsers.remove(i);
+    public ActiveUser getActiveUserByIP(String ip){
+        for(ActiveUser u:connectedUsers){
+            if(u.getIp().equals(ip)){
+                return u;
             }
-        }*/
+        } 
+        return null;
+    }
+    
+    public void removeActiveUsers(ActiveUser user){
         this.connectedUsers.remove(user);
     }
     
@@ -144,9 +148,9 @@ public class TCPServer extends Thread{
     
     @Override
     public void run(){
-        ScheduledExecutorService executor_1 = Executors.newSingleThreadScheduledExecutor();
-        ScheduledExecutorService executor_2 = Executors.newSingleThreadScheduledExecutor(); 
-        executor_1.scheduleAtFixedRate(createRunnable(this, true, executor_2), 0, 30, TimeUnit.SECONDS);;
+        //ScheduledExecutorService executor_1 = Executors.newSingleThreadScheduledExecutor();
+        //ScheduledExecutorService executor_2 = Executors.newSingleThreadScheduledExecutor(); 
+        //executor_1.scheduleAtFixedRate(createRunnable(this, true, executor_2), 0, 30, TimeUnit.SECONDS);
         while(true){
             try{
                 userSocket = serverSocket.accept();

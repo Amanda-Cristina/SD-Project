@@ -14,18 +14,21 @@ public class ActiveUser {
     private int port;
     private User user;
     private boolean loggedUser;
+    private boolean connected;
     
-    public ActiveUser(String ip, int porta, boolean loggedUser, User user){
+    public ActiveUser(String ip, int porta, boolean loggedUser, User user, boolean connected){
         this.ip = ip;
         this.port = porta;
         this.user = user;
         this.loggedUser = loggedUser;
+        this.connected = connected;
     }
     
-    public ActiveUser(String ip, int porta, boolean loggedUser){
+    public ActiveUser(String ip, int porta, boolean loggedUser, boolean connected){
         this.ip = ip;
         this.port = porta;
         this.loggedUser = loggedUser;
+        this.connected = connected;
     }
     
     /**
@@ -62,7 +65,14 @@ public class ActiveUser {
     public User getUser() {
         return user;
     }
-
+    
+    public boolean getConnected(){
+        return this.connected;
+    }
+    
+    public void setConnected(boolean connected){
+        this.connected = connected;
+    }
     /**
      * @param user the user to set
      */

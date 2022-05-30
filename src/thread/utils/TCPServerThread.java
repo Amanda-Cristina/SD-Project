@@ -30,10 +30,9 @@ import utils.ConsoleDate;
  * @author gilson
  */
 public class TCPServerThread extends Thread{
-    private TCPServer server;
-    private ServerView view;
+    private final TCPServer server;
+    private final ServerView view;
     public Socket userSocket;
-    public boolean loggedUser = false;
     public PrintWriter outputData;
     public BufferedReader inputData;
     private DefaultTableModel table;
@@ -54,9 +53,9 @@ public class TCPServerThread extends Thread{
         for(ActiveUser user_ : server.getConnectedUsers()){
             table = (DefaultTableModel)view.getTable().getModel();
             if(user_.getLoggedUser()){
-                table.insertRow(i++,new Object[]{user_.getIp(),user_.getPort(),user_.getUser().getName(),"true"});
+                table.insertRow(i++,new Object[]{user_.getIp(),user_.getPort(),user_.getUser().getName(),"true", user_.getConnected()});
             }else{
-                table.insertRow(i++,new Object[]{user_.getIp(),user_.getPort(),"--","false"});
+                table.insertRow(i++,new Object[]{user_.getIp(),user_.getPort(),"--","false", user_.getConnected()});
             }
         }
     }
@@ -207,6 +206,11 @@ public class TCPServerThread extends Thread{
         String name = data_.getString("name");
         String password = data_.getString("password");
         User user_ = User.getUserById(id);
+        if(user_ == null){
+            data.put("error", "User not registered");
+            reply.put("userUpdate", data);
+            return reply;
+        }
         User user_cpf = User.getUserByCpf(cpf);
         if(user_cpf!=null && user_cpf.getId().equals(user_.getCpf())){
             data.put("error", "CPF already registered");
@@ -284,27 +288,32 @@ public class TCPServerThread extends Thread{
             outputData = new PrintWriter(this.userSocket.getOutputStream(), true);
             inputData = new BufferedReader(new InputStreamReader(this.userSocket.getInputStream()));
             System.out.println(ConsoleDate.getConsoleDate()+"New client connected: " + this.userSocket.getInetAddress().getHostAddress()+":" + this.userSocket.getPort());
-            ActiveUser activeUser = new ActiveUser(this.userSocket.getInetAddress().getHostAddress(), 
-                                                   this.userSocket.getPort(), false);
+            ActiveUser activeUser = this.server.getActiveUserByIP(this.userSocket.getInetAddress().getHostAddress());
+            if(activeUser == null){
+                activeUser = new ActiveUser(this.userSocket.getInetAddress().getHostAddress(), 
+                                                   this.userSocket.getPort(), false, false);
+                this.server.addActiveUser(activeUser);
+            }
+            activeUser.setConnected(true);
             this.user = activeUser;
-            this.server.addActiveUser(activeUser);
             this.updateTable();
             char[] cbuf = new char[2048];
             while(true){
                 int flag = inputData.read(cbuf);
                 if (flag == -1 || userSocket.isClosed()) {
                     System.out.println(ConsoleDate.getConsoleDate()+"Client desconected");
-                    this.user.setLoggedUser(false);
+                    //this.user.setLoggedUser(false);
                     //this.server.removeActiveUsers(this.userSocket.getInetAddress().getHostAddress());
-                    this.server.removeActiveUsers(this.user);
-                    this.server.removeOnlineUser(this.user);
-                    this.server.removeThread(this);
+                    //this.server.removeActiveUsers(this.user);
+                    //this.server.removeOnlineUser(this.user);
+                    this.user.setConnected(false);
                     try {
                         this.userSocket.close();
                     } catch (IOException ex) {
                         Logger.getLogger(TCPServerThread.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     updateTable();
+                    this.server.removeThread(this);
                     break;
                 }else{
                     //deal with received message
@@ -329,9 +338,9 @@ public class TCPServerThread extends Thread{
             System.out.println(ConsoleDate.getConsoleDate()+"JSON error");
         }catch(IOException e){
             if(e.getMessage().equals("Connection reset")){
-                this.user.setLoggedUser(false);
                 System.out.println(ConsoleDate.getConsoleDate()+"Client desconected");
                 //this.server.removeActiveUsers(this.userSocket.getInetAddress().getHostAddress());
+                this.user.setLoggedUser(false);
                 this.server.removeActiveUsers(this.user);
                 this.server.removeThread(this);
                 try {
