@@ -66,7 +66,7 @@ public class User implements Serializable{
             return id.getAndIncrement();
         }catch(ClassNotFoundException | IOException ex){
             id = new AtomicInteger();
-            int id_ = id.getAndIncrement();
+            int id_ = id.incrementAndGet();
             outputobj = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream("index_user.dat")));
             outputobj.writeObject(id);
             outputobj.close();
