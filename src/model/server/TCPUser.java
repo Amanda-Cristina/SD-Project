@@ -27,7 +27,7 @@ public class TCPUser{
     
     public void connect(String ip, int port) throws IOException{
         this.serverSocket = new Socket(ip, port);
-        output = new PrintWriter(this.serverSocket.getOutputStream(), true);
+        output = new PrintWriter(this.serverSocket.getOutputStream());
         input = new BufferedReader(new InputStreamReader(this.serverSocket.getInputStream()));
         this.tCPUserThread = new TCPUserThread(serverSocket, output, input, this.clientView);
         this.tCPUserThread.start();

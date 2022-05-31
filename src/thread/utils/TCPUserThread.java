@@ -38,9 +38,9 @@ public class TCPUserThread extends Thread{
         this.clientView = clientView;
     }
     public void sendMessage(JSONObject msg_json) throws IOException, JSONException{
-        System.out.println(ConsoleDate.getConsoleDate()+"Message sent to "+ this.serverSocket.getInetAddress().getHostAddress() + ":" + this.serverSocket.getPort() + " = " + msg_json);
-        this.output.print(msg_json.toString());
+        this.output.println(msg_json.toString());
         this.output.flush();
+        System.out.println(ConsoleDate.getConsoleDate()+"Message sent to "+ this.serverSocket.getInetAddress().getHostAddress() + ":" + this.serverSocket.getPort() + " = " + msg_json);
     }
     
     public void treatPing() throws JSONException, IOException{
@@ -202,8 +202,9 @@ public class TCPUserThread extends Thread{
         char[] cbuf = new char[2048];
         try{
             while(true){
-                int flag = input.read(cbuf);
-                if (flag == -1 || serverSocket.isClosed()) {
+                String data = input.readLine();
+                //int flag = input.read(cbuf);
+                if (data == null || serverSocket.isClosed()) {
                     System.out.println(ConsoleDate.getConsoleDate()+"Connection closed");
                     try {
                         this.serverSocket.close();
@@ -214,7 +215,8 @@ public class TCPUserThread extends Thread{
                     break;
                 }else{
                     //deal with received message
-                    String msg = String.valueOf(cbuf);
+                    //String msg = String.valueOf(cbuf);
+                    String msg = data;
                     cbuf = new char[2048];
                     JSONObject JSONMsg = new JSONObject(msg);
                     System.out.println(ConsoleDate.getConsoleDate()+"Message received from " + this.serverSocket.getInetAddress().getHostAddress() + ":" +

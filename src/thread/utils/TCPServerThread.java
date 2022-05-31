@@ -254,12 +254,12 @@ public class TCPServerThread extends Thread{
     }
     
     public void sendMessageWithoutRet(JSONObject msg_json) throws IOException, JSONException{
-        this.outputData.print(msg_json.toString());
+        this.outputData.println(msg_json.toString());
         this.outputData.flush();
         System.out.println(ConsoleDate.getConsoleDate()+"Message sent to "+ this.userSocket.getInetAddress().getHostAddress() + ":" + this.userSocket.getPort() + " = " + msg_json);
     }
     
-    public JSONObject sendMessage(JSONObject msg_json) throws IOException, JSONException{
+    /*public JSONObject sendMessage(JSONObject msg_json) throws IOException, JSONException{
         this.outputData.print(msg_json.toString());
         this.outputData.flush();
         System.out.println(ConsoleDate.getConsoleDate()+"Message sent to "+ this.userSocket.getInetAddress().getHostAddress() + ":" + this.userSocket.getPort() + " = " + msg_json);
@@ -268,7 +268,7 @@ public class TCPServerThread extends Thread{
         JSONObject reply = new JSONObject(String.valueOf(cbuf));
         System.out.println(ConsoleDate.getConsoleDate()+"Message received from "+ this.userSocket.getInetAddress().getHostAddress() + ":" + this.userSocket.getPort() + " = " + msg_json);
         return reply;
-    }
+    }*/
     
     public void setUserPing(boolean userPing){
         this.userPing = userPing;
@@ -285,7 +285,7 @@ public class TCPServerThread extends Thread{
     @Override
     public void run(){
         try{
-            outputData = new PrintWriter(this.userSocket.getOutputStream(), true);
+            outputData = new PrintWriter(this.userSocket.getOutputStream());
             inputData = new BufferedReader(new InputStreamReader(this.userSocket.getInputStream()));
             System.out.println(ConsoleDate.getConsoleDate()+"New client connected: " + this.userSocket.getInetAddress().getHostAddress()+":" + this.userSocket.getPort());
             ActiveUser activeUser = this.server.getActiveUserByIP(this.userSocket.getInetAddress().getHostAddress());
@@ -299,8 +299,9 @@ public class TCPServerThread extends Thread{
             this.updateTable();
             char[] cbuf = new char[2048];
             while(true){
-                int flag = inputData.read(cbuf);
-                if (flag == -1 || userSocket.isClosed()) {
+                String data = inputData.readLine();
+                //int flag = inputData.read(cbuf);
+                if (data == null || userSocket.isClosed()) {
                     System.out.println(ConsoleDate.getConsoleDate()+"Client desconected");
                     //this.user.setLoggedUser(false);
                     //this.server.removeActiveUsers(this.userSocket.getInetAddress().getHostAddress());
@@ -317,7 +318,8 @@ public class TCPServerThread extends Thread{
                     break;
                 }else{
                     //deal with received message
-                    String msg = String.valueOf(cbuf);
+                    //String msg = String.valueOf(cbuf);
+                    String msg = data;
                     cbuf = new char[2048];
                     JSONObject JSONMsg = new JSONObject(msg);
                     System.out.println(ConsoleDate.getConsoleDate()+"Message received from " + this.userSocket.getInetAddress().getHostAddress() + ":" +
@@ -326,7 +328,7 @@ public class TCPServerThread extends Thread{
                     JSONObject reply = getReply(JSONMsg);
                     //sending reply to client
                     if(!reply.has("ping")){
-                        outputData.print(reply);
+                        outputData.println(reply);
                         outputData.flush();
                         System.out.println(ConsoleDate.getConsoleDate()+"Message sent to " + this.userSocket.getInetAddress().getHostAddress() + ":" + 
                                             this.userSocket.getPort() + " = " + reply);

@@ -38,7 +38,14 @@ public class Tests {
         
         jsonobj.append("receptions", users.get(0).getJSON());
         jsonobj.append("receptions", users.get(1).getJSON());
-        System.out.println(jsonobj);
+        String a = "-1\n";
+        int flag;
+        try{
+            flag = Integer.parseInt(a.replace("\n", "").replace("\r", ""));
+        }catch(Exception e){
+            flag = 0;
+        }
+        System.out.println(flag);
         /*JSONArray a = (JSONArray)data.get("donations");
         for(int i=0;i<a.length();i++){
             JSONObject j = a.getJSONObject(i);
