@@ -74,7 +74,7 @@ public class TCPServerThread extends Thread{
         String phone = data_.getString("phone");
         String name = data_.getString("name");
         String password = data_.getString("password");
-        if(User.getUserById(cpf) != null){
+        if(User.getUserByCpf(cpf) != null){
             data.put("error", "User already registered");
             reply.put("register", data);
         }else{
