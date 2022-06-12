@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import model.server.TCPServer;
@@ -18,7 +19,7 @@ import model.server.TCPUser;
 import model.User;
 import org.json.JSONException;
 import org.json.JSONObject;
-import pojoutils.ReceptionsPojo;
+import pojoutils.ReceptionPojo;
 import thread.utils.TCPServerThread;
 import utils.ConsoleDate;
 
@@ -108,6 +109,13 @@ public class ClientView extends javax.swing.JFrame {
         updatepassword = new javax.swing.JPasswordField();
         updatecancelbtn = new javax.swing.JButton();
         jLabel17 = new javax.swing.JLabel();
+        receptionPanel = new javax.swing.JPanel();
+        jPanel7 = new javax.swing.JPanel();
+        jSeparator7 = new javax.swing.JSeparator();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        receptionsList = new javax.swing.JList();
+        returnHome = new javax.swing.JButton();
+        jLabel25 = new javax.swing.JLabel();
         createdonationpanel = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         createdonationquantity = new javax.swing.JTextField();
@@ -513,7 +521,7 @@ public class ClientView extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(homepanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(receiveOrDonatebtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(receiveListbtn)))
                 .addContainerGap())
@@ -675,6 +683,68 @@ public class ClientView extends javax.swing.JFrame {
         );
 
         getContentPane().add(updateUserpanel, "card2");
+
+        jScrollPane5.setViewportView(receptionsList);
+
+        returnHome.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
+        returnHome.setForeground(new java.awt.Color(66, 165, 245));
+        returnHome.setText("Return");
+        returnHome.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                returnHomeActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSeparator7, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 572, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(returnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addComponent(jSeparator7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(returnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        jLabel25.setFont(new java.awt.Font("Noto Sans", 0, 36)); // NOI18N
+        jLabel25.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel25.setText("Receive donation");
+
+        javax.swing.GroupLayout receptionPanelLayout = new javax.swing.GroupLayout(receptionPanel);
+        receptionPanel.setLayout(receptionPanelLayout);
+        receptionPanelLayout.setHorizontalGroup(
+            receptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(receptionPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(receptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel25, javax.swing.GroupLayout.DEFAULT_SIZE, 584, Short.MAX_VALUE)
+                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        receptionPanelLayout.setVerticalGroup(
+            receptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(receptionPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel25)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        getContentPane().add(receptionPanel, "card2");
 
         createdonationquantity.setToolTipText("User");
         createdonationquantity.addActionListener(new java.awt.event.ActionListener() {
@@ -1024,6 +1094,16 @@ public class ClientView extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.receiveOrDonatebtn.setText("Create Donation");
         this.homeOperation = true;
+        //this.listDonations();
+        try{
+            JSONObject jsonobj = new JSONObject();
+            JSONObject data = new JSONObject();
+            data.put("idClient", this.user.getId());
+            jsonobj.put("clientTransactions", data);
+            this.tCPUser.sendMessage(jsonobj);
+        }catch(JSONException | IOException ex){
+            System.out.println(ConsoleDate.getConsoleDate()+"Transactions server fetch error");
+        }
     }//GEN-LAST:event_donateListbtnActionPerformed
 
     private void receiveListbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_receiveListbtnActionPerformed
@@ -1032,11 +1112,20 @@ public class ClientView extends javax.swing.JFrame {
         this.homeOperation = false;
         try{
             JSONObject jsonobj = new JSONObject();
+            JSONObject data = new JSONObject();
+            data.put("idClient", this.user.getId());
+            jsonobj.put("clientTransactions", data);
+            this.tCPUser.sendMessage(jsonobj);
+        }catch(JSONException | IOException ex){
+            System.out.println(ConsoleDate.getConsoleDate()+"Transactions server fetch error");
+        }
+        /*try{
+            JSONObject jsonobj = new JSONObject();
             jsonobj.put("receptions", new JSONObject());
             this.tCPUser.sendMessage(jsonobj);
         }catch(JSONException | IOException ex){
             System.out.println(ConsoleDate.getConsoleDate()+"Receptions server fetch error");
-        }
+        }*/
     }//GEN-LAST:event_receiveListbtnActionPerformed
 
     private void receiveOrDonatebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_receiveOrDonatebtnActionPerformed
@@ -1045,9 +1134,25 @@ public class ClientView extends javax.swing.JFrame {
             this.homepanel.setVisible(false);
             this.createdonationpanel.setVisible(true);
         }else{//Receive donation
-              
+            try{
+                JSONObject jsonobj = new JSONObject();
+                JSONObject data = new JSONObject();
+                data.put("idClient", this.user.getId());
+                jsonobj.put("receptions", data);
+                this.tCPUser.sendMessage(jsonobj);
+                this.homepanel.setVisible(false);
+                this.receptionPanel.setVisible(true);
+            }catch(JSONException | IOException ex){
+                System.out.println(ConsoleDate.getConsoleDate()+"Transactions server fetch error");
+            }
         }
     }//GEN-LAST:event_receiveOrDonatebtnActionPerformed
+
+    private void returnHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_returnHomeActionPerformed
+        // TODO add your handling code here:
+        this.receptionPanel.setVisible(false);
+        this.homepanel.setVisible(true);
+    }//GEN-LAST:event_returnHomeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1107,6 +1212,7 @@ public class ClientView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1119,15 +1225,18 @@ public class ClientView extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JSeparator jSeparator6;
+    private javax.swing.JSeparator jSeparator7;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JButton loginbtn;
     private javax.swing.JTextField logincpf;
@@ -1137,6 +1246,9 @@ public class ClientView extends javax.swing.JFrame {
     private javax.swing.JButton receiveListbtn;
     private javax.swing.JList receiveOrDonateList;
     private javax.swing.JButton receiveOrDonatebtn;
+    private javax.swing.JPanel receptionPanel;
+    private javax.swing.JList receptionsList;
+    private javax.swing.JButton returnHome;
     private javax.swing.JPanel serverconnection;
     private javax.swing.JButton serverconnectionbtn;
     private javax.swing.JTextField serverconnectionip;
@@ -1214,11 +1326,23 @@ public class ClientView extends javax.swing.JFrame {
         this.user = user;
     }
     
-    public void setReceiveOrDonateList(JList jList){
-        this.receiveOrDonateList = jList;
+    public void setReceiveOrDonateList(DefaultListModel model){
+        this.receiveOrDonateList.setModel(model);
     }
     
     public JList getReceiveOrDonateList(){
         return this.receiveOrDonateList;
+    }
+    
+    public void setReceptionsList(DefaultListModel model){
+        this.receptionsList.setModel(model);
+    }
+    
+    public JList getReceptionList(){
+        return this.receptionsList;
+    }
+    
+    public boolean getHomeOperation(){
+        return this.homeOperation;
     }
 }

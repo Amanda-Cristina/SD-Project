@@ -16,11 +16,11 @@ import model.Donation;
  *
  * @author gilson
  */
-public class ReceptionPojoList {
-    DefaultListModel<ReceptionPojo> model;
+public class DonationPojoList {
+    DefaultListModel<DonationPojo> model;
     ClientView view;
     
-    public ReceptionPojoList(ClientView view){
+    public DonationPojoList(ClientView view){
         this.view = view;
     }
     public void setPojoList(boolean listener){
@@ -41,19 +41,19 @@ public class ReceptionPojoList {
         }
     }
     
-    public void updateList(ArrayList<ReceptionPojo> receptionsPojo){
+    public void updateList(ArrayList<DonationPojo> donationsPojo){
         if(this.model == null){
             this.model = new DefaultListModel<>();
         }
-        for(ReceptionPojo donation : receptionsPojo){
+        for(DonationPojo donation : donationsPojo){
             this.model.addElement(donation);
         }
     }
-    public void updateList(ReceptionPojo receptionsPojo){
+    public void updateList(DonationPojo donationPojo){
         if(this.model == null){
             this.model = new DefaultListModel<>();
         }
-        this.model.addElement(receptionsPojo);
+        this.model.addElement(donationPojo);
     }
     public void clear(){
         this.model.removeAllElements();

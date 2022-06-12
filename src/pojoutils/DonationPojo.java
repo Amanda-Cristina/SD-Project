@@ -4,21 +4,25 @@
  */
 package pojoutils;
 
+import java.text.MessageFormat;
+
 /**
  *
  * @author gilson
  */
-public class ReceptionsPojo {
+public class DonationPojo {
     private float quantity;
     private String description;
     private String measureUnity;
     private String id;
+    private String donorId;
     
-    public ReceptionsPojo(float quantity, String description, String measureUnity, String id){
+    public DonationPojo(float quantity, String description, String measureUnity, String id, String donorId){
         this.quantity = quantity;
         this.description = description;
         this.measureUnity = measureUnity;
         this.id = id;
+        this.donorId = donorId;
     }
 
     public float getQuantity() {
@@ -39,8 +43,7 @@ public class ReceptionsPojo {
     
     @Override
     public String toString(){
-        return "Description: "+getDescription()+"\n"+
-               "Quantity: "+String.valueOf(getQuantity())+"\n"+
-               "Measure unity: "+getMeasureUnity();
+        return MessageFormat.format("{0} - {1} - {2}", getDescription(),
+        String.valueOf(getQuantity()), getMeasureUnity());
     }
 }

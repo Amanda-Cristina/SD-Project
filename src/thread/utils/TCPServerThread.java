@@ -7,12 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.SocketException;
-import java.security.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
@@ -21,6 +16,7 @@ import model.ActiveUser;
 import model.Donation;
 import model.server.TCPServer;
 import model.User;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import utils.ConsoleDate;
@@ -166,19 +162,31 @@ public class TCPServerThread extends Thread{
         return reply;    
     }
     
-    private JSONObject clientTransactions(JSONObject msg_json){
-        return null;
+    private JSONObject clientTransactions(JSONObject msg_json) throws JSONException, IOException{
+        msg_json = msg_json.getJSONObject("clientTransactions");
+        JSONArray data_donations = new JSONArray();
+        JSONArray data_receptions = new JSONArray();
+        JSONObject data = new JSONObject();
+        JSONObject reply = new JSONObject();
+        ArrayList<Donation> donations = (ArrayList<Donation>) Donation.getDonationbyDonerId(msg_json.getString("idClient"));
+        for(Donation u : donations){
+            data_donations.put(u.getJSON(false));
+        }
+        data.put("donations", data_donations);
+        data.put("receives", data_receptions);
+        reply.put("clientTransactions", data);
+        return reply;
     }
     
     private JSONObject receptions(JSONObject msg_json) throws JSONException, IOException{
-        ArrayList<Donation> donations = (ArrayList<Donation>) Donation.getAllDonations();
+        msg_json = msg_json.getJSONObject("receptions");
+        ArrayList<Donation> donations = (ArrayList<Donation>) Donation.getDonationbyExcludeId(msg_json.getString("idClient"));
         JSONObject data = new JSONObject();
         for(Donation i : donations){
-            data.append("donations", i.getJSON());
+            data.append("donations", i.getJSON(true));
         }
         JSONObject reply = new JSONObject();
         reply.put("receptions", data);
-        System.out.println(reply);
         return reply;
     }
     

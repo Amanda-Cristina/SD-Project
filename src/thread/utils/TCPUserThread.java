@@ -15,8 +15,10 @@ import model.User;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import pojoutils.DonationPojo;
+import pojoutils.DonationPojoList;
 import pojoutils.ReceptionPojoList;
-import pojoutils.ReceptionsPojo;
+import pojoutils.ReceptionPojo;
 import thread.utils.TCPServerThread;
 import utils.ConsoleDate;
 
@@ -29,6 +31,8 @@ public class TCPUserThread extends Thread{
     public PrintWriter output;
     public BufferedReader input;
     private ClientView clientView;
+    private DonationPojoList donationPojoList = null;
+    private ReceptionPojoList receptionPojoList = null;
     
     
     public TCPUserThread(Socket serverSocket, PrintWriter output, BufferedReader input, ClientView clientView){
@@ -100,23 +104,72 @@ public class TCPUserThread extends Thread{
         json_msg = (JSONObject)json_msg.get("receptions");
         if(json_msg.has("error")){
             System.out.println(ConsoleDate.getConsoleDate()+"Error");
-        }else if(json_msg.isNull("donations")){
+        }else if(((JSONArray)json_msg.get("donations")).length()==0){
             System.out.println(ConsoleDate.getConsoleDate()+"Vazio");
         }else{
-            clientView.setReceiveOrDonateList(new JList(new DefaultListModel<ReceptionsPojo>()));
-            ReceptionPojoList receptionPojoList = new ReceptionPojoList(clientView.getReceiveOrDonateList());
+            DonationPojoList donationPojoList_ = new DonationPojoList(clientView);
             JSONArray data = (JSONArray)json_msg.get("donations");
             for(int i=0;i<data.length();i++){
                 JSONObject j = data.getJSONObject(i);
-                receptionPojoList.updateList(new ReceptionsPojo(
+                donationPojoList_.updateList(new DonationPojo(
                         Float.valueOf(j.get("quantity").toString()),
                         j.get("description").toString(), 
                         j.get("measureUnit").toString(), 
-                        j.get("id").toString()
+                        j.get("id").toString(),
+                        j.get("idDonor").toString()
                 ));
-                System.out.println(j.get("quantity"));
             }
-            receptionPojoList.setPojoList();
+            donationPojoList_.setPojoList(true);
+        }
+    }
+    
+    public void treatUserTransactions(JSONObject json_msg, ClientView clientView) throws JSONException{
+        json_msg = (JSONObject)json_msg.get("clientTransactions");
+        if(json_msg.has("error")){
+            System.out.println(ConsoleDate.getConsoleDate()+"Error");
+        }else if(json_msg.isNull("donations") && json_msg.isNull("receives")){
+            System.out.println(ConsoleDate.getConsoleDate()+"No donations or receives");
+        }else{
+            if(receptionPojoList!=null)
+                receptionPojoList.clear();
+            if(donationPojoList!=null)
+                donationPojoList.clear();
+            if(!clientView.getHomeOperation()){
+                if(((JSONArray)json_msg.get("receives")).length()>0){
+                    if(receptionPojoList == null)
+                        receptionPojoList = new ReceptionPojoList(clientView);
+                    JSONArray data = (JSONArray)json_msg.get("receives");
+                    for(int i=0;i<data.length();i++){
+                        JSONObject j = data.getJSONObject(i);
+                        receptionPojoList.updateList(new ReceptionPojo(
+                                Float.valueOf(j.get("quantity").toString()),
+                                j.get("description").toString(), 
+                                j.get("measureUnit").toString(), 
+                                j.get("id").toString(),
+                                j.get("idReceiver").toString(),
+                                j.get("idDonation").toString()
+                        ));
+                    }
+                    receptionPojoList.setPojoList(false);
+                }
+            }else if(clientView.getHomeOperation()){
+                if(((JSONArray)json_msg.get("donations")).length()>0){
+                    if(donationPojoList == null)
+                        donationPojoList = new DonationPojoList(clientView);
+                    JSONArray data = (JSONArray)json_msg.get("donations");
+                    for(int i=0;i<data.length();i++){
+                        JSONObject j = data.getJSONObject(i);
+                        donationPojoList.updateList(new DonationPojo(
+                                Float.valueOf(j.get("quantity").toString()),
+                                j.get("description").toString(), 
+                                j.get("measureUnit").toString(), 
+                                j.get("id").toString(),
+                                j.get("idDonor").toString()
+                        ));
+                    }
+                    donationPojoList.setPojoList(false);
+                }
+            }
         }
     }
     
@@ -183,6 +236,14 @@ public class TCPUserThread extends Thread{
                     }
                 }
                 
+                case "clientTransactions" ->{
+                    try{
+                        treatUserTransactions(json_msg, clientView);
+                    }catch(JSONException ex){
+                        Logger.getLogger(TCPUserThread.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                
                 case "close" -> {
                 try {
                     treatLogout(json_msg, clientView);
@@ -190,7 +251,9 @@ public class TCPUserThread extends Thread{
                     Logger.getLogger(TCPUserThread.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 }
-                default -> throw new AssertionError();
+                default -> {
+                        System.out.println(ConsoleDate.getConsoleDate()+"JSON Key error");
+                }
             }
             return;
         };
