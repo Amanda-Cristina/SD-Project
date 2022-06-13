@@ -47,6 +47,23 @@ public class DonationDAO {
         return true;
     }
     
+    public boolean delete(String id) throws IOException{
+        Database db = Database.getInstance();
+        List<Donation> donations = db.getDonations();
+        int index=-1;
+        for(int i=0;i<donations.size();i++){
+            if(donations.get(i).getId().equals(id)){
+                index = i;
+            }
+        }
+        if(index == -1){
+            return false;
+        }
+        db.getDonations().remove(index);
+        db.saveState();
+        return true;
+    }
+    
     public boolean updateById(Donation donation) throws IOException{
         Database db = Database.getInstance();
         List<Donation> donations = db.getDonations();

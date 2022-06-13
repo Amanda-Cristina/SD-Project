@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
@@ -106,6 +107,31 @@ public class TCPServerThread extends Thread{
         DonationDAO DonationDAO = new DonationDAO();
         try{
             DonationDAO.save(donation);
+            reply.put("donation", new JSONObject());
+        }catch(IOException e){
+            data.put("error", "Database error");
+            reply.put("donation", data);
+            System.out.println(e);
+        }
+
+        return reply;
+    }
+    
+    private JSONObject deleteDonation(JSONObject msg_json) throws JSONException, IOException{
+        String id = msg_json.get("id").toString();
+        JSONObject reply = new JSONObject();
+        JSONObject data = new JSONObject();
+        Donation donation = null;
+        DonationDAO DonationDAO = new DonationDAO();
+        List<Donation> donations = DonationDAO.selectAll();
+        for(Donation d : donations){
+            if(d.getId().equals(id)){
+                donation = d;
+                break;
+            }
+        }
+        try{
+            DonationDAO.delete(donation);
             reply.put("donation", new JSONObject());
         }catch(IOException e){
             data.put("error", "Database error");
@@ -243,6 +269,39 @@ public class TCPServerThread extends Thread{
         return reply;
     }
     
+    private JSONObject donationUpdate(JSONObject msg_json) throws JSONException, IOException{
+        JSONObject reply = new JSONObject();
+        JSONObject data = new JSONObject();
+        JSONObject data_ = msg_json.getJSONObject("donationUpdate");
+        
+        String id = data_.getString("id");
+        String idDonor = data_.getString("idDonor");
+        String measureUnit = data_.getString("measureUnit");
+        String description = data_.getString("description");
+        float quantity = Float.parseFloat(data_.getString("quantity"));
+        Donation donation_ = Donation.getDonationById(id);
+        if(donation_ == null){
+            data.put("error", "User not registered");
+            reply.put("donationUpdate", data);
+            return reply;
+        }
+        DonationDAO donationDao = new DonationDAO();
+        donation_.setMeasureUnit(measureUnit);
+        donation_.setDescription(description);
+        donation_.setQuantity(quantity);
+        try{
+            if(!donationDao.update(donation_)){
+                throw new IOException();
+            }
+            reply.put("donationUpdate", new JSONObject());
+        }catch(IOException e){
+            data.put("error", "Database error");
+            reply.put("donationUpdate", data);
+        }
+        this.updateTable();
+        return reply;
+    }
+    
     private JSONObject getReply(JSONObject msg_json) throws JSONException, IOException{
         String operation = msg_json.keys().next().toString();
         JSONObject reply = new JSONObject();
@@ -255,6 +314,8 @@ public class TCPServerThread extends Thread{
             case "receptions" -> reply = receptions(msg_json);
             case "userUpdate" -> reply = updateUser(msg_json);
             case "ping" -> reply = ping(msg_json);
+            case "donationDelete" -> reply = deleteDonation(msg_json);
+            case "donationUpdate" -> reply = donationUpdate(msg_json);
             default -> {
             }
         }

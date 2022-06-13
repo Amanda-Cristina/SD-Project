@@ -71,6 +71,17 @@ public class Donation implements Serializable{
         return donation_return;
     }
     
+    public static Donation getDonationById(String id) throws IOException{
+        DonationDAO donationDAO = new DonationDAO();
+        List<Donation> donations = donationDAO.selectAll();
+        for(Donation u : donations){
+            if(!u.getId().equals(id)){
+                return u;
+            }
+        }
+        return null;
+    }
+    
     public static List<Donation> getDonationbyExcludeId(String idDonor) throws IOException{
         DonationDAO donationDAO = new DonationDAO();
         List<Donation> donations = donationDAO.selectAll();
