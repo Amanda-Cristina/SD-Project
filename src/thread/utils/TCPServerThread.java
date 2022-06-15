@@ -98,7 +98,7 @@ public class TCPServerThread extends Thread{
             reply.put("register", data);
             return reply;
         }
-        String quantity = data_.getString("quantity");
+        String quantity = data_.get("quantity").toString();
         String description = data_.getString("description");
         String measureUnit = data_.getString("measureUnit");
         String idDonor = data_.getString("idDonor");
@@ -118,7 +118,8 @@ public class TCPServerThread extends Thread{
     }
     
     private JSONObject deleteDonation(JSONObject msg_json) throws JSONException, IOException{
-        String id = msg_json.get("id").toString();
+        JSONObject data_ = msg_json.getJSONObject("donationDelete");
+        String id = data_.get("id").toString();
         JSONObject reply = new JSONObject();
         JSONObject data = new JSONObject();
         Donation donation = null;
@@ -132,10 +133,10 @@ public class TCPServerThread extends Thread{
         }
         try{
             DonationDAO.delete(donation);
-            reply.put("donation", new JSONObject());
+            reply.put("donationDelete", new JSONObject());
         }catch(IOException e){
             data.put("error", "Database error");
-            reply.put("donation", data);
+            reply.put("donationDelete", data);
             System.out.println(e);
         }
 
@@ -205,8 +206,7 @@ public class TCPServerThread extends Thread{
     }
     
     private JSONObject receptions(JSONObject msg_json) throws JSONException, IOException{
-        msg_json = msg_json.getJSONObject("receptions");
-        ArrayList<Donation> donations = (ArrayList<Donation>) Donation.getDonationbyExcludeId(msg_json.getString("idClient"));
+        ArrayList<Donation> donations = (ArrayList<Donation>) Donation.getAllDonations();
         JSONObject data = new JSONObject();
         for(Donation i : donations){
             data.append("donations", i.getJSON(true));
@@ -272,16 +272,15 @@ public class TCPServerThread extends Thread{
     private JSONObject donationUpdate(JSONObject msg_json) throws JSONException, IOException{
         JSONObject reply = new JSONObject();
         JSONObject data = new JSONObject();
-        JSONObject data_ = msg_json.getJSONObject("donationUpdate");
-        
+        JSONObject data_ = msg_json.getJSONObject("donationUpdate");    
         String id = data_.getString("id");
         String idDonor = data_.getString("idDonor");
         String measureUnit = data_.getString("measureUnit");
         String description = data_.getString("description");
-        float quantity = Float.parseFloat(data_.getString("quantity"));
+        float quantity = Float.parseFloat(data_.get("quantity").toString());
         Donation donation_ = Donation.getDonationById(id);
         if(donation_ == null){
-            data.put("error", "User not registered");
+            data.put("error", "Donation don't exists");
             reply.put("donationUpdate", data);
             return reply;
         }
@@ -289,6 +288,7 @@ public class TCPServerThread extends Thread{
         donation_.setMeasureUnit(measureUnit);
         donation_.setDescription(description);
         donation_.setQuantity(quantity);
+        donation_.setQuantityHistory(quantity);
         try{
             if(!donationDao.update(donation_)){
                 throw new IOException();
@@ -298,7 +298,6 @@ public class TCPServerThread extends Thread{
             data.put("error", "Database error");
             reply.put("donationUpdate", data);
         }
-        this.updateTable();
         return reply;
     }
     
@@ -313,7 +312,7 @@ public class TCPServerThread extends Thread{
             case "clientTransactions" -> reply = clientTransactions(msg_json);
             case "receptions" -> reply = receptions(msg_json);
             case "userUpdate" -> reply = updateUser(msg_json);
-            case "ping" -> reply = ping(msg_json);
+            //case "ping" -> reply = ping(msg_json);
             case "donationDelete" -> reply = deleteDonation(msg_json);
             case "donationUpdate" -> reply = donationUpdate(msg_json);
             default -> {

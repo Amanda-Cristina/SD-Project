@@ -58,4 +58,7 @@ public class DonationPojoList {
     public void clear(){
         this.model.removeAllElements();
     }
+    public DefaultListModel getModel(){
+        return this.model;
+    }
 }

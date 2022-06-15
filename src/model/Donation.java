@@ -75,7 +75,7 @@ public class Donation implements Serializable{
         DonationDAO donationDAO = new DonationDAO();
         List<Donation> donations = donationDAO.selectAll();
         for(Donation u : donations){
-            if(!u.getId().equals(id)){
+            if(u.getId().equals(id)){
                 return u;
             }
         }
@@ -123,6 +123,10 @@ public class Donation implements Serializable{
 
     public void setQuantity(float quantity) {
         this.quantity = quantity;
+    }
+    
+    public void setQuantityHistory(float quantity) {
+        this.quantity_history = quantity;
     }
 
     public String getMeasureUnit() {

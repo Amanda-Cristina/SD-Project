@@ -34,7 +34,6 @@ public class TCPUserThread extends Thread{
     private DonationPojoList donationPojoList = null;
     private ReceptionPojoList receptionPojoList = null;
     
-    
     public TCPUserThread(Socket serverSocket, PrintWriter output, BufferedReader input, ClientView clientView){
         this.serverSocket = serverSocket;
         this.output = output;
@@ -100,6 +99,18 @@ public class TCPUserThread extends Thread{
             clientView.setCreateDonationVisibility(true);
         }
     }
+    
+    public void treatDonationUpdate(JSONObject json_msg, ClientView clientView) throws JSONException{
+        json_msg = (JSONObject)json_msg.get("donationUpdate");
+        if(json_msg.has("error")){
+            JOptionPane.showMessageDialog(null, json_msg.get("error"), "Donation error",
+                    JOptionPane.WARNING_MESSAGE);
+        }else{
+            clientView.updatereceiveOrDonateList();
+            clientView.setHomepanelVisibility(true);
+        }
+    }
+    
     public void treatReceptions(JSONObject json_msg, ClientView clientView) throws JSONException{
         json_msg = (JSONObject)json_msg.get("receptions");
         if(json_msg.has("error")){
@@ -111,15 +122,18 @@ public class TCPUserThread extends Thread{
             JSONArray data = (JSONArray)json_msg.get("donations");
             for(int i=0;i<data.length();i++){
                 JSONObject j = data.getJSONObject(i);
-                donationPojoList_.updateList(new DonationPojo(
-                        Float.valueOf(j.get("quantity").toString()),
-                        j.get("description").toString(), 
-                        j.get("measureUnit").toString(), 
-                        j.get("id").toString(),
-                        j.get("idDonor").toString()
-                ));
+                if(!j.get("idDonor").toString().equals(this.clientView.getUser().getId())){
+                    donationPojoList_.updateList(new DonationPojo(
+                            Float.valueOf(j.get("quantity").toString()),
+                            j.get("description").toString(), 
+                            j.get("measureUnit").toString(), 
+                            j.get("id").toString(),
+                            j.get("idDonor").toString()
+                    ));
+                }
             }
-            donationPojoList_.setPojoList(true);
+            if(donationPojoList_.getModel() != null)
+                donationPojoList_.setPojoList(true);
         }
     }
     
@@ -135,10 +149,10 @@ public class TCPUserThread extends Thread{
             if(donationPojoList!=null)
                 donationPojoList.clear();
             if(!clientView.getHomeOperation()){
-                if(((JSONArray)json_msg.get("receives")).length()>0){
+                JSONArray data = (JSONArray)json_msg.get("receives");
+                if(data.length()>0){
                     if(receptionPojoList == null)
                         receptionPojoList = new ReceptionPojoList(clientView);
-                    JSONArray data = (JSONArray)json_msg.get("receives");
                     for(int i=0;i<data.length();i++){
                         JSONObject j = data.getJSONObject(i);
                         receptionPojoList.updateList(new ReceptionPojo(
@@ -153,10 +167,10 @@ public class TCPUserThread extends Thread{
                     receptionPojoList.setPojoList(false);
                 }
             }else if(clientView.getHomeOperation()){
-                if(((JSONArray)json_msg.get("donations")).length()>0){
+                JSONArray data = (JSONArray)json_msg.get("donations");
+                if(data.length()>0){
                     if(donationPojoList == null)
                         donationPojoList = new DonationPojoList(clientView);
-                    JSONArray data = (JSONArray)json_msg.get("donations");
                     for(int i=0;i<data.length();i++){
                         JSONObject j = data.getJSONObject(i);
                         donationPojoList.updateList(new DonationPojo(
@@ -180,6 +194,16 @@ public class TCPUserThread extends Thread{
             clientView.setLoginpanelVisibility(true);
         }else{
             JOptionPane.showMessageDialog(null, json_msg.get("error"), "Logout error",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+    }
+    
+    public void treatDonationDelete(JSONObject json_msg, ClientView clientView) throws JSONException{
+        json_msg = (JSONObject)json_msg.get("donationDelete");
+        if(!json_msg.has("error")){
+            clientView.updatereceiveOrDonateList();
+        }else{
+            JOptionPane.showMessageDialog(null, json_msg.get("error"), "Delete error",
                     JOptionPane.WARNING_MESSAGE);
         }
     }
@@ -239,6 +263,22 @@ public class TCPUserThread extends Thread{
                 case "clientTransactions" ->{
                     try{
                         treatUserTransactions(json_msg, clientView);
+                    }catch(JSONException ex){
+                        Logger.getLogger(TCPUserThread.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                
+                case "donationDelete" ->{
+                    try{
+                        treatDonationDelete(json_msg, clientView);
+                    }catch(JSONException ex){
+                        Logger.getLogger(TCPUserThread.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                
+                case "donationUpdate" ->{
+                    try{
+                        treatDonationUpdate(json_msg, clientView);
                     }catch(JSONException ex){
                         Logger.getLogger(TCPUserThread.class.getName()).log(Level.SEVERE, null, ex);
                     }

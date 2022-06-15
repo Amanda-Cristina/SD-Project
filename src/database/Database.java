@@ -67,7 +67,7 @@ public class Database implements Serializable{
     public void saveState() throws IOException{
         ObjectOutputStream outputobj = null;
         outputobj = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream("database.dat")));
-        outputobj.writeObject(bd);
+        outputobj.writeObject(Database.bd);
         outputobj.close();
     }
 }

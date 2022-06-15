@@ -13,16 +13,16 @@ import java.text.MessageFormat;
 public class DonationPojo {
     private float quantity;
     private String description;
-    private String measureUnity;
+    private String measureUnit;
     private String id;
-    private String donorId;
+    private String idDonor;
     
     public DonationPojo(float quantity, String description, String measureUnity, String id, String donorId){
         this.quantity = quantity;
         this.description = description;
-        this.measureUnity = measureUnity;
+        this.measureUnit = measureUnity;
         this.id = id;
-        this.donorId = donorId;
+        this.idDonor = donorId;
     }
 
     public float getQuantity() {
@@ -33,8 +33,8 @@ public class DonationPojo {
         return description;
     }
 
-    public String getMeasureUnity() {
-        return measureUnity;
+    public String getMeasureUnit() {
+        return measureUnit;
     }
 
     public String getId() {
@@ -44,6 +44,20 @@ public class DonationPojo {
     @Override
     public String toString(){
         return MessageFormat.format("{0} - {1} - {2}", getDescription(),
-        String.valueOf(getQuantity()), getMeasureUnity());
+        String.valueOf(getQuantity()), getMeasureUnit());
+    }
+
+    /**
+     * @return the idDonor
+     */
+    public String getIdDonor() {
+        return idDonor;
+    }
+
+    /**
+     * @param idDonor the idDonor to set
+     */
+    public void setIdDonor(String idDonor) {
+        this.idDonor = idDonor;
     }
 }

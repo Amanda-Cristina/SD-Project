@@ -19,6 +19,7 @@ import model.server.TCPUser;
 import model.User;
 import org.json.JSONException;
 import org.json.JSONObject;
+import pojoutils.DonationPojo;
 import pojoutils.ReceptionPojo;
 import thread.utils.TCPServerThread;
 import utils.ConsoleDate;
@@ -95,6 +96,8 @@ public class ClientView extends javax.swing.JFrame {
         receiveOrDonatebtn = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         receiveOrDonateList = new javax.swing.JList();
+        deleteDonationHomeBtn = new javax.swing.JButton();
+        updateDonationHomeBtn = new javax.swing.JButton();
         updateUserpanel = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         updatename = new javax.swing.JTextField();
@@ -116,17 +119,29 @@ public class ClientView extends javax.swing.JFrame {
         receptionsList = new javax.swing.JList();
         returnHome = new javax.swing.JButton();
         jLabel25 = new javax.swing.JLabel();
-        createdonationpanel = new javax.swing.JPanel();
-        jPanel6 = new javax.swing.JPanel();
+        createDonation = new javax.swing.JPanel();
+        jPanel8 = new javax.swing.JPanel();
         createdonationquantity = new javax.swing.JTextField();
+        jLabel21 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        createdonationbtn = new javax.swing.JButton();
+        jLabel24 = new javax.swing.JLabel();
+        jSeparator8 = new javax.swing.JSeparator();
+        createdonationmeasure = new javax.swing.JTextField();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        createdonationdescription = new javax.swing.JTextArea();
+        jLabel26 = new javax.swing.JLabel();
+        updateDonation = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
+        updatedonationquantity = new javax.swing.JTextField();
         jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
-        createdonationbtn = new javax.swing.JButton();
+        updatedonationbtn = new javax.swing.JButton();
         jLabel20 = new javax.swing.JLabel();
         jSeparator5 = new javax.swing.JSeparator();
-        createdonationmeasure = new javax.swing.JTextField();
+        updatedonationmeasure = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        createdonationdescription = new javax.swing.JTextArea();
+        updatedonationdescription = new javax.swing.JTextArea();
         jLabel22 = new javax.swing.JLabel();
 
         jTextArea1.setColumns(20);
@@ -227,7 +242,7 @@ public class ClientView extends javax.swing.JFrame {
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(104, Short.MAX_VALUE))
+                .addContainerGap(111, Short.MAX_VALUE))
         );
 
         getContentPane().add(serverconnection, "card5");
@@ -452,7 +467,7 @@ public class ClientView extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(104, Short.MAX_VALUE))
+                .addContainerGap(111, Short.MAX_VALUE))
         );
 
         getContentPane().add(loginpanel, "card3");
@@ -502,6 +517,26 @@ public class ClientView extends javax.swing.JFrame {
 
         jScrollPane3.setViewportView(receiveOrDonateList);
 
+        deleteDonationHomeBtn.setBackground(new java.awt.Color(244, 67, 54));
+        deleteDonationHomeBtn.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
+        deleteDonationHomeBtn.setForeground(new java.awt.Color(255, 255, 255));
+        deleteDonationHomeBtn.setText("Delete");
+        deleteDonationHomeBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteDonationHomeBtnActionPerformed(evt);
+            }
+        });
+
+        updateDonationHomeBtn.setBackground(new java.awt.Color(51, 153, 255));
+        updateDonationHomeBtn.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
+        updateDonationHomeBtn.setForeground(new java.awt.Color(255, 255, 255));
+        updateDonationHomeBtn.setText("Update");
+        updateDonationHomeBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateDonationHomeBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout homepanelLayout = new javax.swing.GroupLayout(homepanel);
         homepanel.setLayout(homepanelLayout);
         homepanelLayout.setHorizontalGroup(
@@ -517,11 +552,14 @@ public class ClientView extends javax.swing.JFrame {
                         .addGap(20, 20, 20)
                         .addComponent(logoutbtn))
                     .addGroup(homepanelLayout.createSequentialGroup()
-                        .addComponent(donateListbtn)
+                        .addGroup(homepanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(donateListbtn)
+                            .addComponent(updateDonationHomeBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(deleteDonationHomeBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(homepanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(receiveOrDonatebtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 399, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(receiveListbtn)))
                 .addContainerGap())
@@ -543,7 +581,12 @@ public class ClientView extends javax.swing.JFrame {
                         .addComponent(receiveListbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(receiveOrDonatebtn, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(homepanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(receiveOrDonatebtn, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(homepanelLayout.createSequentialGroup()
+                        .addComponent(updateDonationHomeBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(deleteDonationHomeBtn)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -753,11 +796,11 @@ public class ClientView extends javax.swing.JFrame {
             }
         });
 
-        jLabel18.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
-        jLabel18.setText("Quantity");
+        jLabel21.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
+        jLabel21.setText("Quantity");
 
-        jLabel19.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
-        jLabel19.setText("Measure unit");
+        jLabel23.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
+        jLabel23.setText("Measure unit");
 
         createdonationbtn.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
         createdonationbtn.setForeground(new java.awt.Color(66, 165, 245));
@@ -768,8 +811,8 @@ public class ClientView extends javax.swing.JFrame {
             }
         });
 
-        jLabel20.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
-        jLabel20.setText("Description");
+        jLabel24.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
+        jLabel24.setText("Description");
 
         createdonationmeasure.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -779,7 +822,118 @@ public class ClientView extends javax.swing.JFrame {
 
         createdonationdescription.setColumns(20);
         createdonationdescription.setRows(5);
-        jScrollPane1.setViewportView(createdonationdescription);
+        jScrollPane4.setViewportView(createdonationdescription);
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addComponent(jLabel21)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane4)
+                            .addComponent(createdonationquantity)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                                .addGap(0, 211, Short.MAX_VALUE)
+                                .addComponent(createdonationbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jSeparator8)
+                            .addComponent(createdonationmeasure)
+                            .addGroup(jPanel8Layout.createSequentialGroup()
+                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel23)
+                                    .addComponent(jLabel24))
+                                .addGap(0, 234, Short.MAX_VALUE)))
+                        .addContainerGap())))
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                .addComponent(jSeparator8, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel21)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(createdonationquantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel23)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(createdonationmeasure, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel24)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                .addComponent(createdonationbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jLabel26.setFont(new java.awt.Font("Noto Sans", 0, 36)); // NOI18N
+        jLabel26.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel26.setText("Create donation");
+
+        javax.swing.GroupLayout createDonationLayout = new javax.swing.GroupLayout(createDonation);
+        createDonation.setLayout(createDonationLayout);
+        createDonationLayout.setHorizontalGroup(
+            createDonationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(createDonationLayout.createSequentialGroup()
+                .addGap(130, 130, 130)
+                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(132, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, createDonationLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel26, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        createDonationLayout.setVerticalGroup(
+            createDonationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(createDonationLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel26)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        getContentPane().add(createDonation, "card2");
+
+        updatedonationquantity.setToolTipText("User");
+        updatedonationquantity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updatedonationquantityActionPerformed(evt);
+            }
+        });
+
+        jLabel18.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
+        jLabel18.setText("Quantity");
+
+        jLabel19.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
+        jLabel19.setText("Measure unit");
+
+        updatedonationbtn.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
+        updatedonationbtn.setForeground(new java.awt.Color(66, 165, 245));
+        updatedonationbtn.setText("Update");
+        updatedonationbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updatedonationbtnActionPerformed(evt);
+            }
+        });
+
+        jLabel20.setFont(new java.awt.Font("Noto Sans", 1, 13)); // NOI18N
+        jLabel20.setText("Description");
+
+        updatedonationmeasure.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updatedonationmeasureActionPerformed(evt);
+            }
+        });
+
+        updatedonationdescription.setColumns(20);
+        updatedonationdescription.setRows(5);
+        jScrollPane1.setViewportView(updatedonationdescription);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -794,12 +948,12 @@ public class ClientView extends javax.swing.JFrame {
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1)
-                            .addComponent(createdonationquantity)
+                            .addComponent(updatedonationquantity)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                                 .addGap(0, 211, Short.MAX_VALUE)
-                                .addComponent(createdonationbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(updatedonationbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jSeparator5)
-                            .addComponent(createdonationmeasure)
+                            .addComponent(updatedonationmeasure)
                             .addGroup(jPanel6Layout.createSequentialGroup()
                                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel19)
@@ -814,40 +968,40 @@ public class ClientView extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel18)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(createdonationquantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(updatedonationquantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel19)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(createdonationmeasure, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(updatedonationmeasure, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel20)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
-                .addComponent(createdonationbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(updatedonationbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
         jLabel22.setFont(new java.awt.Font("Noto Sans", 0, 36)); // NOI18N
         jLabel22.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel22.setText("Create donation");
+        jLabel22.setText("Update donation");
 
-        javax.swing.GroupLayout createdonationpanelLayout = new javax.swing.GroupLayout(createdonationpanel);
-        createdonationpanel.setLayout(createdonationpanelLayout);
-        createdonationpanelLayout.setHorizontalGroup(
-            createdonationpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(createdonationpanelLayout.createSequentialGroup()
+        javax.swing.GroupLayout updateDonationLayout = new javax.swing.GroupLayout(updateDonation);
+        updateDonation.setLayout(updateDonationLayout);
+        updateDonationLayout.setHorizontalGroup(
+            updateDonationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(updateDonationLayout.createSequentialGroup()
                 .addGap(130, 130, 130)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(132, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, createdonationpanelLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, updateDonationLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        createdonationpanelLayout.setVerticalGroup(
-            createdonationpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(createdonationpanelLayout.createSequentialGroup()
+        updateDonationLayout.setVerticalGroup(
+            updateDonationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(updateDonationLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel22)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -855,7 +1009,7 @@ public class ClientView extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        getContentPane().add(createdonationpanel, "card2");
+        getContentPane().add(updateDonation, "card2");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -997,7 +1151,11 @@ public class ClientView extends javax.swing.JFrame {
         this.updatecpf.setText(this.user.getCpf());
         this.updatephone.setText(this.user.getPhone());
     }//GEN-LAST:event_updateUserbtnActionPerformed
-
+    
+    public void updatereceiveOrDonateList(){
+        receiveOrDonateList.updateUI();
+    }
+        
     private void updatenameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updatenameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_updatenameActionPerformed
@@ -1054,41 +1212,48 @@ public class ClientView extends javax.swing.JFrame {
         this.homepanel.setVisible(true);
     }//GEN-LAST:event_updatecancelbtnActionPerformed
 
-    private void createdonationquantityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createdonationquantityActionPerformed
+    private void updatedonationquantityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updatedonationquantityActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_createdonationquantityActionPerformed
+    }//GEN-LAST:event_updatedonationquantityActionPerformed
 
-    private void createdonationbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createdonationbtnActionPerformed
-        // TODO add your handling code here:
+    private void updatedonationbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updatedonationbtnActionPerformed
         JSONObject jsonobj = new JSONObject();
         JSONObject data = new JSONObject();
+        DonationPojo donation = (DonationPojo)this.receiveOrDonateList.getSelectedValue();
         try {
-            if(!this.createdonationquantity.getText().isEmpty()&&
-               !this.createdonationmeasure.getText().isEmpty()){
-                data.put("quantity", this.createdonationquantity.getText());
-                data.put("measureUnit", this.createdonationmeasure.getText());
-                data.put("description", this.createdonationdescription.getText());
-                data.put("idDonor", this.user.getId());
-                jsonobj.put("donation", data);
+            if(!this.updatedonationdescription.getText().isEmpty()&&
+               !this.updatedonationmeasure.getText().isEmpty()&&
+               !this.updatedonationquantity.getText().isEmpty()
+               ){
+                data.put("id", donation.getId());
+                data.put("description", updatedonationdescription.getText());
+                data.put("measureUnit", updatedonationmeasure.getText());
+                data.put("quantity", Float.parseFloat(updatedonationquantity.getText()));
+                data.put("idDonor", donation.getIdDonor());
+                jsonobj.put("donationUpdate", data);
                 this.tCPUser.sendMessage(jsonobj);
             }else{
-                if(this.createdonationquantity.getText().isEmpty()){
-                    this.createdonationquantity.setBorder(BorderFactory.createLineBorder(Color.red));
+                if(this.updatedonationdescription.getText().isEmpty()){
+                    this.updatedonationdescription.setBorder(BorderFactory.createLineBorder(Color.red));
                 }
-                if(this.createdonationmeasure.getText().isEmpty()){
-                    this.createdonationmeasure.setBorder(BorderFactory.createLineBorder(Color.red));
+                if(this.updatedonationmeasure.getText().isEmpty()){
+                    this.updatedonationmeasure.setBorder(BorderFactory.createLineBorder(Color.red));
                 }
+                if(this.updatedonationquantity.getText().isEmpty()){
+                    this.updatedonationquantity.setBorder(BorderFactory.createLineBorder(Color.red));
+                }
+                
             }
         } catch (JSONException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {
             Logger.getLogger(ClientView.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_createdonationbtnActionPerformed
+        } 
+    }//GEN-LAST:event_updatedonationbtnActionPerformed
 
-    private void createdonationmeasureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createdonationmeasureActionPerformed
+    private void updatedonationmeasureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updatedonationmeasureActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_createdonationmeasureActionPerformed
+    }//GEN-LAST:event_updatedonationmeasureActionPerformed
 
     private void donateListbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_donateListbtnActionPerformed
         // TODO add your handling code here:
@@ -1132,13 +1297,11 @@ public class ClientView extends javax.swing.JFrame {
         //Create donation
         if(homeOperation){
             this.homepanel.setVisible(false);
-            this.createdonationpanel.setVisible(true);
+            this.createDonation.setVisible(true);
         }else{//Receive donation
             try{
                 JSONObject jsonobj = new JSONObject();
-                JSONObject data = new JSONObject();
-                data.put("idClient", this.user.getId());
-                jsonobj.put("receptions", data);
+                jsonobj.put("receptions", new JSONObject());
                 this.tCPUser.sendMessage(jsonobj);
                 this.homepanel.setVisible(false);
                 this.receptionPanel.setVisible(true);
@@ -1153,6 +1316,71 @@ public class ClientView extends javax.swing.JFrame {
         this.receptionPanel.setVisible(false);
         this.homepanel.setVisible(true);
     }//GEN-LAST:event_returnHomeActionPerformed
+
+    private void createdonationquantityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createdonationquantityActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_createdonationquantityActionPerformed
+
+    private void createdonationbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createdonationbtnActionPerformed
+        // TODO add your handling code here:
+                // TODO add your handling code here:
+        JSONObject jsonobj = new JSONObject();
+        JSONObject data = new JSONObject();
+        try {
+            if(!this.createdonationquantity.getText().isEmpty()&&
+               !this.createdonationmeasure.getText().isEmpty()){
+                data.put("quantity", Float.valueOf(this.createdonationquantity.getText()));
+                data.put("measureUnit", this.createdonationmeasure.getText());
+                data.put("description", this.createdonationdescription.getText());
+                data.put("idDonor", this.user.getId());
+                jsonobj.put("donation", data);
+                this.tCPUser.sendMessage(jsonobj);
+            }else{
+                if(this.createdonationquantity.getText().isEmpty()){
+                    this.createdonationquantity.setBorder(BorderFactory.createLineBorder(Color.red));
+                }
+                if(this.createdonationmeasure.getText().isEmpty()){
+                    this.createdonationmeasure.setBorder(BorderFactory.createLineBorder(Color.red));
+                }
+            }
+        } catch (JSONException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            Logger.getLogger(ClientView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_createdonationbtnActionPerformed
+
+    private void createdonationmeasureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createdonationmeasureActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_createdonationmeasureActionPerformed
+
+    private void deleteDonationHomeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteDonationHomeBtnActionPerformed
+        // TODO add your handling code here:
+        JSONObject msg = new JSONObject();
+        JSONObject data = new JSONObject();
+        DonationPojo donation = (DonationPojo)this.receiveOrDonateList.getSelectedValue();
+        try {
+            data.put("id", donation.getId());
+            msg.put("donationDelete", data);
+        } catch (JSONException ex) {
+            Logger.getLogger(ClientView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            this.tCPUser.sendMessage(msg);
+        } catch (IOException | JSONException ex) {
+            Logger.getLogger(ClientView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_deleteDonationHomeBtnActionPerformed
+
+    private void updateDonationHomeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateDonationHomeBtnActionPerformed
+        // TODO add your handling code here:
+        DonationPojo donation = (DonationPojo)this.receiveOrDonateList.getSelectedValue();
+        this.updateDonation.setVisible(true);
+        this.homepanel.setVisible(false);
+        this.updatedonationquantity.setText(String.valueOf(donation.getQuantity()));
+        this.updatedonationmeasure.setText(donation.getMeasureUnit());
+        this.updatedonationdescription.setText(donation.getDescription());
+    }//GEN-LAST:event_updateDonationHomeBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1191,11 +1419,12 @@ public class ClientView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel createDonation;
     private javax.swing.JButton createdonationbtn;
     private javax.swing.JTextArea createdonationdescription;
     private javax.swing.JTextField createdonationmeasure;
-    private javax.swing.JPanel createdonationpanel;
     private javax.swing.JTextField createdonationquantity;
+    private javax.swing.JButton deleteDonationHomeBtn;
     private javax.swing.JButton donateListbtn;
     private javax.swing.JPanel homepanel;
     private javax.swing.JLabel jLabel1;
@@ -1211,8 +1440,12 @@ public class ClientView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1226,9 +1459,11 @@ public class ClientView extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
@@ -1237,6 +1472,7 @@ public class ClientView extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JSeparator jSeparator6;
     private javax.swing.JSeparator jSeparator7;
+    private javax.swing.JSeparator jSeparator8;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JButton loginbtn;
     private javax.swing.JTextField logincpf;
@@ -1260,11 +1496,17 @@ public class ClientView extends javax.swing.JFrame {
     private javax.swing.JPanel signuppanel;
     private javax.swing.JPasswordField signuppassword;
     private javax.swing.JTextField signupphone;
+    private javax.swing.JPanel updateDonation;
+    private javax.swing.JButton updateDonationHomeBtn;
     private javax.swing.JButton updateUserbtn;
     private javax.swing.JPanel updateUserpanel;
     private javax.swing.JButton updatebtn;
     private javax.swing.JButton updatecancelbtn;
     private javax.swing.JTextField updatecpf;
+    private javax.swing.JButton updatedonationbtn;
+    private javax.swing.JTextArea updatedonationdescription;
+    private javax.swing.JTextField updatedonationmeasure;
+    private javax.swing.JTextField updatedonationquantity;
     private javax.swing.JTextField updatename;
     private javax.swing.JPasswordField updatepassword;
     private javax.swing.JTextField updatephone;
@@ -1277,6 +1519,7 @@ public class ClientView extends javax.swing.JFrame {
     public void setHomepanelVisibility(boolean state) {
         this.serverconnection.setVisible(false);
         this.homepanel.setVisible(state);
+        this.updateDonation.setVisible(false);
         this.loginpanel.setVisible(false);
         this.signuppanel.setVisible(false);
     }
@@ -1298,7 +1541,7 @@ public class ClientView extends javax.swing.JFrame {
     public void setServerconnectionVisibility(boolean state){
         this.updateUserpanel.setVisible(false);
         this.serverconnection.setVisible(false);
-        this.createdonationpanel.setVisible(false);
+        this.updateDonation.setVisible(false);
         this.homepanel.setVisible(false);
         this.loginpanel.setVisible(false);
         this.signuppanel.setVisible(false);
@@ -1316,7 +1559,7 @@ public class ClientView extends javax.swing.JFrame {
     public void setCreateDonationVisibility(boolean state){
         this.updateUserpanel.setVisible(false);
         this.serverconnection.setVisible(false);
-        this.createdonationpanel.setVisible(false);
+        this.createDonation.setVisible(false);
         this.homepanel.setVisible(true);
         this.loginpanel.setVisible(false);
         this.signuppanel.setVisible(false);
@@ -1324,6 +1567,10 @@ public class ClientView extends javax.swing.JFrame {
     
     public void setUser(User user){
         this.user = user;
+    }
+    
+    public User getUser(){
+        return this.user;
     }
     
     public void setReceiveOrDonateList(DefaultListModel model){
