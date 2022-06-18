@@ -1151,10 +1151,7 @@ public class ClientView extends javax.swing.JFrame {
         this.updatecpf.setText(this.user.getCpf());
         this.updatephone.setText(this.user.getPhone());
     }//GEN-LAST:event_updateUserbtnActionPerformed
-    
-    public void updatereceiveOrDonateList(){
-        receiveOrDonateList.updateUI();
-    }
+
         
     private void updatenameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updatenameActionPerformed
         // TODO add your handling code here:

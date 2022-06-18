@@ -106,8 +106,16 @@ public class TCPUserThread extends Thread{
             JOptionPane.showMessageDialog(null, json_msg.get("error"), "Donation error",
                     JOptionPane.WARNING_MESSAGE);
         }else{
-            clientView.updatereceiveOrDonateList();
             clientView.setHomepanelVisibility(true);
+            try{
+                JSONObject jsonobj = new JSONObject();
+                JSONObject data = new JSONObject();
+                data.put("idClient", this.clientView.getUser().getId());
+                jsonobj.put("clientTransactions", data);
+                this.sendMessage(jsonobj);
+            }catch(JSONException | IOException ex){
+                System.out.println(ConsoleDate.getConsoleDate()+"Transactions server fetch error");
+            }
         }
     }
     
@@ -201,7 +209,15 @@ public class TCPUserThread extends Thread{
     public void treatDonationDelete(JSONObject json_msg, ClientView clientView) throws JSONException{
         json_msg = (JSONObject)json_msg.get("donationDelete");
         if(!json_msg.has("error")){
-            clientView.updatereceiveOrDonateList();
+            try{
+                JSONObject jsonobj = new JSONObject();
+                JSONObject data = new JSONObject();
+                data.put("idClient", this.clientView.getUser().getId());
+                jsonobj.put("clientTransactions", data);
+                this.sendMessage(jsonobj);
+            }catch(JSONException | IOException ex){
+                System.out.println(ConsoleDate.getConsoleDate()+"Transactions server fetch error");
+            }
         }else{
             JOptionPane.showMessageDialog(null, json_msg.get("error"), "Delete error",
                     JOptionPane.WARNING_MESSAGE);
