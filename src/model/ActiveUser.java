@@ -1,5 +1,7 @@
 package model;
 
+import java.net.Socket;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -15,6 +17,7 @@ public class ActiveUser {
     private User user;
     private boolean loggedUser;
     private boolean connected;
+    private Socket connection;
     
     public ActiveUser(String ip, int porta, boolean loggedUser, User user, boolean connected){
         this.ip = ip;
@@ -86,5 +89,13 @@ public class ActiveUser {
     
     public boolean getLoggedUser(){
         return this.loggedUser;
+    }
+    
+    public void setConnection(Socket connection){
+        this.connection = connection;
+    }
+    
+    public Socket getConnection(){
+        return this.connection;
     }
 }

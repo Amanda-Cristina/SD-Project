@@ -24,12 +24,17 @@ public class Tests {
     
     public static void main(String[] args) throws JSONException, IOException {
        
-        JSONObject data2 = new JSONObject();
+        JSONObject reply = new JSONObject();
         JSONObject data = new JSONObject();
-        data.put("donations", new JSONArray());
-        data.put("receives", new JSONArray());
-        data2.put("teste", data);
+        JSONObject donation = new JSONObject();
+        JSONObject error = new JSONObject();
         
-        System.out.println(data2);
+        data.put("idReceptor", '2');
+        donation.put("quantity", 23);
+        data.put("donation", donation);
+        //reply.put("startChat", data);
+        error.put("error", "error");
+        reply.put("startChat", error);
+        System.out.println(reply);
     }
 }

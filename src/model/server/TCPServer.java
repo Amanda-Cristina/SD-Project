@@ -90,6 +90,24 @@ public class TCPServer extends Thread{
         this.onlineUsers.remove(activeUser);
     }
     
+    public ActiveUser getOnlineUserByID(String id){
+        for(ActiveUser user : onlineUsers){
+            if(user.getUser().getId().equals(id)){
+                return user;
+            }
+        }
+        return null;
+    }
+    
+    public boolean isUserOnline(String id){
+        for(ActiveUser user : onlineUsers){
+            if(user.getUser().getId().equals(id)){
+                return true;
+            }
+        }
+        return false;
+    }
+    
     private Runnable createRunnable(final TCPServer tCPServer, boolean send, ScheduledExecutorService executor){
         Runnable ping = null;
         if(send){

@@ -165,6 +165,7 @@ public class TCPServerThread extends Thread{
             int user_index = this.server.getConnectedUsers().indexOf(this.user);
             this.user.setUser(user_);
             this.user.setLoggedUser(true);
+            this.user.setConnection(this.userSocket);
             this.server.updateActiveUsers(user_index, this.user);
             this.server.addOnlineUser(this.user);
             updateTable();
@@ -179,11 +180,10 @@ public class TCPServerThread extends Thread{
     private JSONObject logout(JSONObject msg_json) throws JSONException{
         JSONObject reply = new JSONObject();
         reply.put("close", new JSONObject());
-        //this.servethis.loggedUserr.removeActiveUsers(this.userSocket.getInetAddress().getHostName());
         int user_index = this.server.getConnectedUsers().indexOf(this.user);
         this.user.setLoggedUser(false);
+        this.user.setConnection(null);
         this.server.updateActiveUsers(user_index, user);
-        //this.server.removeActiveUsers(user);
         this.server.removeOnlineUser(user);
         updateTable();
         return reply;    
@@ -301,6 +301,66 @@ public class TCPServerThread extends Thread{
         return reply;
     }
     
+    private JSONObject startChat(JSONObject msg_json) throws JSONException, IOException{
+        msg_json = msg_json.getJSONObject("starChat");
+        Donation donation = Donation.getDonationById(msg_json.get("idDonation").toString());
+        JSONObject reply = new JSONObject();
+        JSONObject data = new JSONObject();
+        JSONObject donationData = new JSONObject();
+        
+        if(!server.isUserOnline(donation.getIdDonor())){
+            JSONObject error = new JSONObject();
+            error.put("error", "User not online");
+            reply.put("startChat", error);
+            return reply;
+        }
+        
+        data.put("idReceptor", msg_json.get("idReceptor"));
+        if(donation!=null){
+            donationData.put("quantity", donation.getQuantity());
+            donationData.put("description", donation.getDescription());
+            donationData.put("measureUnit", donation.getMeasureUnit());
+            donationData.put("id", donation.getId());
+            donationData.put("idDonor", donation.getIdDonor());
+            
+            data.put("donation", donationData);
+            reply.put("startChat", data);
+        }else{
+            JSONObject error = new JSONObject();
+            error.put("error", "error");
+            reply.put("startChat", error);
+        }
+        
+        ActiveUser user_ = server.getActiveUserByIP(msg_json.get(donation.getIdDonor()).toString());     
+        this.sendMessageWithoutRetToIP(reply, user_.getConnection());
+        return reply;
+    }
+    
+    private JSONObject chat(JSONObject msg_json) throws JSONException, IOException{
+        msg_json = msg_json.getJSONObject("chat");
+        JSONObject reply = new JSONObject();
+        JSONObject data = new JSONObject();
+        
+        data.put("message", msg_json.get("message"));
+        data.put("idReceptor", msg_json.get("idReceptor"));
+        data.put("idDonor", msg_json.get("idDonor"));
+        
+        reply.put("chatRedirection", data);
+        
+        ActiveUser user_ = server.getActiveUserByIP(msg_json.get("idDonor").toString());
+        
+        this.sendMessageWithoutRetToIP(reply, user_.getConnection());
+        return null;
+    }
+    
+    private JSONObject chatCancel(JSONObject msg_json) throws JSONException, IOException{
+        return null;
+    }
+    
+    private JSONObject chatConfirmation(JSONObject msg_json) throws JSONException, IOException{
+        return null;
+    }
+    
     private JSONObject getReply(JSONObject msg_json) throws JSONException, IOException{
         String operation = msg_json.keys().next().toString();
         JSONObject reply = new JSONObject();
@@ -315,8 +375,11 @@ public class TCPServerThread extends Thread{
             //case "ping" -> reply = ping(msg_json);
             case "donationDelete" -> reply = deleteDonation(msg_json);
             case "donationUpdate" -> reply = donationUpdate(msg_json);
-            default -> {
-            }
+            case "startChat" -> reply = startChat(msg_json);
+            case "chat" -> reply = chat(msg_json);
+            case "chatCancel" -> reply = chatCancel(msg_json);
+            case "chatConfirmation" -> reply = chatConfirmation(msg_json);
+            default -> {}
         }
         return reply;
     }
@@ -325,6 +388,14 @@ public class TCPServerThread extends Thread{
         this.outputData.println(msg_json.toString());
         this.outputData.flush();
         System.out.println(ConsoleDate.getConsoleDate()+"Message sent to "+ this.userSocket.getInetAddress().getHostAddress() + ":" + this.userSocket.getPort() + " = " + msg_json);
+    }
+    
+    public void sendMessageWithoutRetToIP(JSONObject msg_json, Socket socket) throws IOException, JSONException{
+        PrintWriter outputData_;
+        outputData_ = new PrintWriter(socket.getOutputStream());
+        outputData_.println(msg_json.toString());
+        outputData_.flush();
+        System.out.println(ConsoleDate.getConsoleDate()+"Message sent to "+ socket.getInetAddress().getHostAddress() + ":" + this.userSocket.getPort() + " = " + msg_json);
     }
     
     /*public JSONObject sendMessage(JSONObject msg_json) throws IOException, JSONException{
@@ -394,12 +465,14 @@ public class TCPServerThread extends Thread{
                                         this.userSocket.getPort() + " = " + msg);
                     //get the reply
                     JSONObject reply = getReply(JSONMsg);
-                    //sending reply to client
-                    if(!reply.has("ping")){
-                        outputData.println(reply);
-                        outputData.flush();
-                        System.out.println(ConsoleDate.getConsoleDate()+"Message sent to " + this.userSocket.getInetAddress().getHostAddress() + ":" + 
-                                            this.userSocket.getPort() + " = " + reply);
+                    if(reply != null){
+                        //sending reply to client
+                        if(!reply.has("ping")){
+                            outputData.println(reply);
+                            outputData.flush();
+                            System.out.println(ConsoleDate.getConsoleDate()+"Message sent to " + this.userSocket.getInetAddress().getHostAddress() + ":" + 
+                                                this.userSocket.getPort() + " = " + reply);
+                        }
                     }
                 }
             }
