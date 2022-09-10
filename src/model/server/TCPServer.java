@@ -57,6 +57,15 @@ public class TCPServer extends Thread{
         this.connectedUsers.add(activeUser);
     }
     
+    public ActiveUser getActiveUserByID(String id){
+        for(ActiveUser u:connectedUsers){
+            if(u.getUser().getId().equals(id)){
+                return u;
+            }
+        } 
+        return null;
+    }
+    
     public ActiveUser getActiveUserByIP(String ip){
         for(ActiveUser u:connectedUsers){
             if(u.getIp().equals(ip)){

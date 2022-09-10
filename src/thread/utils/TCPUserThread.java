@@ -8,8 +8,10 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import main.Chat;
 import main.ClientView;
 import model.User;
 import org.json.JSONArray;
@@ -33,6 +35,15 @@ public class TCPUserThread extends Thread{
     private ClientView clientView;
     private DonationPojoList donationPojoList = null;
     private ReceptionPojoList receptionPojoList = null;
+    private Chat chat;
+    
+    public ClientView getClientView(){
+        return this.clientView;
+    }
+    
+    private void setChat(Chat chat){
+        this.chat = chat;
+    }
     
     public TCPUserThread(Socket serverSocket, PrintWriter output, BufferedReader input, ClientView clientView){
         this.serverSocket = serverSocket;
@@ -126,7 +137,7 @@ public class TCPUserThread extends Thread{
         }else if(((JSONArray)json_msg.get("donations")).length()==0){
             System.out.println(ConsoleDate.getConsoleDate()+"Vazio");
         }else{
-            DonationPojoList donationPojoList_ = new DonationPojoList(clientView);
+            DonationPojoList donationPojoList_ = new DonationPojoList(clientView, this);
             JSONArray data = (JSONArray)json_msg.get("donations");
             for(int i=0;i<data.length();i++){
                 JSONObject j = data.getJSONObject(i);
@@ -178,7 +189,7 @@ public class TCPUserThread extends Thread{
                 JSONArray data = (JSONArray)json_msg.get("donations");
                 if(data.length()>0){
                     if(donationPojoList == null)
-                        donationPojoList = new DonationPojoList(clientView);
+                        donationPojoList = new DonationPojoList(clientView, this);
                     for(int i=0;i<data.length();i++){
                         JSONObject j = data.getJSONObject(i);
                         donationPojoList.updateList(new DonationPojo(
@@ -221,6 +232,49 @@ public class TCPUserThread extends Thread{
         }else{
             JOptionPane.showMessageDialog(null, json_msg.get("error"), "Delete error",
                     JOptionPane.WARNING_MESSAGE);
+        }
+    }
+    
+    public void treatStartChat(JSONObject json_msg, ClientView clientView) throws JSONException{
+        json_msg = (JSONObject)json_msg.get("startChat");
+        if(json_msg.has("error")){
+            JOptionPane.showMessageDialog(null, json_msg.get("error"), "Chat error",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        String idReceptor = json_msg.get("idReceptor").toString();
+        json_msg = (JSONObject)json_msg.get("donation");
+        float quantity = Float.parseFloat(json_msg.get("quantity").toString());
+        String description = json_msg.get("description").toString();
+        String measureUnit = json_msg.get("measureUnit").toString();
+        String id = json_msg.get("id").toString();
+        String idDonor = json_msg.get("idDonor").toString();
+        
+        DonationPojo pojo = new DonationPojo(quantity, description, measureUnit, id, idDonor);
+        TCPUserThread server_ = this;
+        boolean receptor = idReceptor.equals(this.clientView.getUser().getId());
+        Runnable runnable = new Runnable(){
+            public void run(){
+                Chat chat_ = new Chat(pojo, server_, idDonor, idReceptor, receptor);
+                chat_.setVisible(true);
+                chat_.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                server_.setChat(chat_);
+            }
+        };
+        Thread thread = new Thread(runnable);
+        thread.start();  
+    }
+    
+    public void treatChat(JSONObject json_msg, ClientView clientView) throws JSONException{
+        try{json_msg = (JSONObject)json_msg.get("chatRedirection");
+        if(json_msg.has("error")){
+            JOptionPane.showMessageDialog(null, json_msg.get("error"), "Chat error",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        this.chat.setMessage(json_msg.get("message").toString());
+        }catch(JSONException ex){
+            ex.printStackTrace();
         }
     }
     
@@ -307,6 +361,29 @@ public class TCPUserThread extends Thread{
                     Logger.getLogger(TCPUserThread.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 }
+                case "startChat" -> {
+                    try{
+                        treatStartChat(json_msg, clientView);
+                    }catch(JSONException ex){
+                        Logger.getLogger(TCPUserThread.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                case "chatRedirection" -> {
+                    try{
+                        treatChat(json_msg, clientView);
+                    }catch(JSONException ex){
+                        Logger.getLogger(TCPUserThread.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                
+                case "chatCancelRedirection" -> {
+                    this.chat.dispose();
+                }
+                
+                case "chatConfirmationRedirection" -> {
+                    this.chat.dispose();    
+                }
+                
                 default -> {
                         System.out.println(ConsoleDate.getConsoleDate()+"JSON Key error");
                 }

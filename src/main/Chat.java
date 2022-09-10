@@ -4,17 +4,42 @@
  */
 package main;
 
+import java.awt.Font;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import org.json.JSONException;
+import org.json.JSONObject;
+import pojoutils.DonationPojo;
+import thread.utils.TCPServerThread;
+import thread.utils.TCPUserThread;
+
 /**
  *
  * @author gilson
  */
 public class Chat extends javax.swing.JFrame {
-
+    
+    DonationPojo donation;
+    TCPUserThread server;
+    String idReceptor;
+    String idDonor;
+    boolean receptor;
     /**
      * Creates new form Chat
      */
-    public Chat() {
+    public Chat(DonationPojo donation, TCPUserThread server, String idReceptor, String idDonor, boolean receptor) {
+        this.donation = donation;
+        this.idReceptor = idReceptor;
+        this.idDonor = idDonor;
+        this.server = server;
+        this.receptor = receptor;
         initComponents();
+        DefaultListModel<String> model = new DefaultListModel<>();
+        chatMessagePanel.setModel(model);
     }
 
     /**
@@ -27,16 +52,72 @@ public class Chat extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        chatMessagePanel = new javax.swing.JList<>();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        chatMessageInput = new javax.swing.JTextArea();
+        chatSendMessagebtn = new javax.swing.JButton();
+        chatCancelbtn = new javax.swing.JButton();
+        chatConfirmationbtn = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
+        jSeparator2 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
 
         jLabel1.setText("jLabel1");
 
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane2.setViewportView(jTextArea1);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(chatMessagePanel);
+
+        chatMessageInput.setColumns(20);
+        chatMessageInput.setRows(3);
+        jScrollPane3.setViewportView(chatMessageInput);
+
+        chatSendMessagebtn.setBackground(new java.awt.Color(102, 187, 106));
+        chatSendMessagebtn.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        chatSendMessagebtn.setForeground(new java.awt.Color(255, 255, 255));
+        chatSendMessagebtn.setText("Send");
+        chatSendMessagebtn.setMaximumSize(new java.awt.Dimension(85, 24));
+        chatSendMessagebtn.setMinimumSize(new java.awt.Dimension(85, 24));
+        chatSendMessagebtn.setPreferredSize(new java.awt.Dimension(85, 24));
+        chatSendMessagebtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chatSendMessagebtnActionPerformed(evt);
+            }
+        });
+
+        chatCancelbtn.setBackground(new java.awt.Color(244, 67, 54));
+        chatCancelbtn.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        chatCancelbtn.setForeground(new java.awt.Color(255, 255, 255));
+        chatCancelbtn.setText("Cancel");
+        chatCancelbtn.setMaximumSize(new java.awt.Dimension(85, 24));
+        chatCancelbtn.setMinimumSize(new java.awt.Dimension(85, 24));
+        chatCancelbtn.setPreferredSize(new java.awt.Dimension(85, 24));
+        chatCancelbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chatCancelbtnActionPerformed(evt);
+            }
+        });
+
+        chatConfirmationbtn.setBackground(new java.awt.Color(51, 153, 255));
+        chatConfirmationbtn.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        chatConfirmationbtn.setForeground(new java.awt.Color(255, 255, 255));
+        chatConfirmationbtn.setText("Confirm");
+        chatConfirmationbtn.setMaximumSize(new java.awt.Dimension(85, 24));
+        chatConfirmationbtn.setMinimumSize(new java.awt.Dimension(85, 24));
+        chatConfirmationbtn.setPreferredSize(new java.awt.Dimension(85, 24));
+        chatConfirmationbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chatConfirmationbtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -44,17 +125,44 @@ public class Chat extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator2)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(chatSendMessagebtn, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(chatCancelbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(chatConfirmationbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 4, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addComponent(chatSendMessagebtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(chatCancelbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(chatConfirmationbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jLabel2.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Chat");
 
@@ -82,46 +190,96 @@ public class Chat extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void chatSendMessagebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chatSendMessagebtnActionPerformed
+        // TODO add your handling code here:
+        if(!chatMessageInput.getText().isEmpty()){
+            JSONObject reply = new JSONObject();
+            JSONObject data = new JSONObject();
+        
+            try {
+                data.put("message", chatMessageInput.getText());
+                data.put("idReceptor", this.idReceptor);
+                data.put("idDonor", this.idDonor);
+        
+                reply.put("chat", data);
+                server.sendMessage(reply);
+            } catch (JSONException | IOException ex) {
+                Logger.getLogger(Chat.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            DefaultListModel model = (DefaultListModel)this.chatMessagePanel.getModel();
+            chatMessagePanel.setFont(chatMessagePanel.getFont().deriveFont(Font.PLAIN));
+            String user_ = receptor ? "<html><b>Receptor</b>: " : "<html><b>Donor</b>: ";
+            model.addElement(user_ + chatMessageInput.getText()+"</html>");
+            chatMessagePanel.setModel(model);
+            
+            chatMessageInput.setText("");
+        }
+    }//GEN-LAST:event_chatSendMessagebtnActionPerformed
+
+    private void chatCancelbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chatCancelbtnActionPerformed
+        // TODO add your handling code here:
+        JSONObject reply = new JSONObject();
+        JSONObject data = new JSONObject();
+
+        try {
+            data.put("idReceptor", this.idReceptor);
+            data.put("idDonor", this.idDonor);
+
+            reply.put("chatCancel", data);
+            server.sendMessage(reply);
+        } catch (JSONException | IOException ex) {
+            Logger.getLogger(Chat.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_chatCancelbtnActionPerformed
+
+    private void chatConfirmationbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chatConfirmationbtnActionPerformed
+        // TODO add your handling code here:
+        JSONObject reply = new JSONObject();
+        JSONObject data = new JSONObject();
+        
+        String input = JOptionPane.showInputDialog("Quantity");
+        float quantity = Float.parseFloat(input);
+        
+        try {
+            data.put("idReceptor", this.idReceptor);
+            data.put("idDonor", this.idDonor);
+            data.put("idDonation", donation.getId());
+            data.put("quantity", quantity);
+
+            reply.put("chatConfirmation", data);
+            server.sendMessage(reply);
+        } catch (JSONException | IOException ex) {
+            Logger.getLogger(Chat.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_chatConfirmationbtnActionPerformed
+    
+    public void setMessage(String message){
+        DefaultListModel model = (DefaultListModel)this.chatMessagePanel.getModel();
+        chatMessagePanel.setFont(chatMessagePanel.getFont().deriveFont(Font.PLAIN));
+        String user_ = !receptor ? "<html><b>Receptor</b>: " : "<html><b>Donor</b>: ";
+        model.addElement(user_ + message +"</html>");
+        chatMessagePanel.setModel(model);
+    }
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Chat.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Chat.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Chat.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Chat.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Chat().setVisible(true);
-            }
-        });
-    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton chatCancelbtn;
+    private javax.swing.JButton chatConfirmationbtn;
+    private javax.swing.JTextArea chatMessageInput;
+    private javax.swing.JList<String> chatMessagePanel;
+    private javax.swing.JButton chatSendMessagebtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 }

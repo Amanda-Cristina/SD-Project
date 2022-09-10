@@ -9,6 +9,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import main.Chat;
 import main.ClientView;
 import model.Donation;
 
@@ -32,7 +33,7 @@ public class ReceptionPojoList {
                 public void valueChanged(ListSelectionEvent levent) {
                     if(levent.getValueIsAdjusting()){
                         ReceptionPojo pojo = (ReceptionPojo) ((JList) levent.getSource()).getSelectedValue();
-                        System.out.println(pojo);
+                        
                     }
                 }
             });

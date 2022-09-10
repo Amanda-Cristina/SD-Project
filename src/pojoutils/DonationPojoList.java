@@ -4,13 +4,23 @@
  */
 package pojoutils;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import main.Chat;
 import main.ClientView;
 import model.Donation;
+import model.server.TCPUser;
+import org.json.JSONException;
+import org.json.JSONObject;
+import thread.utils.TCPServerThread;
+import thread.utils.TCPUserThread;
 
 /**
  *
@@ -19,9 +29,11 @@ import model.Donation;
 public class DonationPojoList {
     DefaultListModel<DonationPojo> model;
     ClientView view;
+    TCPUserThread server;
     
-    public DonationPojoList(ClientView view){
+    public DonationPojoList(ClientView view, TCPUserThread server){
         this.view = view;
+        this.server = server;
     }
     public void setPojoList(boolean listener){
         if(listener){
@@ -31,8 +43,23 @@ public class DonationPojoList {
                 @Override
                 public void valueChanged(ListSelectionEvent levent) {
                     if(levent.getValueIsAdjusting()){
-                        ReceptionPojo pojo = (ReceptionPojo) ((JList) levent.getSource()).getSelectedValue();
-                        System.out.println(pojo);
+                        DonationPojo pojo = (DonationPojo) ((JList) levent.getSource()).getSelectedValue();
+                        JSONObject msg_json = new JSONObject();
+                        JSONObject data = new JSONObject();
+                        try {
+                            data.put("idReceptor", server.getClientView().getUser().getId());
+                            data.put("idDonation", pojo.getId());
+                            msg_json.put("startChat", data);
+                        } catch (JSONException ex) {
+                            Logger.getLogger(DonationPojoList.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        try {
+                            server.sendMessage(msg_json);
+                        } catch (IOException ex) {
+                            Logger.getLogger(DonationPojoList.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (JSONException ex) {
+                            Logger.getLogger(DonationPojoList.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                 }
             });
